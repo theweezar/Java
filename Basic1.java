@@ -25,5 +25,6 @@ public class Basic1 {
     System.out.print("Nhap b: ");
     int b = scan.nextInt();
     System.out.printf("Result: %d",a+b);
+    scan.close();
   }
 }
