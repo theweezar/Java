@@ -4,6 +4,12 @@
       "type": "java",
       "name": "CodeLens (Launch) - Basic1",
       "request": "launch",
+      "mainClass": "Basic1"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Basic1",
+      "request": "launch",
       "mainClass": "Basic1",
       "projectName": "BasicJava_b2a27cf7"
     },
