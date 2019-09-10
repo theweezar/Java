@@ -2,6 +2,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - BaiTap",
+      "request": "launch",
+      "mainClass": "BaiTap",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - BaiTap1",
+      "request": "launch",
+      "mainClass": "bai_tap_java.BaiTap1",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - BaiTap",
+      "request": "launch",
+      "mainClass": "baitapjava.BaiTap",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Basic1",
       "request": "launch",
       "mainClass": "Basic1"
