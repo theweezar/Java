@@ -10,7 +10,9 @@ public class BTVN1 {
     // baitap1();
     // baitap2();
     // baitap3();
-    baitap4();
+    // baitap4();
+    // baitap5();
+    baitap6();
   }
   static void baitap1(){
     System.out.println("Hello! I’m Hoang Phan Minh Duc.");
@@ -64,4 +66,17 @@ public class BTVN1 {
     }
     System.out.printf("Tong gia tri cac phan tu trong ma tran: %d\n",tong);
   }
+  static void baitap5(){
+    for(int i=2;i<=9;i++){
+      for(int j=1;j<=10;j++){
+        System.out.printf("%d x %d = %d\n",i,j,i*j);
+      }
+    }
+  }
+  static void baitap6(){
+    for(int i=1;i<=10;i++){
+      System.out.printf("1 : Binh phuong la %d, lap phuong la %d\n",(int)Math.pow((double)i, 2),(int)Math.pow((double)i, 3));
+    }
+  }
+  
 }
