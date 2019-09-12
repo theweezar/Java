@@ -7,14 +7,16 @@ import java.lang.Math;
 public class BTVN1 {
   static Scanner scan = new Scanner(System.in);
   public static void main(String[] args) {
-    // baitap1();
-    // baitap2();
-    // baitap3();
-    // baitap4();
-    // baitap5();
-    // baitap6();
-    // baitap7();
+    baitap1();
+    baitap2();
+    baitap3();
+    baitap4();
+    baitap5();
+    baitap6();
+    baitap7();
     baitap8();
+    baitap9();
+    baitap10();
   }
   static void baitap1(){
     System.out.println("Hello! I’m Hoang Phan Minh Duc.");
@@ -33,7 +35,7 @@ public class BTVN1 {
     tuoi = scan.nextInt();
     System.out.print("Nam sinh: ");
     namsinh = scan.nextInt();
-    System.out.print("dtb");
+    System.out.print("dtb: ");
     dtb = scan.nextFloat();
     System.out.printf("%s %s %d %d %f\n",mssv,hoten,tuoi,namsinh,dtb);
   }
@@ -52,10 +54,10 @@ public class BTVN1 {
   static void baitap4(){
     int m,n;
     int min = 0, max = 50;
-    System.out.print("Nhap m dong: ");
-    m = scan.nextInt();
+    System.out.print("\nNhap m dong: ");
+    m = Math.abs(scan.nextInt());
     System.out.print("Nhap n cot : ");
-    n = scan.nextInt();
+    n = Math.abs(scan.nextInt());
     int[][] matrix = new int[m][n];
     int tong = 0;
     for(int y=0;y<matrix.length;y++){
@@ -110,8 +112,8 @@ public class BTVN1 {
     int min = 32;
     int max = 126;
     int n;
-    System.out.print("Nhap so luong ky tu: ");
-    n = scan.nextInt();
+    System.out.print("\nNhap so luong ky tu: ");
+    n = Math.abs(scan.nextInt());
     char[] arr = new char[n];
     System.out.print("Mang chu: ");
     for(int i=0;i<arr.length;i++){
@@ -122,11 +124,43 @@ public class BTVN1 {
     for(int i=0;i<arr.length;i++){
       System.out.printf("%d ",(int)arr[i]);
     }
+    System.out.println();
   }
   static void baitap9(){
-    
+    long[] arr = new long[100];
+    arr[0] = arr[1] = 1;
+    for(int i=2;i<arr.length;i++){
+      arr[i] = (long)(arr[i-1] + arr[i-2]);
+    }
+    for(int i=0;i<arr.length;i++){
+      System.out.printf("%d ",arr[i]);
+    }
   }
   static void baitap10(){
-    
+    int k;
+    int m,n;
+    int min = 0, max = 50;
+    int tong_hang = 0;
+    System.out.print("\nNhap m dong: ");
+    m = Math.abs(scan.nextInt());
+    System.out.print("Nhap n cot : ");
+    n = Math.abs(scan.nextInt());
+    int[][] matrix = new int[m][n];
+    for(int y=0;y<matrix.length;y++){
+      for(int x=0;x<matrix[y].length;x++){
+        matrix[y][x] = (int)Math.floor(Math.random()*(max+1-min)+min);
+        System.out.printf("%d   ",matrix[y][x]);
+      }
+      System.out.println();
+    }
+    System.out.print("\nTinh tong hang thu: ");
+    k = Math.abs(scan.nextInt());
+    if (k > 0 && k <= matrix.length){
+      for(int i=0;i<matrix[k-1].length;i++){
+        tong_hang+=matrix[k-1][i];
+      }
+      System.out.printf("Tong cac phan tu hang thu %d la %d\n",k,tong_hang);
+    }
+    else System.out.print("\nError");
   }
 }
