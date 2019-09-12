@@ -1,5 +1,4 @@
 package btvn1;
-import java.lang.reflect.Array;
 import java.util.Scanner;
 import java.lang.Math;
 /**
@@ -47,12 +46,22 @@ public class BTVN1 {
     System.out.printf("So lon nhat trong mang la: %d\n",max);
   }
   static void baitap4(){
-    // int m,n;
-    // System.out.print("Nhap m dong: ");
-    // m = scan.nextInt();
-    // System.out.print("Nhap n cot : ");
-    // n = scan.nextInt();
-    // int[][] matrix = new int[m][n];
-    System.out.printf("%f",Math.random());
+    int m,n;
+    int min = 0, max = 50;
+    System.out.print("Nhap m dong: ");
+    m = scan.nextInt();
+    System.out.print("Nhap n cot : ");
+    n = scan.nextInt();
+    int[][] matrix = new int[m][n];
+    int tong = 0;
+    for(int y=0;y<matrix.length;y++){
+      for(int x=0;x<matrix[y].length;x++){
+        matrix[y][x] = (int)Math.floor(Math.random()*(max+1-min)+min);
+        tong += matrix[y][x];
+        System.out.printf("%d   ",matrix[y][x]);
+      }
+      System.out.println();
+    }
+    System.out.printf("Tong gia tri cac phan tu trong ma tran: %d\n",tong);
   }
 }

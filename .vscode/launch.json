@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - BTVN1",
+      "request": "launch",
+      "mainClass": "btvn1.BTVN1",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - BaiTap",
       "request": "launch",
       "mainClass": "BaiTap",
