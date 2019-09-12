@@ -12,7 +12,9 @@ public class BTVN1 {
     // baitap3();
     // baitap4();
     // baitap5();
-    baitap6();
+    // baitap6();
+    // baitap7();
+    baitap8();
   }
   static void baitap1(){
     System.out.println("Hello! I’m Hoang Phan Minh Duc.");
@@ -78,5 +80,53 @@ public class BTVN1 {
       System.out.printf("1 : Binh phuong la %d, lap phuong la %d\n",(int)Math.pow((double)i, 2),(int)Math.pow((double)i, 3));
     }
   }
-  
+  static void baitap7(){
+    int[] arr = new int[10];
+    int min = 1; 
+    int max = 50;
+    int tmp;
+    System.out.print("Mang luc dau: ");
+    for(int i=0;i<arr.length;i++){
+      arr[i] = (int)Math.floor(Math.random()*(max+1-min)+min);
+      System.out.printf("%d ",arr[i]);
+    }
+    for(int i=0;i<arr.length;i++){
+      for(int j=i+1;j<arr.length;j++){
+        if (arr[i] > arr[j]){
+          tmp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = tmp;
+        }
+      }
+    }
+    System.out.print("\nMang luc sau: ");
+    for(int i=0;i<arr.length;i++){
+      System.out.printf("%d ",arr[i]);
+    }
+  }
+  static void baitap8(){
+    // ascii
+    // Tao 1 mang ky tu random voi so luong n duoc nhap tu ban phim 
+    int min = 32;
+    int max = 126;
+    int n;
+    System.out.print("Nhap so luong ky tu: ");
+    n = scan.nextInt();
+    char[] arr = new char[n];
+    System.out.print("Mang chu: ");
+    for(int i=0;i<arr.length;i++){
+      arr[i] = (char)Math.floor(Math.random()*(max+1-min)+min);
+      System.out.printf("%c ",arr[i]);
+    }
+    System.out.print("\nMang ma ascii: ");
+    for(int i=0;i<arr.length;i++){
+      System.out.printf("%d ",(int)arr[i]);
+    }
+  }
+  static void baitap9(){
+    
+  }
+  static void baitap10(){
+    
+  }
 }
