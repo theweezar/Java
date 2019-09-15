@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - DEMO",
+      "request": "launch",
+      "mainClass": "btvnt3.DEMO",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - BTVNT3",
       "request": "launch",
       "mainClass": "btvnt3.BTVNT3",
