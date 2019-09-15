@@ -13,9 +13,8 @@ public class BTVNT3 {
     // FRACTION ft2 = new FRACTION(2,5);
     // FRACTION ft3 = ft1.plus(ft2);
     // ft3.showFraction();
-    COORDINATE coord1 = new COORDINATE(6,8);
-    coord1.inToaDo();
-    coord1 = coord1.dx_truc_X();
-    coord1.inToaDo();
+    COORDINATE coord1 = new COORDINATE(6,8.7);
+    COORDINATE coord2 = new COORDINATE(50.5,8);
+    System.out.printf("Khoang cach: %f",coord1.khoangCach(coord2));
   }
 }
