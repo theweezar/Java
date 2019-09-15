@@ -28,11 +28,11 @@ class FRACTION {
   FRACTION(){ 
     inputFraction();
   }
-  FRACTION(int numerator,int denominator){
-    if (denominator != 0){
-      Numerator = numerator;
-      Denominator = denominator;
-      Decimal = (float)Numerator / (float)Denominator;
+  FRACTION(int Numerator,int Denominator){
+    if (Denominator != 0){
+      this.Numerator = Numerator;
+      this.Denominator = Denominator;
+      this.Decimal = (float)Numerator / (float)Denominator;
     }
     else System.out.print("Error");
   }
