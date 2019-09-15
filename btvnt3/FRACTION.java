@@ -13,6 +13,11 @@ import java.util.Scanner;
  * inputFraction: Nhap phan so
  * showFraction: in ra phan so
  * calcDivisor: tim UCLN
+ * reduceFraction: Rut gon phan so
+ * plus: cong phan so
+ * minus: tru phan so
+ * multiply: nhan phan so
+ * divise: chia phan so
  */
 class FRACTION {
   private int Numerator;
@@ -78,5 +83,23 @@ class FRACTION {
       newDenominator = Denominator * otherFraction.getDenominator();
     }
     return new FRACTION(newNumerator,newDenominator);
+  }
+  public FRACTION minus(FRACTION otherFraction){
+    int newNumerator = 1, newDenominator = 1;
+    if (Denominator == otherFraction.getDenominator()){
+      newNumerator = Numerator - otherFraction.getNumerator();
+      newDenominator = Denominator;
+    }
+    else{
+      newNumerator = Numerator * otherFraction.getDenominator() - otherFraction.getNumerator() * Denominator;
+      newDenominator = Denominator * otherFraction.getDenominator();
+    }
+    return new FRACTION(newNumerator,newDenominator);
+  }
+  public FRACTION multiply(FRACTION otherFraction){
+    return new FRACTION(Numerator * otherFraction.getNumerator(),Denominator * otherFraction.getDenominator());
+  }
+  public FRACTION divise(FRACTION otherFraction){
+    return new FRACTION(Numerator * otherFraction.getDenominator(),Denominator * otherFraction.getNumerator());
   }
 }
