@@ -1,4 +1,5 @@
 package btvnt3;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 /**
@@ -8,6 +9,7 @@ class HOCSINH {
   private String ms;
   private String hoten;
   private double dtb;
+  public DecimalFormat df = new DecimalFormat("0.00");
   HOCSINH(){
     input();
   }
@@ -42,12 +44,12 @@ class HOCSINH {
     this.hoten = scan.nextLine();
     System.out.print("Nhap DTB: ");
     this.dtb = scan.nextDouble();
-    scan.close();
+    // scan.close();
   }
   public void output(){
     System.out.printf("Ma so: %s\n",ms);
     System.out.printf("Ho ten: %s\n",hoten);
-    System.out.printf("DTB: %f\n",dtb);
+    System.out.printf("DTB: %s\n",df.format(dtb));
   }
   public String rank(){
     String rank = "";
