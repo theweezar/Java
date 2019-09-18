@@ -1,4 +1,5 @@
 package btvnt3;
+import java.util.Scanner;
 
 /**
  * HOCSINH
@@ -34,7 +35,14 @@ class HOCSINH {
     return dtb;
   }
   public void input(){
-
+    Scanner scan = new Scanner(System.in);
+    System.out.print("Nhap ms: ");
+    this.ms = scan.nextLine();
+    System.out.print("Nhap ho ten: ");
+    this.hoten = scan.nextLine();
+    System.out.print("Nhap DTB: ");
+    this.dtb = scan.nextDouble();
+    scan.close();
   }
   public void output(){
     System.out.printf("Ma so: %s\n",ms);

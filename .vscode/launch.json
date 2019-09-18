@@ -2,6 +2,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - DEMO2",
+      "request": "launch",
+      "mainClass": "btvnt3.DEMO2",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - ARRAY",
+      "request": "launch",
+      "mainClass": "btvnt3.ARRAY",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - DEMO1",
+      "request": "launch",
+      "mainClass": "btvnt3.DEMO1",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - HOCSINH",
+      "request": "launch",
+      "mainClass": "btvnt3.HOCSINH",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - DEMO",
       "request": "launch",
       "mainClass": "btvnt3.DEMO",
