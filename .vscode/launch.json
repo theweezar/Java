@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - ThucPham",
+      "request": "launch",
+      "mainClass": "btvnt5.ThucPham",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - DEMO4",
       "request": "launch",
       "mainClass": "btvnt3.DEMO4",
