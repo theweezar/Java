@@ -15,4 +15,10 @@ public class HangHoa {
   public String getMH(){
     return mahang;
   }
+  public String getTH(){
+    return tenhang;
+  }
+  public double getPrice(){
+    return giatien;
+  }
 }
