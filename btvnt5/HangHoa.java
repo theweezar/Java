@@ -6,8 +6,8 @@ package btvnt5;
 public class HangHoa {
   final private String mahang;
   final private String tenhang;
-  final private double giatien;
-  HangHoa(String mahang,String tenhang,double giatien){
+  final private int giatien;
+  HangHoa(String mahang,String tenhang,int giatien){
     this.mahang = mahang;
     this.tenhang = tenhang;
     this.giatien = giatien;
@@ -18,7 +18,7 @@ public class HangHoa {
   public String getTH(){
     return tenhang;
   }
-  public double getPrice(){
+  public int getPrice(){
     return giatien;
   }
 }
