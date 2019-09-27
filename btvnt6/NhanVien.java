@@ -8,9 +8,11 @@ import java.util.Scanner;
 public class NhanVien extends ConNguoi {
   private int luong;
   private String ngaynv;
+  private PhongBanKhoa pbk;
   NhanVien(){
     super();
     nhapNV();
+    pbk = new PhongBanKhoa();
   }
   public void nhapNV(){
     Scanner scan = new Scanner(System.in);
