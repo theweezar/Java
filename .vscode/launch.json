@@ -5,6 +5,13 @@
       "name": "CodeLens (Launch) - DSHANGHOA",
       "request": "launch",
       "mainClass": "btvnt5.DSHANGHOA",
+      "projectName": "Java_98ff1097"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - DSHANGHOA",
+      "request": "launch",
+      "mainClass": "btvnt5.DSHANGHOA",
       "projectName": "BasicJava_b2a27cf7"
     },
     {

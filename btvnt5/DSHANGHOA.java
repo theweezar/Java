@@ -2,7 +2,6 @@ package btvnt5;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-// import java.time.LocalDate;
 
 /**
  * DSHANGHOA
