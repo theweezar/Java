@@ -2,6 +2,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - ConNguoi",
+      "request": "launch",
+      "mainClass": "btvnt6.ConNguoi",
+      "projectName": "Java_98ff1097"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - NhanVien",
+      "request": "launch",
+      "mainClass": "btvnt6.NhanVien",
+      "projectName": "Java_98ff1097"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - DSHANGHOA",
       "request": "launch",
       "mainClass": "btvnt5.DSHANGHOA",
