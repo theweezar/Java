@@ -24,7 +24,15 @@ public class Basic1 {
     int a = scan.nextInt(); // this function will auto create a new line when we finish the input
     System.out.print("Nhap b: ");
     int b = scan.nextInt();
-    System.out.printf("Result: %d",a+b);
+    System.out.printf("Result: %d\n",a+b);
+    double d;
+    System.out.print("Nhap double d: ");
+    d = scan.nextDouble();
+    String tmp;
+    System.out.print("Nhap String: ");
+    scan.nextLine(); // xoa bo nho dem
+    tmp = scan.nextLine();
+    System.out.printf("d = %f and tmp = %s",d,tmp);
     scan.close();
   }
 }
