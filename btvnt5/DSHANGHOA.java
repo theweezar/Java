@@ -2,32 +2,34 @@ package btvnt5;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.time.LocalDate;
+// import java.time.LocalDate;
 
 /**
  * DSHANGHOA
  */
 public class DSHANGHOA {
-  private ArrayList<ThucPham> dstp;
+  private ArrayList<HangHoa> dshh;
   DSHANGHOA(){
-    dstp = new ArrayList<ThucPham>();
-    
+    dshh = new ArrayList<HangHoa>();
   }
   public void addFood(){
-    Scanner scan = new Scanner(System.in);
-    String mh,th;
-    int gt;
-    System.out.print("Nhap ma hang : ");
-    mh = scan.nextLine();
-    System.out.print("Nhap ten hang: ");
-    th = scan.nextLine();
-    System.out.print("Nhap gia tien: ");
-    gt = scan.nextInt();
-    dstp.add(new ThucPham(mh, th, gt, LocalDate.now().toString(),LocalDate.now().plusDays(7).toString()));
+    dshh.add(new ThucPham());
+  }
+  public void addMachine(){
+    dshh.add(new DienMay());
   }
   public void showListFood(){
-    for(int i=0;i<dstp.size();i++){
-      dstp.get(i).show();
+    for(int i=0;i<dshh.size();i++){
+      if (dshh.get(i).getClass() == ThucPham.class){
+        ((ThucPham)dshh.get(i)).show();
+      }
+    }
+  }
+  public void showListMachine(){
+    for(int i=0;i<dshh.size();i++){
+      if (dshh.get(i).getClass() == DienMay.class){
+        ((DienMay)dshh.get(i)).show();
+      }
     }
   }
   public void run(){
@@ -49,6 +51,12 @@ public class DSHANGHOA {
             break;
           case 2:
             showListFood();
+            break;
+          case 3:
+            addMachine();
+            break;
+          case 4:
+            showListMachine();
             break;
           default:
             break;
