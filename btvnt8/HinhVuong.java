@@ -16,12 +16,11 @@ public class HinhVuong implements Hinh{
     Scanner scan = new Scanner(System.in);
     System.out.print("Nhap chieu dai canh: ");
     this.canh = scan.nextDouble();
-    scan.close();
   }
   public void Xuat(){
     DecimalFormat df = new DecimalFormat("0.00");
-    System.out.printf("Chieu dai canh : %s",df.format(canh));
-    System.out.printf("Dien tich : %s",df.format(DienTich()));
+    System.out.printf("Chieu dai canh : %s\n",df.format(canh));
+    System.out.printf("Dien tich      : %s\n",df.format(DienTich()));
   }
   public float DienTich(){
     return (float)canh * (float)canh;
