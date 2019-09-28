@@ -2,6 +2,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - Exception_2",
+      "request": "launch",
+      "mainClass": "btvnt9.Exception_2",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Exception_1",
+      "request": "launch",
+      "mainClass": "btvnt9.Exception_1",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - test",
+      "request": "launch",
+      "mainClass": "btvnt9.test",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - TEST",
+      "request": "launch",
+      "mainClass": "btvnt9.TEST",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Demo",
       "request": "launch",
       "mainClass": "btvnt6.Demo",
