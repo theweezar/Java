@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - TuDien",
+      "request": "launch",
+      "mainClass": "btslidet5.TuDien",
+      "projectName": "Java_98ff1097"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Exception_2",
       "request": "launch",
       "mainClass": "btvnt9.Exception_2",
