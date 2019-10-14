@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - Khoa",
+      "request": "launch",
+      "mainClass": "dethi.Khoa",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Bai3",
       "request": "launch",
       "mainClass": "SlideT6.Bai3",
