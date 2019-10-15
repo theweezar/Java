@@ -28,6 +28,17 @@ public class Khoa {
     }
   }
 
+  public void InTatCa(){
+    for(SinhVien sv:ds){
+      if (sv.getClass() == SVATTT.class){
+        ((SVATTT)sv).Xuat();
+      }
+      else if(sv.getClass() == SVCNTT.class){
+        ((SVCNTT)sv).Xuat();
+      }
+    }
+  }
+
   public void SapXepDTK(){
     Collections.sort(ds, new Comparator<SinhVien>() {
       @Override
@@ -44,7 +55,7 @@ public class Khoa {
       System.out.println("3. In ds sinh vien CNTT");
       System.out.println("4. In ds sinh vien ATTT");
       System.out.println("5. Sap xep tang dan theo DTK");
-      System.out.println("6. Tim va xoa sinh vien");
+      System.out.println("6. In het ds");
       System.out.println("0. Thoat");
       System.out.print("Chon: ");
       switch (scan.next()) {
@@ -64,6 +75,7 @@ public class Khoa {
           SapXepDTK();
           break;
         case "6":
+          InTatCa();
           break;
         case "0":
           System.exit(0);
