@@ -1,5 +1,6 @@
 package dethi;
 
+import java.text.DecimalFormat;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ public class SVCNTT extends SinhVien{
 
   private double hdt;
   private double csdl;
+  public DecimalFormat df = new DecimalFormat("0.00");
 
   SVCNTT(){
     super();
@@ -32,6 +34,10 @@ public class SVCNTT extends SinhVien{
     this.csdl = csdl;
   }
 
+  public String loai(){
+    return "cntt";
+  }
+
   public void NhapDiem(){
     Scanner scan = new Scanner(System.in);
     try {
@@ -46,8 +52,10 @@ public class SVCNTT extends SinhVien{
     }
   }
 
-  public String Xuat() {
-    return "SVCNTT [csdl=" + csdl + ", hdt=" + hdt + "]";
+  @Override
+  public void Xuat(){
+    super.Xuat();
+    System.out.printf("HDH: %s - CSDL: %s\n",df.format(getHdt()),df.format(getCsdl()));
   }
 
 }

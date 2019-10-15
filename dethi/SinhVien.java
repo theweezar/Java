@@ -1,5 +1,6 @@
 package dethi;
 
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 /**
@@ -10,6 +11,7 @@ public class SinhVien {
   private String mssv;
   private String hoten;
   private double dtk;
+  public DecimalFormat df = new DecimalFormat("0.00");
 
   public SinhVien(String mssv, String hoten, double dtk) {
     this.mssv = mssv;
@@ -61,8 +63,8 @@ public class SinhVien {
     else System.out.println("Sinh vien xep loai xuat sac");
   }
 
-  @Override
-  public String toString() {
-    return "SinhVien [dtk=" + dtk + ", hoten=" + hoten + ", mssv=" + mssv + "]";
+  public void Xuat(){
+    System.out.println("------------------------------------------------");
+    System.out.printf("Mssv: %s - HoTen: %s - DTK: %s\n",getMssv(),getHoten(),df.format(getDtk()));
   }
 }

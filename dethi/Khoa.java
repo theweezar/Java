@@ -1,5 +1,7 @@
 package dethi;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -12,16 +14,27 @@ public class Khoa {
 
   public Khoa(){
     ds = new Vector<SinhVien>();
-    run();
+    
   }
 
   public void InDS(String loai){
     for(SinhVien sv:ds){
-      // if (loai.equalsIgnoreCase("cntt") && sv.getClass().toString() == SVCNTT.class.toString()){
-      //   System.out.println(sv.toString());
-      // }
-      System.out.println(sv.toString());
+      if (loai.equalsIgnoreCase("attt") && sv.getClass() == SVATTT.class){
+        ((SVATTT)sv).Xuat();
+      }
+      else if(loai.equalsIgnoreCase("cntt") && sv.getClass() == SVCNTT.class){
+        ((SVCNTT)sv).Xuat();
+      }
     }
+  }
+
+  public void SapXepDTK(){
+    Collections.sort(ds, new Comparator<SinhVien>() {
+      @Override
+      public int compare(SinhVien s1,SinhVien s2){
+        return (int)(s1.getDtk() - s2.getDtk()); 
+      }
+    });
   }
 
   public void run(){
@@ -30,7 +43,7 @@ public class Khoa {
       System.out.println("Nhap sinh vien (1.CNTT | 2.ATTT)");
       System.out.println("3. In ds sinh vien CNTT");
       System.out.println("4. In ds sinh vien ATTT");
-      System.out.println("5. Sap xep tang dan theo mssv");
+      System.out.println("5. Sap xep tang dan theo DTK");
       System.out.println("6. Tim va xoa sinh vien");
       System.out.println("0. Thoat");
       System.out.print("Chon: ");
@@ -45,8 +58,10 @@ public class Khoa {
           InDS("cntt");
           break;
         case "4":
+          InDS("attt");
           break;
         case "5":
+          SapXepDTK();
           break;
         case "6":
           break;
@@ -59,5 +74,6 @@ public class Khoa {
   }
   public static void main(String[] args) {
     Khoa khoa = new Khoa();
+    khoa.run();
   }
 }

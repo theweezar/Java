@@ -5,6 +5,13 @@
       "name": "CodeLens (Launch) - Khoa",
       "request": "launch",
       "mainClass": "dethi.Khoa",
+      "projectName": "Java_98ff1097"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Khoa",
+      "request": "launch",
+      "mainClass": "dethi.Khoa",
       "projectName": "BasicJava_b2a27cf7"
     },
     {
