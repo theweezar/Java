@@ -2,6 +2,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - DemoBai4",
+      "request": "launch",
+      "mainClass": "BTPhuLucTuan3Bai4.DemoBai4",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - QLNV",
+      "request": "launch",
+      "mainClass": "btvnt3.QLNV",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Khoa",
       "request": "launch",
       "mainClass": "dethi.Khoa",

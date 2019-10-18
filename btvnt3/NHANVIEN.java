@@ -1,5 +1,6 @@
 package btvnt3;
 
+import java.text.DecimalFormat;
 import java.util.Scanner;
 /**
  * NHANVIEN
@@ -9,14 +10,9 @@ class NHANVIEN {
   private String hoten;
   private double luongcb;
   private double hsluong;
-  NHANVIEN(boolean input){
-    if (input) nhapNV();
-    else{
-      msnv = "";
-      hoten = "";
-      hsluong = 0;
-      luongcb = 0;
-    }
+  public DecimalFormat df = new DecimalFormat("0.00");
+  NHANVIEN(){
+    Nhap();
   }
   NHANVIEN(String msnv,String hoten,double hsluong){
     this.msnv = msnv;
@@ -24,29 +20,40 @@ class NHANVIEN {
     this.hsluong = hsluong;
     this.luongcb = 1500000 * this.hsluong;
   }
-  public void setMSNV(String msnv){
-    this.msnv = msnv;
-  }
-  public void setHoTen(String hoten){
-    this.hoten = hoten;
-  }
-  public void setHsluong(double hsluong){
-    this.hsluong = hsluong;
-    this.luongcb = 1500000 * this.hsluong;
-  }
-  public String getMSNV(){
+
+  public String getMsnv() {
     return msnv;
   }
-  public String getHoTen(){
+
+  public void setMsnv(String msnv) {
+    this.msnv = msnv;
+  }
+
+  public String getHoten() {
     return hoten;
   }
-  public double getHsluong(){
-    return hsluong;
+
+  public void setHoten(String hoten) {
+    this.hoten = hoten;
   }
-  public double getLuongCB(){
+
+  public double getLuongcb() {
     return luongcb;
   }
-  public void nhapNV(){
+
+  public void setLuongcb(double luongcb) {
+    this.luongcb = luongcb;
+  }
+
+  public double getHsluong() {
+    return hsluong;
+  }
+
+  public void setHsluong(double hsluong) {
+    this.hsluong = hsluong;
+  }
+  
+  public void Nhap(){
     Scanner scan = new Scanner(System.in);
     System.out.print("Nhap MSNV: ");
     this.msnv = scan.nextLine();
@@ -55,7 +62,13 @@ class NHANVIEN {
     System.out.print("Nhap he so luong: ");
     this.hsluong = scan.nextDouble();
     this.luongcb = 1500000 * this.hsluong;
-    scan.close();
+    
   }
 
+  public void Xuat(){
+    System.out.println("\n------------------------\n");
+    System.out.printf("MSNV : %s\n",getMsnv());
+    System.out.printf("HoTen: %s\n",getHoten());
+    System.out.printf("Luong: %s\n",df.format(getLuongcb()));
+  }
 }
