@@ -47,4 +47,8 @@ public class KhachHang {
     setPassword(scan.nextLine());
     setSodu(0);
   }
+
+  public void Xuat(){
+    System.out.printf("Ten: %s - so du tk: %d\n",getTen(),getSodu());
+  }
 }
