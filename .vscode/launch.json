@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - QLNV",
+      "request": "launch",
+      "mainClass": "btslidet5.bai2.QLNV",
+      "projectName": "Java_98ff1097"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - NhanVien",
       "request": "launch",
       "mainClass": "btslidet5.bai2.NhanVien",
