@@ -5,6 +5,13 @@
       "name": "CodeLens (Launch) - NganHang",
       "request": "launch",
       "mainClass": "btslidet5.bai3.NganHang",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - NganHang",
+      "request": "launch",
+      "mainClass": "btslidet5.bai3.NganHang",
       "projectName": "Java_98ff1097"
     },
     {

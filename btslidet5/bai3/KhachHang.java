@@ -41,7 +41,7 @@ public class KhachHang {
 
   public void Nhap(){
     Scanner scan = new Scanner(System.in);
-    System.out.print("\nNhap ten: ");
+    System.out.print("Nhap ten: ");
     setTen(scan.nextLine());
     System.out.print("Nhap mk : ");
     setPassword(scan.nextLine());
