@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - Bai1",
+      "request": "launch",
+      "mainClass": "SlideT7.Bai1",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - NganHang",
       "request": "launch",
       "mainClass": "btslidet5.bai3.NganHang",
