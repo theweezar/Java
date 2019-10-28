@@ -2,6 +2,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - Bai2",
+      "request": "launch",
+      "mainClass": "SlideT7.bai2.Bai2",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Bai1",
+      "request": "launch",
+      "mainClass": "SlideT7.bai1.Bai1",
+      "projectName": "BasicJava_b2a27cf7"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - Bai1",
       "request": "launch",
       "mainClass": "SlideT7.Bai1",

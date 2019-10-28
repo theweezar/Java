@@ -1,4 +1,4 @@
-package SlideT7;
+package SlideT7.bai1;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,7 +17,7 @@ public class Bai1 {
     System.out.printf("%s Java\n",s);
 
     // BufferedWriter bw = new BufferedWriter(new FileWriter("SlideT7\\Text.txt"));
-    FileWriter fw = new FileWriter(new File("SlideT7\\Text.txt"));
+    FileWriter fw = new FileWriter(new File("SlideT7\\bai1\\Text.txt"));
     fw.write(s);
     fw.close();
 
