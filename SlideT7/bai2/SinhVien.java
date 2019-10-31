@@ -1,9 +1,11 @@
 package SlideT7.bai2;
 
+import java.io.Serializable;
+
 /**
  * SinhVien
  */
-public class SinhVien {
+public class SinhVien implements Serializable {
 
   private String ten;
   private String ns;
