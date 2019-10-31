@@ -7,6 +7,10 @@ import java.io.Serializable;
  */
 public class SinhVien implements Serializable {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private String ten;
   private String ns;
   private double dtb;
