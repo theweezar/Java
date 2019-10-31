@@ -19,12 +19,10 @@ public class Bai2 {
   public static String path = "D:\\BasicJava\\SlideT7\\bai2\\Sinhvien.txt";
 
   public static void GhiFile() throws FileNotFoundException, IOException{
-    SinhVien sv = new SinhVien("Minh Duc", "30-10-1999", 9.0);
-    FileOutputStream fos = new FileOutputStream(path);
-    ObjectOutputStream oos = new ObjectOutputStream(fos);
+    SinhVien sv = new SinhVien("Minh Duc Dep Trai", "30-10-1999", 9.0);
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
     oos.writeObject(sv);
     oos.close();
-    fos.close();
   }
 
   public static void DocFile() throws FileNotFoundException, IOException, ClassNotFoundException{
@@ -36,7 +34,7 @@ public class Bai2 {
   public static void main(String[] args) throws IOException, ClassNotFoundException{
     try {
       // GhiFile();
-    DocFile();
+      DocFile();
     } 
     catch (FileNotFoundException e) {
       File f = new File(path);

@@ -43,7 +43,7 @@ public class SinhVien implements Serializable {
 
   @Override
   public String toString() {
-    return "SinhVien [dtb=" + dtb + ", ns=" + ns + ", ten=" + ten + "]";
+    return "SinhVien [dtb = " + dtb + ", ns = " + ns + ", ten = " + ten + "]";
   }
 
   
