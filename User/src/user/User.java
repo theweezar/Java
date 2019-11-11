@@ -16,10 +16,18 @@ public class User {
      */
     private String username;
     private String password;
+    private boolean administrator;
+    private String fullname;
+    private String phonenumber;
+    private String email;
 
-    public User(String username, String password) {
+    public User(String username, String password, boolean administrator, String fullname, String phonenumber, String email) {
         this.username = username;
         this.password = password;
+        this.administrator = administrator;
+        this.fullname = fullname;
+        this.phonenumber = phonenumber;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -37,14 +45,39 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public void register(){
-        
+
+    public boolean isAdministrator() {
+        return administrator;
     }
-    
-    public void validate(){
-        
+
+    public void setAdministrator(boolean administrator) {
+        this.administrator = administrator;
     }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     
     
     
