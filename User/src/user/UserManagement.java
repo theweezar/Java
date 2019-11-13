@@ -19,18 +19,14 @@ public class UserManagement {
         conn = new MSSQLConnection().getConnection();
     }
     
-    public void getalluser(){
-        try{
-            Statement stt = conn.createStatement();
-            ResultSet result = stt.executeQuery("SELECT * from users");
-            while(result.next()){
-                System.out.printf("Username: %s - Password: %s \n",result.getString("username")
-                ,result.getString("pass"));
-            }
-        }
-        catch(SQLException err){
-            err.printStackTrace();
-        }
+    public ResultSet getAllUsers() throws SQLException{
+        Statement stt = conn.createStatement();
+        ResultSet result = stt.executeQuery("SELECT * from users");
+        return result;
+//        while(result.next()){
+//            System.out.printf("Username: %s - Password: %s \n",result.getString("username")
+//            ,result.getString("pass"));
+//        }
     }
     
     public void register(User newuser){
@@ -79,6 +75,6 @@ public class UserManagement {
         UserManagement usermg = new UserManagement();
 //        usermg.getalluser();
 //        usermg.register(new User("nhat","nhat","Nhat Cuong"));
-        System.out.println(usermg.validate("admin", "admin").getFullname());
+//        System.out.println(usermg.validate("admin", "admin").getFullname());
     }
 }

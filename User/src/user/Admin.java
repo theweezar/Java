@@ -8,6 +8,7 @@ package user;
 import java.awt.Color;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 
 /**
  *
@@ -18,11 +19,11 @@ public class Admin extends javax.swing.JFrame {
     /**
      * Creates new form Admin
      */
-    private static User curr_user = null;
+    private User curr_user = null;
     static DefaultTableModel dtm;
     public Admin(User user) {
         initComponents();
-        Admin.curr_user = user;
+        this.curr_user = user;
         showinforintable();
     }
     
@@ -31,17 +32,23 @@ public class Admin extends javax.swing.JFrame {
         dtm.setNumRows(0);
         Vector vt= new Vector();
         
-        for(int i=0;i<100;i++){
-            vt.add(curr_user.getUsername());
-            vt.add(curr_user.getPassword());
-            vt.add(curr_user.getFullname());
-            vt.add(curr_user.getPhonenumber());
-            vt.add(curr_user.getEmail());
-            vt.add(curr_user.isAdministrator());
-            dtm.addRow(vt);
+        try{
+            ResultSet rs = new UserManagement().getAllUsers();
+            while(rs.next()){
+                vt.add(rs.getString("username"));
+                vt.add(rs.getString("pass"));
+                vt.add(rs.getString("fullname"));
+                vt.add(rs.getString("pnumber"));
+                vt.add(rs.getString("email"));
+                vt.add(rs.getBoolean("administrator"));
+                dtm.addRow(vt);
+            }
+            infortable.setModel(dtm);
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
         }
         
-        infortable.setModel(dtm);
 //        infortable.getTableHeader().setOpaque(false);
 //        infortable.getTableHeader().setBackground(Color.red);
 //        infortable.getTableHeader().setForeground(Color.white);
@@ -111,8 +118,9 @@ public class Admin extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
@@ -125,37 +133,37 @@ public class Admin extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Admin(curr_user).setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Windows".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(Admin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new Admin(curr_user).setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable infortable;

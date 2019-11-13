@@ -16,10 +16,8 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    private UserManagement usermg = null;
     public Login() {
         initComponents();
-        usermg = new UserManagement();
     }
 
     /**
@@ -128,11 +126,12 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         String username = username_in.getText();
         String password = password_in.getText();
-        User curr_user = usermg.validate(username, password);
+        User curr_user = new UserManagement().validate(username, password);
         if (curr_user != null){
-            JOptionPane.showMessageDialog(null, "Login successfully", "Success", JOptionPane.DEFAULT_OPTION);
+            JOptionPane.showMessageDialog(null, "Login successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             this.setVisible(false);
-            new Admin(curr_user).setVisible(true);
+            if (curr_user.isAdministrator()) new Admin(curr_user).setVisible(true);
+            else new Normal().setVisible(true);
         }
         else {
             JOptionPane.showMessageDialog(null, "Wrong username or password", "Error", JOptionPane.ERROR_MESSAGE);
