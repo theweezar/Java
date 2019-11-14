@@ -19,7 +19,7 @@ public class NhanVienModel {
         this.conn = new MSSQLConnection().getConnection();
     }
     
-    public void register(NhanVien nv,CTNhanVien ctnv){
+    public void register(NhanVien nv) throws SQLException{
         /*
         Trước khi dùng hàm register này thì ta phải kiểm lỗi ở bên ngoài trước, sau đó khởi tạo nhân viên mới
         với đầy đủ thông tin, thì ta mới truyền vào
@@ -28,18 +28,13 @@ public class NhanVienModel {
         */
         String query1 = "INSERT INTO NHANVIEN (username,pw,isActive,isAdmin,isAllowed) VALUES(?,?,?,?,?)";
 //        String query2 = "INSERT INTO CTNHANVIEN (username,ten,phai,ngaysinh,diachi,sdt,email,maBP) VALUES(?,?,?,?,?,?,?,?)";
-        try{
-            PreparedStatement pstt = this.conn.prepareStatement(query1);
-            pstt.setString(1, nv.getUsername());
-            pstt.setString(2, nv.getPassword());
-            pstt.setBoolean(3, nv.isActive());
-            pstt.setBoolean(4, nv.isAdmin());
-            pstt.setBoolean(5, nv.isAllowed());
-            pstt.execute();
-        }
-        catch(SQLException ex){
-            ex.printStackTrace();
-        }
+        PreparedStatement pstt = this.conn.prepareStatement(query1);
+        pstt.setString(1, nv.getUsername());
+        pstt.setString(2, nv.getPassword());
+        pstt.setBoolean(3, nv.isActive());
+        pstt.setBoolean(4, nv.isAdmin());
+        pstt.setBoolean(5, nv.isAllowed());
+        pstt.execute();
     }
     
     public boolean validate(String username, String password){
@@ -55,6 +50,21 @@ public class NhanVienModel {
             ResultSet rs = pstt.executeQuery();
             rs.next();
             if (rs.getRow() == 1) return true;
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean isExist(String username){
+        String query = "SELECT * FROM NHANVIEN WHERE username = ?";
+        try{
+            PreparedStatement pstt = this.conn.prepareStatement(query);
+            pstt.setString(1, username);
+            ResultSet rs = pstt.executeQuery();
+            rs.next();
+            if (rs.getRow() != 0) return true;
         }
         catch(SQLException ex){
             ex.printStackTrace();
@@ -102,7 +112,7 @@ public class NhanVienModel {
         pstt.execute();
     }
     
-    public void getAll() throws SQLException{
+    public Vector<NhanVien> getAll() throws SQLException{
         /*
         Lấy tất cả nhân viên trong database ra rồi bỏ vào vector
         */
@@ -111,7 +121,30 @@ public class NhanVienModel {
         Statement stt = this.conn.createStatement();
         ResultSet rs = stt.executeQuery(query);
         while(rs.next()){
-            
+            dsnv.add(new NhanVien(
+                    rs.getString("username"),
+                    rs.getString("pw"),
+                    rs.getBoolean("isActive"),
+                    rs.getBoolean("isAdmin"),
+                    rs.getBoolean("isAllowed"),
+                    null
+            ));
         }
+        return dsnv;
+    }
+    
+//    public NhanVien getUser(String username) throws SQLException{
+//        String query = "SELECT * FROM NHANVIEN WHERE username = ?";
+//        PreparedStatement pstt = this.conn.prepareStatement(query);
+//        pstt.setString(1, username);
+//        ResultSet rs = pstt.executeQuery();
+//        rs.next();
+//        if (rs.getRow() != )
+//        return null;
+//    }
+    
+    public static void main(String[] args) throws SQLException {
+//        NhanVienModel nvmd = new NhanVienModel();
+//        nvmd.register(new NhanVien("admin","admin",true,true,false,null));
     }
 }
