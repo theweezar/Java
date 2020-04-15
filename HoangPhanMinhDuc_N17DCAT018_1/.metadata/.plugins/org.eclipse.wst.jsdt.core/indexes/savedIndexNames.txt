@@ -1,0 +1,8 @@
+INDEX VERSION 1.3+D:\programming\Java\HoangPhanMinhDuc_N17DCAT018_1\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+2595383974.index
+37103444.index
+1114260840.index
+4155791782.index
+457360258.index
+274850167.index
+2407613109.index
