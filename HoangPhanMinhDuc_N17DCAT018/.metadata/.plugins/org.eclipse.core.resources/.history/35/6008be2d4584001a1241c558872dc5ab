@@ -1,0 +1,17 @@
+package student.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+@RequestMapping("/student-mgr")
+public class StudentMgrController {
+	@RequestMapping()
+	public String index(ModelMap model){
+		model.addAttribute("message","You call index()");
+		return "student-mgr";
+	}
+}

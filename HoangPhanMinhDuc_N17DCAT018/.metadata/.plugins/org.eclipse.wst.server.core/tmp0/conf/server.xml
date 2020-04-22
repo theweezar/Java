@@ -124,7 +124,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\PTITHCMS1L1" path="/PTITHCMS1L1" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L1"/></Host>
+      <Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\PTITHCMS1L1" path="/PTITHCMS1L1" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L1"/><Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\PTITHCMS1L2" path="/PTITHCMS1L2" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L2"/></Host>
     </Engine>
   </Service>
 </Server>
