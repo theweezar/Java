@@ -123,8 +123,13 @@
              Documentation at: /docs/config/valve.html
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
-
-      <Context docBase="PTITHCMS1L1" path="/PTITHCMS1L1" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L1"/><Context docBase="PTITHCMS1L2" path="/PTITHCMS1L2" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L2"/></Host>
+<!-- 
+	      <Context docBase="PTITHCMS1L1" path="/PTITHCMS1L1" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L1"/>
+	      <Context docBase="PTITHCMS1L2" path="/PTITHCMS1L2" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L2"/>  -->
+          <!--  Context docBase="PTITHCMS1L3" path="/PTITHCMS1L3" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L3"/-->
+<!-- 	  <Context docBase="PTITHCMS1L3" path="/PTITHCMS1L3" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L3"/>
+	      <Context docBase="PTITHCMS1L4" path="/PTITHCMS1L4" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L4"/> -->
+	      <Context docBase="DoAnWebNgheNhac" path="/DoAnWebNgheNhac" reloadable="true" source="org.eclipse.jst.jee.server:DoAnWebNgheNhac"/></Host>
     </Engine>
   </Service>
 </Server>

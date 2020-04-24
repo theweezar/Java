@@ -3,6 +3,9 @@
 	<name>Servers</name>
 	<comment></comment>
 	<projects>
+		<project>PTITHCMS1L1</project>
+		<project>PTITHCMS1L2</project>
+		<project>PTITHCMS1L3</project>
 	</projects>
 	<buildSpec>
 	</buildSpec>

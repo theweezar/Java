@@ -1,0 +1,58 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+<style>
+	li{
+		list-style: none;
+		line-height: 25px;
+	}
+	li > label{
+		display: inline-block;
+		text-align: right;
+		width: 110px;
+		font-variant: small-caps;
+		font-weight: bold;
+	}
+</style>
+</head>
+<body>
+	<h1>EL & JSTL</h1>
+	<ul>
+		<li>
+			<label>Họ và tên:</label>${bean.name}
+		</li>
+		<li>
+			<label>Điểm TB: </label>${bean.mark}
+		</li>
+		<li>
+			<label>Chuyên ngành: </label>${bean.major}
+		</li>
+	</ul>
+	<ul>
+		<li>
+			<label>Họ và tên:</label>${list[0].name}
+		</li>
+		<li>
+			<label>Điểm TB: </label>${list[0].mark}
+		</li>
+		<li>
+			<label>Chuyên ngành: </label>${list[0].major}
+		</li>
+	</ul>
+	<ul>
+		<li>
+			<label>Họ và tên:</label>${map.get("KietLPT").name}
+		</li>
+		<li>
+			<label>Điểm TB: </label>${map.get("KietLPT").mark}
+		</li>
+		<li>
+			<label>Chuyên ngành: </label>${map.get("KietLPT").major}
+		</li>
+	</ul>
+</body>
+</html>
