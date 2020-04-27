@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;DoAnWebNgheNhac/WebContent/WEB-INF/views/layout.jsp&apos; to &apos;mainLayout.jsp&apos;" description="Rename resource &apos;layout.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="WebContent/WEB-INF/views/layout.jsp" name="mainLayout.jsp" stamp="1587981058793" updateReferences="true"/>
+</session>

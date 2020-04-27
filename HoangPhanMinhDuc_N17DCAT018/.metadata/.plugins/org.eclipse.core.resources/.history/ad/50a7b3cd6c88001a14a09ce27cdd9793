@@ -1,0 +1,10 @@
+package app.render;
+
+import org.springframework.ui.ModelMap;
+
+public class Render {
+	public String render(ModelMap model, String layout, String render){
+		model.addAttribute("render", "testLayout");
+		return layout;
+	}
+}
