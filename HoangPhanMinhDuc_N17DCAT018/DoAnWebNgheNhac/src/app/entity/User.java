@@ -15,6 +15,7 @@ public class User {
 	private String password;
 	@Column(name="email")
 	private String email;
+	
 	public int getId() {
 		return id;
 	}

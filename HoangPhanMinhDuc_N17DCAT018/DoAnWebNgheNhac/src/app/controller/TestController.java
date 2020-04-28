@@ -24,7 +24,7 @@ public class TestController {
 	
 	@RequestMapping("testlayout")
 	public String testLayout(ModelMap model){
-		return new Render().render(model,"mainLayout","testLayout");
+		return new Render(model).render("mainLayout","testLayout");
 	}
 	
 	@Transactional

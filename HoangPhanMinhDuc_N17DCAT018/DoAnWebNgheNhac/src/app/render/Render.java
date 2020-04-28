@@ -7,12 +7,18 @@ public class Render {
 	private String cssFolder;
 	private String jsFolder;
 	private String imgFolder;
+	private ModelMap model;
 	
-	public Render(){
+	public Render(ModelMap model){
 		this.rootFolder = "public";
 		this.cssFolder = "css";
 		this.jsFolder = "js";
 		this.imgFolder = "img";
+		this.model = model;
+	}
+	
+	public void setModelAttr(String paramName, Object paramValue){
+		model.addAttribute(paramName, paramValue);
 	}
 	
 	private String getLinkCss(String fileName){
@@ -23,7 +29,7 @@ public class Render {
 		return rootFolder + "/" + jsFolder + "/" + fileName;
 	}
 	
-	public String render(ModelMap model, String layout, String render){
+	public String render(String layout, String render){
 		model.addAttribute("cssLink", getLinkCss("main"));
 		model.addAttribute("jsLink", getLinkJs("jquery.min"));
 		model.addAttribute("render", render);

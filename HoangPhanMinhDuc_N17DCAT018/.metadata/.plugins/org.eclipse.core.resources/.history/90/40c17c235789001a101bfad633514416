@@ -1,0 +1,29 @@
+package app.query;
+import org.hibernate.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import app.entity.*;
+import java.util.*;
+
+
+public class UserQuery {
+	@Autowired
+	SessionFactory ftr;
+	
+	@Transactional
+	public void add(User user){
+		
+	}
+	
+	@Transactional
+	public List<User> get(String pattern){
+		Session session = ftr.getCurrentSession();
+		String[] row = pattern.split("=");
+		String hql = "FROM User u WHERE u." + row[0] +" LIKE :data";
+		Query query = session.createQuery(hql);
+		query.setParameter("data", row[1]);
+		return query.list();
+	}
+}
