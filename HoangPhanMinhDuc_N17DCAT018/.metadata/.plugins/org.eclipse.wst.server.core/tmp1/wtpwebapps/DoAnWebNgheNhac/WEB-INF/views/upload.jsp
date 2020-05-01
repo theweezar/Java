@@ -8,5 +8,17 @@
 		<div>
 			<input type="file" name="uplSong"/>
 		</div>
+		<div>
+			<input placeholder="Tên bài hát" type="text" name="songName"/>
+		</div>
+		<div>
+			<input placeholder="Tên ca sĩ" type="text" name="singerName"/>
+		</div>
+		<div>
+			<input placeholder="Tên nhạc sĩ" type="text" name="musicianName"/>
+		</div>
+		<div>
+			<form:select path="kind" items="${kind}" /> 
+		</div>
 	</form>
 </div>
