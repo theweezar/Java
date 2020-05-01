@@ -1,6 +1,5 @@
 package app.query;
 import org.hibernate.*;
-import org.springframework.transaction.annotation.Transactional;
 import app.entity.*;
 import java.util.*;
 
@@ -13,7 +12,6 @@ public class UserQuery {
 		this.ftr = ftr;
 	}
 	
-	@Transactional
 	public void add(User user){
 		Session session = ftr.openSession();
 		Transaction t = session.beginTransaction();
@@ -29,7 +27,6 @@ public class UserQuery {
 		}
 	}
 	
-	@Transactional
 	public List<User> get(String pattern){
 		Session session = ftr.getCurrentSession();
 		String[] row = pattern.split("=");

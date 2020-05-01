@@ -1,13 +1,14 @@
 package app.controller;
-import org.hibernate.Query;
-import org.hibernate.Session;
+//import org.hibernate.Query;
+//import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+//import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -25,14 +26,8 @@ public class UserController {
 	@Transactional
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public void login(HttpServletRequest req, HttpServletResponse res) throws IOException{
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		
-//		Session session = ftr.getCurrentSession();
-//		String hql = "FROM User u WHERE u.username LIKE :username";
-//		Query query = session.createQuery(hql);
-//		query.setParameter("username", username);
-//		List<User> list = query.list();
+		String username = req.getParameter("username").trim();
+		String password = req.getParameter("password").trim();
 		
 		UserQuery query = new UserQuery(ftr);
 		List<User> list = query.get("username="+username);
@@ -51,39 +46,35 @@ public class UserController {
 	@Transactional
 	@RequestMapping(value="/register",method = RequestMethod.POST)
 	public void register(HttpServletRequest req, HttpServletResponse res) throws IOException{
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		String rePw = req.getParameter("rePassword");
-		String email = req.getParameter("email");
 		
-		UserQuery query = new UserQuery(ftr);
-		if (query.get("username="+username).size() != 0){
-			if (query.get("email="+email).size() != 0){
-				if (password.equals(rePw)){
-					User user = new User();
-					user.setUsername(username);
-					user.setPassword(password);
-					user.setEmail(email);
-					query.add(user);
+		User user = new User();
+		UserQuery userQuery = new UserQuery(ftr);
+		
+		String rePw = req.getParameter("rePassword").trim();
+		user.setUsername(req.getParameter("username").trim());
+		user.setPassword(req.getParameter("password").trim());
+		user.setEmail(req.getParameter("email").trim());
+		
+		if (userQuery.get("username="+user.getUsername()) != null){
+			if (userQuery.get("email="+user.getEmail())!= null){
+				if (user.getPassword().equals(rePw)){
+					userQuery.add(user);
+					res.sendRedirect("./userlist.htm");
 				}
+				else res.sendRedirect("./passErr.htm");
 			}
+			else res.sendRedirect("./emailErr.htm");
 		}
-		res.sendRedirect("./home.htm");
+		else res.sendRedirect("./usernameErr.htm");
 	}
 	
 	@RequestMapping("/logout")
-	public void logout(HttpServletRequest req, HttpServletResponse res){
+	public void logout(HttpServletRequest req, HttpServletResponse res) throws Exception{
 		HttpSession httpss = req.getSession();
-		try{
-			httpss.removeAttribute("logged");
-			httpss.removeAttribute("username");
-			httpss.removeAttribute("userId");
-			res.sendRedirect("./home.htm");
-		}
-		catch(Exception e){
-			
-		}
-		
+		httpss.removeAttribute("logged");
+		httpss.removeAttribute("username");
+		httpss.removeAttribute("userId");
+		res.sendRedirect("./home.htm");
 	}
 	
 }

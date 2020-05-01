@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="f" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,8 +23,9 @@
 		<div class="searchbar">
 			<input type="text" value="" placeholder="Tìm kiếm">
 		</div>
-		<c:if test="${!logged}">
+		
 		<div class="account">
+		<c:if test="${!logged}">
 			<span id="login">
 				đăng nhập
 			</span>
@@ -31,12 +33,16 @@
 			<span id="register">
 				đăng ký
 			</span>
-		</div>
 		</c:if>
 		<c:if test="${logged}">
-			<span id="logout"><a href="./logout.htm">thoát</a></span>
+			<span id="logout"><a href="./logout.htm">Thoát</a></span>
+			<span><a href="./upload.htm">tải lên</a></span>
 		</c:if>
+		</div>
+		<div>This is file mainLayout.jsp</div>
 	</div>
+	<!-- ================================================================================ -->
+	<c:if test="${!logged }">
 	<div id="sign" class="sign" style="display: none">
 		<div id="blackglass" class="blackglass">
 			<div id="loginForm" class="login-form" style="display: none">
@@ -51,7 +57,7 @@
 					<button class="subBtn" type="submit">
 						Login
 					</button>
-				</form>
+				</form> 
 			</div>
 			<div id="registerForm" class="register-form" style="display: none">
 				<div id="closeBtn2" class="close-btn">Close</div>
@@ -60,10 +66,10 @@
 						<input placeholder="Username" name="username" type="text">
 					</div>
 					<div class="ip-g">
-						<input placeholder="Password" name="password" type="password">
+						<input placeholder="Password" name="password" type="text">
 					</div>
 					<div class="ip-g">
-						<input placeholder="Confirm Password" name="rePassword" type="password">
+						<input placeholder="Confirm Password" name="rePassword" type="text">
 					</div>
 					<div class="ip-g">
 						<input placeholder="Email" name="email" type="text">
@@ -75,8 +81,10 @@
 			</div>
 		</div>
 	</div>
+	</c:if>
+	<!-- ============================================================ -->
 	<jsp:include page="${render}.jsp"/>
-	
+	<!-- ============================================================ -->	
 	<div class="a-player">
 		<audio id="audio" controls>
 			<source id="musicSrc" src type="audio/mpeg">

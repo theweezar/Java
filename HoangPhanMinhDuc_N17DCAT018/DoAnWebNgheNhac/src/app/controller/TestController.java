@@ -28,13 +28,13 @@ public class TestController {
 	}
 	
 	@Transactional
-	@RequestMapping("test")
+	@RequestMapping("userlist")
 	public String test(ModelMap model){
 		Session session = ftr.getCurrentSession();
 		String hql = "FROM User";
 		Query query = session.createQuery(hql);
 		List<User> list = query.list();
 		model.addAttribute("list", list);
-		return "test";
+		return "userlist";
 	}
 }
