@@ -1,0 +1,18 @@
+package app.entity;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="playlist")
+public class PlayList {
+	@Id
+	@GeneratedValue
+	@Column(name="id")
+	private int id;
+	
+	@Column(name="userId")
+	private int userId;
+	
+	@Column(name="isLater")
+	private boolean isLater;
+}

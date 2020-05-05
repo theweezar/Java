@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.*;
 import app.entity.*;
+import app.query.PlayListQuery;
 import app.render.*;
 
 @Controller
@@ -36,5 +37,12 @@ public class TestController {
 		List<User> list = query.list();
 		model.addAttribute("list", list);
 		return "userlist";
+	}
+	
+	@Transactional
+	@RequestMapping("playlist")
+	public void plTest(){
+		PlayListQuery query = new PlayListQuery(ftr);
+		System.out.print(query.getPlayList(1, 1));
 	}
 }

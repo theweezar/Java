@@ -29,7 +29,7 @@ public class AppController {
 		Session session = ftr.getCurrentSession();
 		String hql = "FROM Song";
 		Query query = session.createQuery(hql);
-		List<User> songList = query.list();
+		List<Song> songList = query.list();
 //		set các biến boolean để làm điều kiện xử lý ở file .jsp
 		r.setModelAttr("songList", songList);
 		r.setModelAttr("logged", false);

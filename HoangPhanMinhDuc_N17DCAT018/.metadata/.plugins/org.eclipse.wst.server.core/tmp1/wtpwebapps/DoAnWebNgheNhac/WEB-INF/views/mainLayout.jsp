@@ -15,6 +15,7 @@
 	<div class="menu">
 		<div class="nav">
 			<ul>
+				<li><a href="./home.htm">home</a></li>
 				<li><a href="#">top 100</a></li>
 				<li><a href="#">quốc gia</a></li>
 				<li><a href="#">thể loại</a></li>
@@ -49,10 +50,10 @@
 				<div id="closeBtn1" class="close-btn">Close</div>
 				<form action="./login.htm" method="post">
 					<div class="ip-g">
-						<input placeholder="Username" name="username" type="text">
+						<input placeholder="Username" name="username" type="text" value="admin">
 					</div>
 					<div class="ip-g">
-						<input placeholder="Password" name="password" type="password">
+						<input placeholder="Password" name="password" type="password" value="admin">
 					</div>
 					<button class="subBtn" type="submit">
 						Login

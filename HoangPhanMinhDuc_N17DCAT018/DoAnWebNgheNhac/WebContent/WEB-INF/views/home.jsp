@@ -15,7 +15,7 @@
 						<div class="singer-name">${s.getSingerName()}</div>
 					</li>
 					<li>Duration</li>
-					
+					<li role="addPL"><div class="loveBtn">Love</div></li>
 				</ul>
 			</div>
 		</li>

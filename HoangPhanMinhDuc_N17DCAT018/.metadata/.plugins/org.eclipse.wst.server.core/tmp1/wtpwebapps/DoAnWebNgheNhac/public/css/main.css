@@ -104,17 +104,22 @@ body{
 	display: block;
 }
 
-.song-list .song-infor .main-infor li{
+.song-list ul li .song-infor .main-infor li{
 	display: inline-block;
 }
 
-.song-list .song-infor .main-infor li .song-name{
+.song-list ul li .song-infor .main-infor li .song-name{
 	font-weight: bold;
 }
 
-.song-list .song-infor .main-infor li .singer-name{
+.song-list ul li .song-infor .main-infor li .singer-name{
 	color: gray;
 	font-size: 85%;
+}
+
+.song-list ul li .song-infor .main-infor li .loveBtn{
+	cursor: pointer;
+	color: red;
 }
 
 .a-player{

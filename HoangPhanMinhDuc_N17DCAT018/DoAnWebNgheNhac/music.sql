@@ -73,3 +73,6 @@ INSERT INTO kind VALUES
 ('Nhạc Rap Việt'),
 ('Nhạc Thiếu Nhi'),
 ('Nhạc Trẻ')
+
+INSERT INTO songs VALUES
+()

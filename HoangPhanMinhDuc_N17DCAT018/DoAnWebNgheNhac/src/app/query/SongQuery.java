@@ -12,7 +12,18 @@ public class SongQuery {
 	}
 	
 	public void add(Song song){
-		
+		Session session = ftr.openSession();
+		Transaction t = session.beginTransaction();
+		try{
+			session.save(song);
+			t.commit();
+		}
+		catch(Exception e){
+			t.rollback();
+		}
+		finally{
+			session.close();
+		}
 	}
 	
 	

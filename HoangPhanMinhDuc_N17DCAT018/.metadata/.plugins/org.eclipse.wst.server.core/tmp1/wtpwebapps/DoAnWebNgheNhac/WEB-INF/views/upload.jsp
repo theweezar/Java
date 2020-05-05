@@ -17,8 +17,15 @@
 		<div>
 			<input placeholder="Tên nhạc sĩ" type="text" name="musicianName"/>
 		</div>
+		<div> 
+			<select id="kindSelect" name="kind">
+				<c:forEach var="k" items="${kind}">
+					<option value="${k.getId()}">${k.getKindName()}</option>
+				</c:forEach>
+			</select>
+		</div>
 		<div>
-			<form:select path="kind" items="${kind}" /> 
+			<button type="submit">Tải lên</button>
 		</div>
 	</form>
 </div>

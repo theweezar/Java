@@ -1,9 +1,11 @@
 $(function(){
-	$("ul[role='play']").click(function(){
+	$("ul[role='play'] li:nth-child(1)").click(function(){
 		let audio = document.getElementById("audio");
-		$("#musicSrc").attr("src",`music_src/${$(this).attr("link")}.mp3`);
+		$("#musicSrc").attr("src",`music_src/${$(this).parent().attr("link")}`);
 		audio.load();
-		audio.play();
+		audio.onloadeddata = function(){
+			this.play();
+		}
 	});
 
 	$("#login").click(function(){
@@ -21,4 +23,17 @@ $(function(){
 		$("#loginForm").attr("style","display: none");
 		$("#registerForm").attr("style","display: none");
 	});
+
+	$("li[role='addPL']").click(function(){
+		$.ajax({
+			type:"POST",
+			url:"AddToPlayList",
+			data:{
+				songId: $(this).parent().attr("song-id")
+			},
+			success: function(res){
+				console.log(res);
+			}
+		})
+	})
 });

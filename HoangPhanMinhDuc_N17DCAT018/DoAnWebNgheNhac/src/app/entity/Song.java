@@ -18,6 +18,7 @@ public class Song {
 	@Column(name="userId")
 	private int userId;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="upload_at")
 	private Date uploadAt;
 	
@@ -107,6 +108,5 @@ public class Song {
 	public void setView(int view) {
 		this.view = view;
 	}
-	
 	
 }
