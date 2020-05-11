@@ -30,12 +30,11 @@ public class AppController {
 //		PlayListQuery plQuery = new PlayListQuery(ftr);
 		List<Song> songList = sQuery.getAll();
 		List<SongBean> sLBean = new ArrayList<>();
-//		HttpSession httpss = req.getSession();
-//		boolean logged = httpss.getAttribute("logged") == null ? false : (boolean)httpss.getAttribute("logged");
-//		if (logged){
-//			r.setModelAttr("logged", logged);
-//			r.setModelAttr("currUsername", httpss.getAttribute("username"));	
-//		}
+		HttpSession httpss = req.getSession();
+		if (httpss.getAttribute("logged") != null){
+			r.setModelAttr("currUsername", ((User)httpss.getAttribute("userObj")).getUsername());
+		}
+		System.out.print(httpss.getAttribute("logged"));
 		for(Song s: songList){
 //			if (logged){
 //				if (plQuery.getDetail((int)httpss.getAttribute("lovePlId"), s.getId()) == null) 

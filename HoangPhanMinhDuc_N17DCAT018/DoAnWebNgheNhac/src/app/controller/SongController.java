@@ -40,10 +40,12 @@ public class SongController {
 		Render r = new Render(model);
 		HttpSession httpss = req.getSession();
 		if (httpss.getAttribute("logged") == null) res.sendRedirect("./home.htm");
+		//else r.setModelAttr("currUsername", ((User)httpss.getAttribute("userObj")).getUsername());
 		r.setModelAttr("listKind", new KindQuery(ftr).get());
 		return r.render("mainLayout", "upload");
 	}
 	
+	@Transactional
 	@RequestMapping(value="upload",method=RequestMethod.POST)
 	public void upload(@RequestParam("uplSong") MultipartFile song, 
 			HttpServletRequest req, HttpServletResponse res) throws IOException{
@@ -53,6 +55,8 @@ public class SongController {
 		String singerName = req.getParameter("singerName");
 		String musicianName = req.getParameter("musicianName");
 		String kindId = req.getParameter("kind");
+		Kind kind = new KindQuery(ftr).get(Integer.parseInt(kindId));
+		System.out.print(kind.getKindName());
 		
 		if (!song.isEmpty()){
 			String rName = "";
@@ -61,13 +65,13 @@ public class SongController {
 			}
 			System.out.print(rName);
 			s.setLink(rName + ".mp3");
-//			s.setUserId((int)req.getSession().getAttribute("userId"));
+			s.setUser((User)req.getSession().getAttribute("userObj"));
 			s.setUploadAt(new Date());
 			// Generate random name for songName
 			s.setSongName(songName);
 			s.setSingerName(singerName);
 			s.setMusicianName(musicianName);
-			s.setKindId(Integer.parseInt(kindId));
+			s.setKind(kind);
 			s.setView(0);
 			song.transferTo(new File(req.getServletContext().getRealPath("/music_src/" + rName + ".mp3")));
 			query.add(s);

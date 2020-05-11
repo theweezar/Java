@@ -18,7 +18,7 @@
       <div class="title">.navigation</div>
       <ul class="navi">
         <li class="navi-item">
-          <a href="#">Home</a>
+          <a href="./home.htm">Home</a>
         </li>
         <li class="navi-item">
           <a href="#">top 100</a>
@@ -33,12 +33,25 @@
       <div class="infor">
         <div class="log-nav">
           <ul>
-            <li>
+          	<c:if test="${!logged}">
+          	<li>
               <a href="./account.htm?m=register">Đăng ký</a>
             </li>
             <li>
               <a href="./account.htm?m=login">Đăng nhập</a>
             </li>
+          	</c:if>
+          	<c:if test="${logged }">
+          	<li>
+          	  <a href="./logout.htm">Thoát</a>
+          	</li>
+          	<li>
+          	  <a href="./upload.htm">Tải lên</a>
+          	</li>
+          	<li>
+          	  Hi, ${currUsername}
+          	</li>
+          	</c:if>
           </ul>
         </div>
 

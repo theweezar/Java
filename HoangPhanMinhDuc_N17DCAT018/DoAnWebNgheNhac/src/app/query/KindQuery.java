@@ -10,6 +10,14 @@ public class KindQuery {
 		this.ftr = ftr;
 	}
 	
+	public Kind get(Integer id){
+		Session session = ftr.getCurrentSession();
+		String hql = "FROM Kind k WHERE k.id LIKE :id";
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		return (Kind)query.uniqueResult();
+	}
+	
 	public List<Kind> get(){
 		Session session = ftr.getCurrentSession();
 		String hql = "FROM Kind";

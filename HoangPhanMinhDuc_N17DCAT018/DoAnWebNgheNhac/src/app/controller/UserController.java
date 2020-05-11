@@ -29,9 +29,9 @@ public class UserController {
 	public String account(@ModelAttribute User user ,ModelMap model,
 			HttpServletRequest req){
 		Render r = new Render(model);
-		String mode = req.getParameter("m").trim();
+		String mode = req.getParameter("m") == null ? "":req.getParameter("m").trim();
 		System.out.print(mode);
-		if (mode.equalsIgnoreCase("login") || mode == null) model.addAttribute("mode", 1);
+		if (mode.equalsIgnoreCase("login") || mode.equalsIgnoreCase("")) model.addAttribute("mode", 1);
 		else if (mode.equalsIgnoreCase("register")) model.addAttribute("mode", 2); 
 		return "user/account";
 	}
@@ -53,8 +53,10 @@ public class UserController {
 //				int lovePlId = plQuery.getPlayList(list.get(0).getId(), 1).get(0).getId();
 				HttpSession httpss = req.getSession();
 				httpss.setAttribute("logged", true);
-				httpss.setAttribute("username", list.get(0).getUsername());
-				httpss.setAttribute("userId", list.get(0).getId());
+//				httpss.setAttribute("username", username);
+//				httpss.setAttribute("userId", list.get(0).getId());
+				httpss.setAttribute("userObj", list.get(0));
+				
 //				httpss.setAttribute("lovePlId", lovePlId);
 			}
 		}
@@ -90,9 +92,10 @@ public class UserController {
 	public void logout(HttpServletRequest req, HttpServletResponse res) throws Exception{
 		HttpSession httpss = req.getSession();
 		httpss.removeAttribute("logged");
-		httpss.removeAttribute("username");
-		httpss.removeAttribute("userId");
-		httpss.removeAttribute("lovePlId");
+		httpss.removeAttribute("userObj");
+//		httpss.removeAttribute("username");
+//		httpss.removeAttribute("userId");
+//		httpss.removeAttribute("lovePlId");
 		res.sendRedirect("./home.htm");
 	}
 	

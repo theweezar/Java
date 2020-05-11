@@ -10,6 +10,11 @@ public class PlayListDetail {
 	@Column(name="plId")
 	private int plId;
 	
+//	@Id
+//	@ManyToOne
+//	@JoinColumn(name="plId")
+//	private PlayList playlist;
+	
 	@Column(name="songId")
 	private int songId;
 	

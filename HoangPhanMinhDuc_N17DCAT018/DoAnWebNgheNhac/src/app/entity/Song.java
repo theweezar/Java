@@ -17,7 +17,6 @@ public class Song {
 	
 //	@Column(name="userId")
 //	private int userId;
-	
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
@@ -35,8 +34,12 @@ public class Song {
 	@Column(name="musicianName")
 	private String musicianName;
 	
-	@Column(name="kindId")
-	private int kindId;
+//	@Column(name="kindId")
+//	private int kindId;
+	
+	@ManyToOne
+	@JoinColumn(name="kindId")
+	private Kind kind;
 	
 	@Column(name="_view")
 	private int view;
@@ -97,13 +100,13 @@ public class Song {
 		this.musicianName = musicianName;
 	}
 
-	public int getKindId() {
-		return kindId;
-	}
-
-	public void setKindId(int kindId) {
-		this.kindId = kindId;
-	}
+//	public int getKindId() {
+//		return kindId;
+//	}
+//
+//	public void setKindId(int kindId) {
+//		this.kindId = kindId;
+//	}
 
 	public int getView() {
 		return view;
@@ -119,6 +122,14 @@ public class Song {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Kind getKind() {
+		return kind;
+	}
+
+	public void setKind(Kind kind) {
+		this.kind = kind;
 	}
 	
 	
