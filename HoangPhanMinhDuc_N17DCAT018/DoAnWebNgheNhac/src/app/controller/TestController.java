@@ -10,7 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.*;
 import app.entity.*;
-import app.query.PlayListQuery;
+import app.query.*;
 import app.render.*;
 
 @Controller
@@ -31,11 +31,8 @@ public class TestController {
 	@Transactional
 	@RequestMapping("userlist")
 	public String test(ModelMap model){
-		Session session = ftr.getCurrentSession();
-		String hql = "FROM User";
-		Query query = session.createQuery(hql);
-		List<User> list = query.list();
-		model.addAttribute("list", list);
+		QueryT query = new QueryT(ftr);
+		model.addAttribute("list", query.select("User"));
 		return "userlist";
 	}
 	
@@ -44,5 +41,16 @@ public class TestController {
 	public void plTest(){
 		PlayListQuery query = new PlayListQuery(ftr);
 		System.out.print(query.getPlayList(1, 1));
+	}
+	
+	@Transactional
+	@RequestMapping("songtest")
+	public void songtest(){
+		SongQuery sQuery = new SongQuery(ftr);
+		for(Song s: sQuery.getAll()){
+			System.out.printf(s.getSongName());
+		}
+		UserQuery uQuery = new UserQuery(ftr);
+		System.out.print("\n"+uQuery.get("username=admin").get(0).getSongs());
 	}
 }

@@ -1,39 +1,23 @@
 $(function(){
-	$("ul[role='play'] li:nth-child(1)").click(function(){
-		let audio = document.getElementById("audio");
-		$("#musicSrc").attr("src",`music_src/${$(this).parent().attr("link")}`);
-		audio.load();
-		audio.onloadeddata = function(){
-			this.play();
-		}
-	});
-
-	$("#login").click(function(){
-		$("#sign").attr("style","display: block");
-		$("#loginForm").attr("style","display: block");
-	});
-
-	$("#register").click(function(){
-		$("#sign").attr("style","display: block");
-		$("#registerForm").attr("style","display: block");
-	})
-
-	$("#closeBtn1,#closeBtn2").click(function(){
-		$("#sign").attr("style","display: none");
-		$("#loginForm").attr("style","display: none");
-		$("#registerForm").attr("style","display: none");
-	});
-
-	$("li[role='addPL']").click(function(){
-		$.ajax({
-			type:"POST",
-			url:"AddToPlayList",
-			data:{
-				songId: $(this).parent().attr("song-id")
-			},
-			success: function(res){
-				console.log(res);
-			}
-		})
-	})
-});
+      const audio = document.querySelector("audio");
+      
+      audio.load();
+      $("#play").click(function(){
+        if ($(this).attr("role") === "pausing"){
+          $(this).attr("role","playing").text("Pause");
+          audio.play();
+        }
+        else if ($(this).attr("role") === "playing"){
+          $(this).attr("role","pausing").text("Play");
+          audio.pause();
+        }
+      });
+      
+      audio.onplaying = function(){
+    	  
+      }
+      
+      audio.onended = function(){
+        $(this).attr("role","pausing").text("Play");
+      }
+})

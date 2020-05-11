@@ -1,5 +1,7 @@
 package app.entity;
 
+import java.util.Collection;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,6 +20,9 @@ public class User {
 	
 	@Column(name="email")
 	private String email;
+	
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	private Collection<Song> songs;
 	
 	public int getId() {
 		return id;
@@ -42,6 +47,12 @@ public class User {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public Collection<Song> getSongs() {
+		return songs;
+	}
+	public void setSongs(Collection<Song> songs) {
+		this.songs = songs;
 	}
 	
 	

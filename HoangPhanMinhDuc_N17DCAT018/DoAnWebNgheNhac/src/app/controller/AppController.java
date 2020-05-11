@@ -12,8 +12,10 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
+import app.bean.SongBean;
 import app.entity.*;
 import app.render.*;
+import app.query.*;
 
 @Controller
 public class AppController {
@@ -22,31 +24,29 @@ public class AppController {
 	
 	@Transactional
 	@RequestMapping("home")
-	public String home(ModelMap model, HttpServletRequest req, HttpServletResponse res){
+	public String home(ModelMap model, HttpServletRequest req, HttpServletResponse res) throws NullPointerException{
 		Render r = new Render(model);
-		boolean logged = false;
-		
-		Session session = ftr.getCurrentSession();
-		String hql = "FROM Song";
-		Query query = session.createQuery(hql);
-		List<Song> songList = query.list();
-//		set các biến boolean để làm điều kiện xử lý ở file .jsp
-		r.setModelAttr("songList", songList);
-		r.setModelAttr("logged", false);
-		
-		HttpSession httpss = req.getSession();
-		try{
-			logged = (boolean)httpss.getAttribute("logged");
+		SongQuery sQuery = new SongQuery(ftr);
+//		PlayListQuery plQuery = new PlayListQuery(ftr);
+		List<Song> songList = sQuery.getAll();
+		List<SongBean> sLBean = new ArrayList<>();
+//		HttpSession httpss = req.getSession();
+//		boolean logged = httpss.getAttribute("logged") == null ? false : (boolean)httpss.getAttribute("logged");
+//		if (logged){
+//			r.setModelAttr("logged", logged);
+//			r.setModelAttr("currUsername", httpss.getAttribute("username"));	
+//		}
+		for(Song s: songList){
+//			if (logged){
+//				if (plQuery.getDetail((int)httpss.getAttribute("lovePlId"), s.getId()) == null) 
+//					sLBean.add(new SongBean(s, false));
+//				else sLBean.add(new SongBean(s, true));
+//			}
+//			else sLBean.add(new SongBean(s, false));
+			sLBean.add(new SongBean(s, false));
 		}
-		catch(NullPointerException e){
-			
-		}
-		if (logged){
-			r.setModelAttr("logged", true);
-			r.setModelAttr("currUsername", httpss.getAttribute("username"));
-			return r.render("mainLayout", "home");
-		}
-		
+		System.out.print(sLBean.get(0).getSong().getSongName());
+		r.setModelAttr("songList", sLBean);
 		return r.render("mainLayout", "home");
 	}
 	

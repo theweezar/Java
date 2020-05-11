@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sun.xml.internal.bind.CycleRecoverable.Context;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.File;
 import java.util.*;
 
@@ -29,5 +30,20 @@ public class PlayListController {
 	@Autowired
 	SessionFactory ftr;
 	
-	
+	@Transactional
+	@RequestMapping(value="/addtopl", method=RequestMethod.POST)
+	public void handle(HttpServletRequest req ,HttpServletResponse res) throws IOException{
+		String songId = req.getParameter("songId");
+		PlayListQuery plQuery = new PlayListQuery(ftr);
+		PlayListDetail item = new PlayListDetail();
+		
+		item.setPlId((int)req.getSession().getAttribute("lovePlId"));
+		item.setSongId(Integer.parseInt(songId));
+		item.setAdd_at(new Date());
+		
+		plQuery.addSong(item);
+		
+		PrintWriter out = res.getWriter();
+		out.print(songId);
+	}
 }

@@ -53,9 +53,15 @@ public class SongController {
 		String singerName = req.getParameter("singerName");
 		String musicianName = req.getParameter("musicianName");
 		String kindId = req.getParameter("kind");
+		
 		if (!song.isEmpty()){
-			s.setLink(song.getOriginalFilename());
-			s.setUserId((int)req.getSession().getAttribute("userId"));
+			String rName = "";
+			for(int i = 0; i < 10; i++){
+				rName = rName + (char)(int)(Math.random() * (122 - 97 + 1) + 97);
+			}
+			System.out.print(rName);
+			s.setLink(rName + ".mp3");
+//			s.setUserId((int)req.getSession().getAttribute("userId"));
 			s.setUploadAt(new Date());
 			// Generate random name for songName
 			s.setSongName(songName);
@@ -63,7 +69,7 @@ public class SongController {
 			s.setMusicianName(musicianName);
 			s.setKindId(Integer.parseInt(kindId));
 			s.setView(0);
-			song.transferTo(new File(req.getServletContext().getRealPath("/music_src/" + song.getOriginalFilename())));
+			song.transferTo(new File(req.getServletContext().getRealPath("/music_src/" + rName + ".mp3")));
 			query.add(s);
 //			D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\DoAnWebNgheNhac\music_src\WYS - Snowman.mp3			
 			res.sendRedirect("./upload.htm");

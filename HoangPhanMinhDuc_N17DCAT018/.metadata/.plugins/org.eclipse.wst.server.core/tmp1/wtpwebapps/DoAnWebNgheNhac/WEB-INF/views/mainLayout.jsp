@@ -8,90 +8,70 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="${cssLink}.css">
+<link rel="stylesheet" href="${bootstrap}.css">
 <script src="${jsLink}.js"></script>
 <title>Layout</title>
 </head>
 <body>
-	<div class="menu">
-		<div class="nav">
-			<ul>
-				<li><a href="./home.htm">home</a></li>
-				<li><a href="#">top 100</a></li>
-				<li><a href="#">quốc gia</a></li>
-				<li><a href="#">thể loại</a></li>
-			</ul>
-		</div>
-		<div class="searchbar">
-			<input type="text" value="" placeholder="Tìm kiếm">
-		</div>
-		
-		<div class="account">
-		<c:if test="${!logged}">
-			<span id="login">
-				đăng nhập
-			</span>
-			|
-			<span id="register">
-				đăng ký
-			</span>
-		</c:if>
-		<c:if test="${logged}">
-			<span id="logout"><a href="./logout.htm">Thoát</a></span>
-			<span><a href="./upload.htm">tải lên</a></span>
-		</c:if>
-		</div>
-		<div>This is file mainLayout.jsp</div>
-	</div>
-	<!-- ================================================================================ -->
-	<c:if test="${!logged }">
-	<div id="sign" class="sign" style="display: none">
-		<div id="blackglass" class="blackglass">
-			<div id="loginForm" class="login-form" style="display: none">
-				<div id="closeBtn1" class="close-btn">Close</div>
-				<form action="./login.htm" method="post">
-					<div class="ip-g">
-						<input placeholder="Username" name="username" type="text" value="admin">
-					</div>
-					<div class="ip-g">
-						<input placeholder="Password" name="password" type="password" value="admin">
-					</div>
-					<button class="subBtn" type="submit">
-						Login
-					</button>
-				</form> 
-			</div>
-			<div id="registerForm" class="register-form" style="display: none">
-				<div id="closeBtn2" class="close-btn">Close</div>
-				<form action="./register.htm" method="post">
-					<div class="ip-g">
-						<input placeholder="Username" name="username" type="text">
-					</div>
-					<div class="ip-g">
-						<input placeholder="Password" name="password" type="text">
-					</div>
-					<div class="ip-g">
-						<input placeholder="Confirm Password" name="rePassword" type="text">
-					</div>
-					<div class="ip-g">
-						<input placeholder="Email" name="email" type="text">
-					</div>
-					<button class="subBtn" type="submit">
-						Sign up
-					</button>
-				</form>
-			</div>
-		</div>
-	</div>
-	</c:if>
-	<!-- ============================================================ -->
-	<jsp:include page="${render}.jsp"/>
-	<!-- ============================================================ -->	
-	<div class="a-player">
-		<audio id="audio" controls>
-			<source id="musicSrc" src type="audio/mpeg">
-		</audio>
-	</div>
-	
-	<script src="public/js/script.js"></script>
+	<div class="conTainer">
+    <div class="left-ct">
+      <div class="title">.navigation</div>
+      <ul class="navi">
+        <li class="navi-item">
+          <a href="#">Home</a>
+        </li>
+        <li class="navi-item">
+          <a href="#">top 100</a>
+        </li>
+        <li class="navi-item">
+          <a href="#">quốc gia</a>
+        </li>
+      </ul>
+    </div>
+    <div style="padding: 0; margin: 0;" class="right-ct">
+      <jsp:include page="${render}.jsp"></jsp:include>
+      <div class="infor">
+        <div class="log-nav">
+          <ul>
+            <li>
+              <a href="./account.htm?m=register">Đăng ký</a>
+            </li>
+            <li>
+              <a href="./account.htm?m=login">Đăng nhập</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="pl-nav">
+          <ul>
+            <li style="text-transform: uppercase; color: whitesmoke;">My PLaylist</li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <audio controls style="display: none;">
+    <source src="./music_src/DoiBaoLauKhongDangSo_TrangThien.mp3"  type="audio/mp3">
+  </audio>
+  <div class="audio-nav">
+    <div class="song-infor">
+      <div class="name">Test DRIVE</div>
+      <div class="singer">JoJI</div>
+    </div>
+    <div class="control">
+      <div class="play-ct">
+        <div id="play" role="pausing">Play</div>
+      </div>
+      <div class="timeline">
+        <div class="">0:00</div>
+        <div id="length" class="line">
+          <div id="current" class="where"></div>
+        </div>
+        <div class="">3:47</div>
+      </div>
+    </div>
+  </div>
+  <script src="./public/js/script.js"></script>
 </body>
 </html>

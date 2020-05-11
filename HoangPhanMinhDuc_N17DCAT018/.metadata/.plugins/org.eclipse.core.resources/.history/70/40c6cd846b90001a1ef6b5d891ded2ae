@@ -1,0 +1,24 @@
+package ptithcm.entity;
+
+import java.util.Date;
+
+import javax.persistence.*;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Entity
+@Table(name="Students")
+public class Student {
+	@Id
+	@GeneratedValue
+	private Integer id;
+	private String fullname;
+	private Boolean gender;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern="MM/dd/yyyy")
+	private Date birthday;
+	private Double mark;
+	@ManyToOne
+	@JoinColumn(name="majorId")
+	private Major major;
+}

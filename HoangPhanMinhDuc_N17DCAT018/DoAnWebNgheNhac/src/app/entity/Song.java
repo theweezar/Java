@@ -15,8 +15,12 @@ public class Song {
 	@Column(name="link")
 	private String link;
 	
-	@Column(name="userId")
-	private int userId;
+//	@Column(name="userId")
+//	private int userId;
+	
+	@ManyToOne
+	@JoinColumn(name="userId")
+	private User user;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="upload_at")
@@ -53,13 +57,13 @@ public class Song {
 		this.link = link;
 	}
 
-	public int getUserId() {
+/*	public int getUserId() {
 		return userId;
 	}
 
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
+	}*/
 
 	public Date getUploadAt() {
 		return uploadAt;
@@ -108,5 +112,15 @@ public class Song {
 	public void setView(int view) {
 		this.view = view;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 	
 }

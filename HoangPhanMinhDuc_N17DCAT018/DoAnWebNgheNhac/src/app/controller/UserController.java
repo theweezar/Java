@@ -17,6 +17,7 @@ import javax.servlet.http.*;
 
 import app.entity.*;
 import app.query.*;
+import app.render.Render;
 
 @Controller
 public class UserController {
@@ -24,20 +25,37 @@ public class UserController {
 	SessionFactory ftr;
 	
 	@Transactional
+	@RequestMapping("account")
+	public String account(@ModelAttribute User user ,ModelMap model,
+			HttpServletRequest req){
+		Render r = new Render(model);
+		String mode = req.getParameter("m").trim();
+		System.out.print(mode);
+		if (mode.equalsIgnoreCase("login") || mode == null) model.addAttribute("mode", 1);
+		else if (mode.equalsIgnoreCase("register")) model.addAttribute("mode", 2); 
+		return "user/account";
+	}
+	
+	
+	
+	@Transactional
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public void login(HttpServletRequest req, HttpServletResponse res) throws IOException{
-		String username = req.getParameter("username").trim();
-		String password = req.getParameter("password").trim();
+	public void login(@ModelAttribute User user,
+			HttpServletRequest req, HttpServletResponse res) throws IOException{
+		String username = user.getUsername().trim();
+		String password = user.getPassword().trim();
 		
-		UserQuery query = new UserQuery(ftr);
-		List<User> list = query.get("username="+username);
-		
+		UserQuery uQuery = new UserQuery(ftr);
+//		PlayListQuery plQuery = new PlayListQuery(ftr);
+		List<User> list = uQuery.get("username="+username);
 		if (list.size() != 0 && list != null){
 			if (password.equals(list.get(0).getPassword())){
+//				int lovePlId = plQuery.getPlayList(list.get(0).getId(), 1).get(0).getId();
 				HttpSession httpss = req.getSession();
 				httpss.setAttribute("logged", true);
 				httpss.setAttribute("username", list.get(0).getUsername());
 				httpss.setAttribute("userId", list.get(0).getId());
+//				httpss.setAttribute("lovePlId", lovePlId);
 			}
 		}
 		res.sendRedirect("./home.htm");
@@ -45,15 +63,15 @@ public class UserController {
 	
 	@Transactional
 	@RequestMapping(value="/register",method = RequestMethod.POST)
-	public void register(HttpServletRequest req, HttpServletResponse res) throws IOException{
+	public void register(@ModelAttribute User user,
+			HttpServletRequest req, HttpServletResponse res) throws IOException{
 		
-		User user = new User();
 		UserQuery userQuery = new UserQuery(ftr);
 		
 		String rePw = req.getParameter("rePassword").trim();
-		user.setUsername(req.getParameter("username").trim());
-		user.setPassword(req.getParameter("password").trim());
-		user.setEmail(req.getParameter("email").trim());
+		user.setUsername(user.getUsername().trim());
+		user.setPassword(user.getPassword().trim());
+		user.setEmail(user.getEmail().trim());
 		
 		if (userQuery.get("username="+user.getUsername()) != null){
 			if (userQuery.get("email="+user.getEmail())!= null){
@@ -74,6 +92,7 @@ public class UserController {
 		httpss.removeAttribute("logged");
 		httpss.removeAttribute("username");
 		httpss.removeAttribute("userId");
+		httpss.removeAttribute("lovePlId");
 		res.sendRedirect("./home.htm");
 	}
 	

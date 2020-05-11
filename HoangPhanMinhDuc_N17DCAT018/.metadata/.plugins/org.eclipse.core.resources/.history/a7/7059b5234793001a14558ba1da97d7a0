@@ -1,0 +1,30 @@
+$(function(){
+      const audio = document.querySelector("audio");
+      
+//      const count = setInterval(function(){
+//          console.log(audio.currentTime);
+//      }, 800);
+      
+      audio.load();
+      $("#play").click(function(){
+        if ($(this).attr("role") === "pausing"){
+          $(this).attr("role","playing").text("Pause");
+          audio.play();
+          count();
+        }
+        else if ($(this).attr("role") === "playing"){
+          $(this).attr("role","pausing").text("Play");
+          audio.pause();
+          clearInterval(count);
+        }
+      });
+      
+      audio.onplaying = function(){
+    	  count();
+      }
+      
+      audio.onended = function(){
+        $(this).attr("role","pausing").text("Play");
+        clearInterval(count);
+      }
+})

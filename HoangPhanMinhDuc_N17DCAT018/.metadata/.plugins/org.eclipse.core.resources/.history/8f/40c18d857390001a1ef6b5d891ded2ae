@@ -1,0 +1,39 @@
+package ptithcm.entity;
+
+import java.util.Date;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="Staffs")
+public class Staffs {
+	@Id
+	@Column(name="Id")
+	private String id;
+	@Column(name="Name")
+	private String name;
+	@Column(name="Gender")
+	private Boolean gender;
+	@Temporal(TemporalType.DATE)
+	@Column(name="Birthday")
+	private Date birthday;
+	@Column(name="Photo")
+	private String photo;
+	@Column(name="Email")
+	private String email;
+	@Column(name="Phone")
+	private String phone;
+	@Column(name="Salary")
+	private Float salary;
+	@Column(name="Notes")
+	private String notes;
+	
+	
+	@ManyToOne
+	@JoinColumn(name="Id")
+	private Departs depart;
+	
+	
+	
+	
+}

@@ -128,7 +128,9 @@
 	      <Context docBase="PTITHCMS1L2" path="/PTITHCMS1L2" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L2"/>  -->
           <!--  Context docBase="PTITHCMS1L3" path="/PTITHCMS1L3" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L3"/-->
 <!-- 	  <Context docBase="PTITHCMS1L3" path="/PTITHCMS1L3" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L3"/>
-	      <Context docBase="PTITHCMS1L4" path="/PTITHCMS1L4" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L4"/> -->
+	      <Context docBase="PTITHCMS1L4" path="/PTITHCMS1L4" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L4"/> 
+	      <Context docBase="PTITHCMS1L6" path="/PTITHCMS1L6" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L6"/>
+	      -->
 	      <Context docBase="DoAnWebNgheNhac" path="/DoAnWebNgheNhac" reloadable="true" source="org.eclipse.jst.jee.server:DoAnWebNgheNhac"/></Host>
     </Engine>
   </Service>

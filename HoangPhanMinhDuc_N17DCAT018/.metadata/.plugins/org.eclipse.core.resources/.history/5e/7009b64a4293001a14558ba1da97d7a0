@@ -1,0 +1,128 @@
+html,body{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	background: whitesmoke;
+}
+
+.menu{
+	position: sticky;
+	top: 0;
+	width: 100%;
+	border-bottom: 1px solid gray;
+}
+
+.menu div{
+	display: inline-block;
+}
+
+.menu .nav{
+	border: 1px solid black;
+}
+
+.menu .nav ul{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.menu .nav ul li{
+	float: left;
+}
+
+.menu .nav ul li a{
+	text-decoration: none;
+	text-transform: uppercase;
+	color: black;
+	font-size: 110%;
+}
+
+.menu .account span{ 
+	text-transform: uppercase;
+	color: gray;
+	cursor: pointer;
+}
+
+.menu .account span a{
+	text-transform: uppercase;
+	text-decoration: none;
+	color: gray;
+}
+
+.sign{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.sign .blackglass{
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.5);
+	/* z-index: -1; */
+}
+
+.sign .blackglass .login-form{
+	position: absolute;
+	background: white;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	width: 30%;
+	height: 30%;
+}
+
+.sign .blackglass .register-form{
+	position: absolute;
+	background: white;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	width: 30%;
+	height: 40%;
+}
+
+.close-btn{
+	float: right;
+	cursor: pointer;
+}
+
+.song-list{
+	position: relative;
+}
+
+.song-list ul{
+	list-style: none;
+}
+
+.song-list ul > li {
+	display: block;
+}
+
+.song-list ul li .song-infor .main-infor li{
+	display: inline-block;
+}
+
+.song-list ul li .song-infor .main-infor li .song-name{
+	font-weight: bold;
+}
+
+.song-list ul li .song-infor .main-infor li .singer-name{
+	color: gray;
+	font-size: 85%;
+}
+
+.song-list ul li .song-infor .main-infor li .loveBtn{
+	cursor: pointer;
+	color: red;
+}
+
+.a-player{
+	position: fixed;
+	bottom: 0;
+}

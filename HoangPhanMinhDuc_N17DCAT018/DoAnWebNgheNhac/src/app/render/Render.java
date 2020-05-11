@@ -29,8 +29,13 @@ public class Render {
 		return rootFolder + "/" + jsFolder + "/" + fileName;
 	}
 	
+	public String render(String render){
+		return render;
+	}
+	
 	public String render(String layout, String render){
 		model.addAttribute("cssLink", getLinkCss("main"));
+		model.addAttribute("bootstrap", getLinkCss("bootstrap"));
 		model.addAttribute("jsLink", getLinkJs("jquery.min"));
 		model.addAttribute("render", render);
 		return layout;

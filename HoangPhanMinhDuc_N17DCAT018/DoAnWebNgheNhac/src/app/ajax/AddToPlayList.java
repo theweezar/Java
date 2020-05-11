@@ -27,10 +27,10 @@ public class AddToPlayList extends HttpServlet{
 		String songId = req.getParameter("songId");
 		
 		PlayListQuery query = new PlayListQuery(ftr);
-//		PlayListDetail item = new PlayListDetail();
+		PlayListDetail item = new PlayListDetail();
 //		(int)req.getSession().getAttribute("userId")
 //		List<PlayList> pl = ;
-//		System.out.print(query.getPlayList(1, 1));
+		System.out.print(query.getPlayList(1, 1));
 //		item.setPlId(pl.getId());
 //		item.setSongId(Integer.parseInt(songId));
 //		item.setAdd_at(new Date());

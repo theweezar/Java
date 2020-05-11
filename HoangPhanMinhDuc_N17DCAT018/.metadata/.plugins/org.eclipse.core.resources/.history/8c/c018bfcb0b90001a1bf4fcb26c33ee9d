@@ -1,0 +1,24 @@
+package app.query;
+
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+public class QueryT<T> {
+	
+	private T t;
+	private SessionFactory ftr;
+	
+	public QueryT(SessionFactory ftr){
+		this.ftr = ftr;
+	}
+	
+	public List<T> select(){
+		Session session = ftr.getCurrentSession();
+		String hql = "FROM " + this.t.getClass();
+		Query query = session.createQuery(hql);
+		return query.list();
+	}
+}

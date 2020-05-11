@@ -1,128 +1,164 @@
-html,body{
-	margin: 0;
-	padding: 0;
+html, body{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
-body{
-	background: whitesmoke;
+a{
+  text-decoration: none;
 }
 
-.menu{
-	position: sticky;
-	top: 0;
-	width: 100%;
-	border-bottom: 1px solid gray;
+ul{
+  list-style: none;
 }
 
-.menu div{
-	display: inline-block;
+.conTainer{
+  height: 100%;
+  display: grid;
+  grid-template-columns: 25% 75%;
+  z-index: -1;
 }
 
-.menu .nav{
-	border: 1px solid black;
+.conTainer .left-ct{
+  position: relative;
+  background: #131C37;
 }
 
-.menu .nav ul{
-	list-style: none;
-	padding: 0;
-	margin: 0;
+.conTainer .left-ct .title{
+  color: white;
+  letter-spacing: 2px;
+  padding: 25px 0 25px 35px;
+  text-transform: uppercase;
+  font-size: 110%;
 }
 
-.menu .nav ul li{
-	float: left;
+.conTainer .left-ct .navi{
+  color: white;
+  margin: 0;
+  padding: 0;
 }
 
-.menu .nav ul li a{
-	text-decoration: none;
-	text-transform: uppercase;
-	color: black;
-	font-size: 110%;
+.conTainer .left-ct .navi .navi-item{
+  padding: 15px 0 15px 35px;
+  font-size: 90%;
+  text-transform: uppercase;
 }
 
-.menu .account span{ 
-	text-transform: uppercase;
-	color: gray;
-	cursor: pointer;
+.conTainer .left-ct .navi .navi-item a{
+  color: white;
 }
 
-.menu .account span a{
-	text-transform: uppercase;
-	text-decoration: none;
-	color: gray;
+.conTainer .right-ct{
+  background: #0F172E;
+  display: grid;
+  grid-template-columns: 65% 35%;
 }
 
-.sign{
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+.conTainer .right-ct .news{
+  /* border-right: 1px solid white; */
 }
 
-.sign .blackglass{
-	position: relative;
-	width: 100%;
-	height: 100%;
-	background: rgba(0,0,0,0.5);
-	/* z-index: -1; */
+.conTainer .right-ct .news .song-list{
+  color: white;
 }
 
-.sign .blackglass .login-form{
-	position: absolute;
-	background: white;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-	width: 30%;
-	height: 30%;
+.conTainer .right-ct .news .song-list ul{
+  margin: 0;
+  padding: 0;
 }
 
-.sign .blackglass .register-form{
-	position: absolute;
-	background: white;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-	width: 30%;
-	height: 40%;
+.conTainer .right-ct .news .song-list ul li{
+  display: block;
+  width: 100%;
+  /* border: 1px solid white; */
+  display: grid;
+  grid-template-columns: 40% 25% 25% 10%;
 }
 
-.close-btn{
-	float: right;
-	cursor: pointer;
+.conTainer .right-ct .news .song-list ul li div{
+  display: inline-block;
+  font-size: 90%;
+  padding: 15px 0;
 }
 
-.song-list{
-	position: relative;
+.conTainer .right-ct .news .song-list ul li div:nth-child(4){
+  cursor: pointer;
 }
 
-.song-list ul{
-	list-style: none;
+.conTainer .right-ct .infor{
+
 }
 
-.song-list ul > li {
-	display: block;
+.conTainer .right-ct .infor .log-nav{
+  height: 10%;
 }
 
-.song-list ul li .song-infor .main-infor li{
-	display: inline-block;
+.conTainer .right-ct .infor .log-nav ul{
+  color: whitesmoke;
 }
 
-.song-list ul li .song-infor .main-infor li .song-name{
-	font-weight: bold;
+.conTainer .right-ct .infor .log-nav ul li{
+  float: right;
+  margin-right: 25px;
 }
 
-.song-list ul li .song-infor .main-infor li .singer-name{
-	color: gray;
-	font-size: 85%;
+.conTainer .right-ct .infor .log-nav ul li a{
+  color: gray;
+  font-size: 88%;
 }
 
-.song-list ul li .song-infor .main-infor li .loveBtn{
-	cursor: pointer;
-	color: red;
+.conTainer .right-ct .infor .pl-nav{
+
 }
 
-.a-player{
-	position: fixed;
-	bottom: 0;
+.audio-nav{
+  position: absolute;
+  height: 10%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(245, 245, 245, 0.2);
+  display: grid;
+  grid-template-columns: 25% 75%;
+}
+
+.audio-nav .control{
+  width: 100%;
+  /* border: 1px solid wheat; */
+  display: flex;
+  flex-direction: row;
+}
+
+.audio-nav .control .play-ct{
+  display: flex;
+  /* flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+  width: 10%;
+  cursor: pointer;
+}
+
+.audio-nav .control .timeline{
+  display: grid;
+  width: 80%;
+  grid-template-columns: 15% 70% 15%;
+}
+
+.audio-nav .control .timeline .line{
+  background-color: gray;
+  height: 10%;
+  margin-top: 2px;
+}
+
+.audio-nav .control .timeline .line .where{
+  height: 100%;
+  background: whitesmoke;
+}
+
+.audio-nav .control div{
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
 }
