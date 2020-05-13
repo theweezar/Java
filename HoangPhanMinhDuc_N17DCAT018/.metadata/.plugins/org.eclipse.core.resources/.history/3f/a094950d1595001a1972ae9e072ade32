@@ -1,0 +1,44 @@
+$(function(){
+      const audio = document.querySelector("audio");
+      
+      audio.load();
+      $("#play").click(function(){
+        if ($(this).attr("role") === "pausing"){
+          $(this).attr("role","playing").text("Pause");
+          audio.play();
+        }
+        else if ($(this).attr("role") === "playing"){
+          $(this).attr("role","pausing").text("Play");
+          audio.pause();
+        }
+      });
+      
+      audio.onplaying = function(){
+    	  
+      }
+      
+      audio.onended = function(){
+        $(this).attr("role","pausing").text("Play");
+      }
+
+      $("div[role='love']").click(function(){
+        const songId = $(this).siblings("div.title").attr("song-id");
+        $.ajax({
+          type:"POST",
+          url:"./addtolovepl.htm",
+          data:{
+            songId:songId
+          },
+          success: function(d){
+        	console.log(d);
+        	console.log($(this));
+            if (d){
+            	$(this).attr("style","filter: invert(13%) sepia(92%) saturate(7237%) hue-rotate(360deg) brightness(103%) contrast(106%)");
+            }
+            else{
+//            	$(this).removeAttr("style");
+            }
+          }
+        })
+      })
+})
