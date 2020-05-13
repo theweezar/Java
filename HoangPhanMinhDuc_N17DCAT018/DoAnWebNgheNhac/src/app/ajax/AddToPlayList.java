@@ -24,18 +24,18 @@ public class AddToPlayList extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	@Transactional
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
-		String songId = req.getParameter("songId");
-		
-		PlayListQuery query = new PlayListQuery(ftr);
-		PlayListDetail item = new PlayListDetail();
+//		String songId = req.getParameter("songId");
+//		System.out.print(songId);
+//		PlayListQuery query = new PlayListQuery(ftr);
+//		PlayListDetail item = new PlayListDetail();
 //		(int)req.getSession().getAttribute("userId")
 //		List<PlayList> pl = ;
-		System.out.print(query.getPlayList(1, 1));
+//		System.out.print(query.getPlayList(1, 1));
 //		item.setPlId(pl.getId());
 //		item.setSongId(Integer.parseInt(songId));
 //		item.setAdd_at(new Date());
 //		query.addSong(item);
 		PrintWriter out = res.getWriter();
-		out.print(songId);
+		out.print("ina");
 	}
 }

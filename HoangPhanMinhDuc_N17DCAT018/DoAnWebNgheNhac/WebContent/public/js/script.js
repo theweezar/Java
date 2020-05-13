@@ -1,5 +1,6 @@
 $(function(){
       const audio = document.querySelector("audio");
+      var start = undefined;
       
       audio.load();
       $("#play").click(function(){
@@ -14,10 +15,45 @@ $(function(){
       });
       
       audio.onplaying = function(){
-    	  
+    	  start = setInterval(function(){
+          let percent = (audio.currentTime / audio.duration) * 100;
+          $("#current").css("width",`${percent}%`);
+          let min = "0";
+          let sec = "0";
+          if (audio.currentTime < 10 + 60 * Math.floor(audio.currentTime/60)) sec = `0${audio.currentTime - 60 * Math.floor(audio.currentTime/60)}`;
+          
+        },900);
       }
       
       audio.onended = function(){
         $(this).attr("role","pausing").text("Play");
       }
+
+      $("div[role='love']").click(function(){
+        const songId = $(this).siblings("div.title").attr("song-id");
+        $.ajax({
+          type:"POST",
+          url:"./addtolovepl.htm",
+          data:{
+            songId:songId
+          },
+          success: (d) => {
+        	console.log(d);
+            if (d.trim() === "true"){
+            	$(this).css("filter","invert(13%) sepia(92%) saturate(7237%) hue-rotate(360deg) brightness(103%) contrast(106%)");
+            }
+            else if(d.trim() === "false"){
+            	$(this).removeAttr("style");
+            }
+          }
+        });
+      });
+      
+      $("div[role='choose']").click(function(){
+       console.log($(this).attr("link"));
+       $("#play").attr("role","playing").text("Pause");
+       audio.setAttribute("src",`music_src/${$(this).attr("link")}`);
+       audio.load();
+       audio.play();
+      });
 })

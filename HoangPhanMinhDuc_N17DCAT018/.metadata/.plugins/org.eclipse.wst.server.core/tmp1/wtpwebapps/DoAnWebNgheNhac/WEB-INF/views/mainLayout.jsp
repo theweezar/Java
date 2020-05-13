@@ -77,9 +77,9 @@
         <div id="play" role="pausing">Play</div>
       </div>
       <div class="timeline">
-        <div class="">0:00</div>
+        <div id="current-time" class="">0:00</div>
         <div id="length" class="line">
-          <div id="current" class="where"></div>
+          <div id="current" class="current"></div>
         </div>
         <div class="">3:47</div>
       </div>

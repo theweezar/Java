@@ -24,6 +24,9 @@ public class User {
 	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
 	private Collection<Song> songs;
 	
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	private Collection<PlayList> playlist;
+	
 	public int getId() {
 		return id;
 	}
@@ -53,6 +56,12 @@ public class User {
 	}
 	public void setSongs(Collection<Song> songs) {
 		this.songs = songs;
+	}
+	public Collection<PlayList> getPlaylist() {
+		return playlist;
+	}
+	public void setPlaylist(Collection<PlayList> playlist) {
+		this.playlist = playlist;
 	}
 	
 	

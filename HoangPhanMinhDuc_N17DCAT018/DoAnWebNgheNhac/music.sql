@@ -40,6 +40,7 @@ CREATE TABLE playlist(
 )
 
 CREATE TABLE playlist_detail(
+	id INT PRIMARY KEY IDENTITY(1,1),
 	plId INT NOT NULL,
 	songId INT NOT NULL,
 	add_at DATETIME NOT NULL DEFAULT GETDATE()
@@ -59,7 +60,7 @@ ALTER TABLE playlist_detail ADD FOREIGN KEY (plId) REFERENCES playlist(id);
 
 ALTER TABLE playlist_detail ADD FOREIGN KEY (songId) REFERENCES songs(id);
 
-ALTER TABLE playlist_detail ADD CONSTRAINT PK_SONG PRIMARY KEY(plId, songId);
+/*ALTER TABLE playlist_detail ADD CONSTRAINT PK_SONG PRIMARY KEY(plId, songId);*/
 
 INSERT INTO users VALUES
 ('admin','admin','admin@gmail.com'),
@@ -77,3 +78,6 @@ INSERT INTO kind VALUES
 ('Nhạc Trẻ')
 
 
+ALTER TABLE playlist_detail ADD id INT PRIMARY KEY IDENTITY(1,1)
+
+drop table playlist_detail

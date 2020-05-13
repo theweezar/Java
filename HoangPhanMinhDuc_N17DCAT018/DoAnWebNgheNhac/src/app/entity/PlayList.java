@@ -1,5 +1,7 @@
 package app.entity;
 
+import java.util.Collection;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,11 +12,18 @@ public class PlayList {
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="userId")
-	private int userId;
+//	@Column(name="userId")
+//	private int userId;
+	
+	@ManyToOne
+	@JoinColumn(name="userId")
+	private User user;
 	
 	@Column(name="isLater")
 	private int isLater;
+	
+	@OneToMany(mappedBy="playlist",fetch=FetchType.EAGER)
+	private Collection<PlayListDetail> plDetail;
 
 	public int getId() {
 		return id;
@@ -24,13 +33,13 @@ public class PlayList {
 		this.id = id;
 	}
 
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+//	public int getUserId() {
+//		return userId;
+//	}
+//
+//	public void setUserId(int userId) {
+//		this.userId = userId;
+//	}
 
 	public int isLater() {
 		return isLater;
@@ -38,6 +47,22 @@ public class PlayList {
 
 	public void setLater(int isLater) {
 		this.isLater = isLater;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Collection<PlayListDetail> getPlDetail() {
+		return plDetail;
+	}
+
+	public void setPlDetail(Collection<PlayListDetail> plDetail) {
+		this.plDetail = plDetail;
 	}
 	
 	

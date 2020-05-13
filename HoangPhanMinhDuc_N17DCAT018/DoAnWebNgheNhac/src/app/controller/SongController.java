@@ -51,6 +51,7 @@ public class SongController {
 			HttpServletRequest req, HttpServletResponse res) throws IOException{
 		Song s = new Song();
 		SongQuery query = new SongQuery(ftr);
+		UserQuery uQr = new UserQuery(ftr);
 		String songName = req.getParameter("songName");
 		String singerName = req.getParameter("singerName");
 		String musicianName = req.getParameter("musicianName");
@@ -65,7 +66,7 @@ public class SongController {
 			}
 			System.out.print(rName);
 			s.setLink(rName + ".mp3");
-			s.setUser((User)req.getSession().getAttribute("userObj"));
+			s.setUser(uQr.get("username="+req.getSession().getAttribute("username")).get(0));
 			s.setUploadAt(new Date());
 			// Generate random name for songName
 			s.setSongName(songName);

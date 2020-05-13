@@ -32,7 +32,7 @@ public class AppController {
 		List<SongBean> sLBean = new ArrayList<>();
 		HttpSession httpss = req.getSession();
 		if (httpss.getAttribute("logged") != null){
-			r.setModelAttr("currUsername", ((User)httpss.getAttribute("userObj")).getUsername());
+			r.setModelAttr("currUsername", httpss.getAttribute("username"));
 		}
 		System.out.print(httpss.getAttribute("logged"));
 		for(Song s: songList){

@@ -31,19 +31,24 @@ public class PlayListController {
 	SessionFactory ftr;
 	
 	@Transactional
-	@RequestMapping(value="/addtopl", method=RequestMethod.POST)
+	@RequestMapping(value="/addtolovepl", method=RequestMethod.POST)
 	public void handle(HttpServletRequest req ,HttpServletResponse res) throws IOException{
 		String songId = req.getParameter("songId");
 		PlayListQuery plQuery = new PlayListQuery(ftr);
-		PlayListDetail item = new PlayListDetail();
-		
-		item.setPlId((int)req.getSession().getAttribute("lovePlId"));
-		item.setSongId(Integer.parseInt(songId));
-		item.setAdd_at(new Date());
-		
-		plQuery.addSong(item);
-		
-		PrintWriter out = res.getWriter();
-		out.print(songId);
+		PlayList cPl = plQuery.getPlayList((int)req.getSession().getAttribute("userId"), 1).get(0);
+		System.out.println(cPl.getId());
+		PlayListDetail detail = plQuery.getDetail(cPl.getId(), Integer.parseInt(songId));
+		if (detail == null){
+			PlayListDetail item = new PlayListDetail();
+			item.setPlaylist(cPl);
+			item.setSongId(Integer.parseInt(songId));
+			item.setAdd_at(new Date());
+			plQuery.addSong(item);
+			res.getWriter().println(true);
+		}
+		else{
+			plQuery.deleleDetail(detail);
+			res.getWriter().println(false);
+		}
 	}
 }

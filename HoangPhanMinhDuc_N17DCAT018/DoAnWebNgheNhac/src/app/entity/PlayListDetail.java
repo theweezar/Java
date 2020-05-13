@@ -7,13 +7,13 @@ import javax.persistence.*;
 @Table(name="playlist_detail")
 public class PlayListDetail {
 	@Id
-	@Column(name="plId")
-	private int plId;
+	@GeneratedValue
+	@Column(name="Id")
+	private int id;
 	
-//	@Id
-//	@ManyToOne
-//	@JoinColumn(name="plId")
-//	private PlayList playlist;
+	@ManyToOne
+	@JoinColumn(name="plId")
+	private PlayList playlist;
 	
 	@Column(name="songId")
 	private int songId;
@@ -22,12 +22,12 @@ public class PlayListDetail {
 	@Column(name="add_at")
 	private Date add_at;
 
-	public int getPlId() {
-		return plId;
+	public int getId() {
+		return id;
 	}
 
-	public void setPlId(int plId) {
-		this.plId = plId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getSongId() {
@@ -44,6 +44,14 @@ public class PlayListDetail {
 
 	public void setAdd_at(Date add_at) {
 		this.add_at = add_at;
+	}
+
+	public PlayList getPlaylist() {
+		return playlist;
+	}
+
+	public void setPlaylist(PlayList playlist) {
+		this.playlist = playlist;
 	}
 	
 }

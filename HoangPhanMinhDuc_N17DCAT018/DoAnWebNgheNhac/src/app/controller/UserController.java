@@ -46,18 +46,16 @@ public class UserController {
 		String password = user.getPassword().trim();
 		
 		UserQuery uQuery = new UserQuery(ftr);
-//		PlayListQuery plQuery = new PlayListQuery(ftr);
+		PlayListQuery plQuery = new PlayListQuery(ftr);
 		List<User> list = uQuery.get("username="+username);
 		if (list.size() != 0 && list != null){
 			if (password.equals(list.get(0).getPassword())){
-//				int lovePlId = plQuery.getPlayList(list.get(0).getId(), 1).get(0).getId();
 				HttpSession httpss = req.getSession();
 				httpss.setAttribute("logged", true);
-//				httpss.setAttribute("username", username);
-//				httpss.setAttribute("userId", list.get(0).getId());
-				httpss.setAttribute("userObj", list.get(0));
-				
-//				httpss.setAttribute("lovePlId", lovePlId);
+				httpss.setAttribute("username", username);
+				httpss.setAttribute("userId", list.get(0).getId());
+//				httpss.setAttribute("userObj", list.get(0));				
+				httpss.setAttribute("lovePlId", plQuery.getPlayList(list.get(0).getId(), 1).get(0).getId());
 			}
 		}
 		res.sendRedirect("./home.htm");

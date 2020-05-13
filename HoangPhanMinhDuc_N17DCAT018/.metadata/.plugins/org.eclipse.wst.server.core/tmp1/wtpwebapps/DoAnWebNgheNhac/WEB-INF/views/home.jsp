@@ -24,10 +24,14 @@
             </li>
             <c:forEach var="s" items="${songList}">
             <li>
-              <div role="play" song-id="${s.getSong().getId()}" link="${s.getSong().getLink() }" class="title">${s.getSong().getSongName()}</div>
+              <div role="choose" song-id="${s.getSong().getId()}" link="${s.getSong().getLink() }" class="title">${s.getSong().getSongName()}</div>
               <div class="singer">${s.getSong().getSingerName()}</div>
               <div class="duration">4:10</div>
-              <div class="love">Love</div>
+              <c:if test="${logged }">
+              <div class="love" id="loveBtn" role="love">
+              	<img src="./public/img/heart-solid.svg"/>
+              </div>
+              </c:if>
             </li>
             </c:forEach>
           </ul>

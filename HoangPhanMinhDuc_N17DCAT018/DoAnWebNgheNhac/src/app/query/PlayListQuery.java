@@ -13,7 +13,7 @@ public class PlayListQuery {
 	
 	public List<PlayList> getPlayList(int userId, int isLater){
 		Session session = ftr.getCurrentSession();
-		String hql = "FROM PlayList pl WHERE pl.userId LIKE :userId AND pl.isLater LIKE :isLater";
+		String hql = "FROM PlayList pl WHERE pl.user.id LIKE :userId AND pl.isLater LIKE :isLater";
 		Query query = session.createQuery(hql);
 		query.setParameter("userId", userId);
 		query.setParameter("isLater", isLater);
@@ -37,10 +37,25 @@ public class PlayListQuery {
 	
 	public PlayListDetail getDetail(int plId, int songId){
 		Session session = ftr.getCurrentSession();
-		String hql = "FROM PlayListDetail dt WHERE dt.plId LIKE :plId AND dt.songId LIKE :songId";
+		String hql = "FROM PlayListDetail dt WHERE dt.playlist.id LIKE :plId AND dt.songId LIKE :songId";
 		Query query = session.createQuery(hql);
 		query.setParameter("plId", plId);
 		query.setParameter("songId", songId);
 		return (PlayListDetail)query.uniqueResult();
+	}
+	
+	public void deleleDetail(PlayListDetail detail){
+		Session session = ftr.openSession();
+		Transaction t = session.beginTransaction();
+		try{
+			session.delete(detail);
+			t.commit();
+		}
+		catch(Exception e){
+			t.rollback();
+		}
+		finally{
+			session.close();
+		}
 	}
 }
