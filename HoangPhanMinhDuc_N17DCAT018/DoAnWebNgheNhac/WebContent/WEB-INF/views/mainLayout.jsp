@@ -32,24 +32,38 @@
       <jsp:include page="${render}.jsp"></jsp:include>
       <div class="infor">
         <div class="log-nav">
-          <ul>
+          <ul class="ul-parent">
           	<c:if test="${!logged}">
-          	<li>
+          	<li class="li-parent">
               <a href="./account.htm?m=register">Đăng ký</a>
             </li>
-            <li>
+            <li class="li-parent">
               <a href="./account.htm?m=login">Đăng nhập</a>
             </li>
           	</c:if>
           	<c:if test="${logged }">
-          	<li>
-          	  <a href="./logout.htm">Thoát</a>
+          	<li id="acc-nav" class="li-parent">
+          	  <div style="width: 100%">
+          	  	<div>Hi, ${currUsername }</div>
+          	  	<div id="arrow" class="arrow-icon"></div>
+          	  </div>
+          	  <ul class="ul-c-1">
+          	  	<li>
+          	  		
+          	  	</li>
+          	  	<li>
+          	  		<a href="#">Đổi mật khẩu</a>
+          	  	</li>
+          	  	<li>
+          	  		<a href="./playlist.htm">Nhạc cá nhân</a>
+          	  	</li>
+          	  	<li>
+          	  		<a href="./logout.htm">Thoát</a>
+          	  	</li>
+          	  </ul>
           	</li>
-          	<li>
+          	<li class="li-parent">
           	  <a href="./upload.htm">Tải lên</a>
-          	</li>
-          	<li>
-          	  Hi, ${currUsername}
           	</li>
           	</c:if>
           </ul>
@@ -65,7 +79,7 @@
     </div>
   </div>
   <audio controls style="display: none;">
-    <source src="./music_src/DoiBaoLauKhongDangSo_TrangThien.mp3"  type="audio/mp3">
+    <source src=""  type="audio/mp3">
   </audio>
   <div class="audio-nav">
     <div class="song-infor">
@@ -81,10 +95,11 @@
         <div id="length" class="line">
           <div id="current" class="current"></div>
         </div>
-        <div class="">3:47</div>
+        <div id="duration" class="">0:00</div>
       </div>
     </div>
   </div>
+  
   <script src="./public/js/script.js"></script>
 </body>
 </html>

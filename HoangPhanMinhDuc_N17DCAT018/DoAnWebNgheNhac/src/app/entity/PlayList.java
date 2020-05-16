@@ -15,6 +15,9 @@ public class PlayList {
 //	@Column(name="userId")
 //	private int userId;
 	
+	@Column(name="plName")
+	private String plName;
+	
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
@@ -63,6 +66,14 @@ public class PlayList {
 
 	public void setPlDetail(Collection<PlayListDetail> plDetail) {
 		this.plDetail = plDetail;
+	}
+
+	public String getPlName() {
+		return plName;
+	}
+
+	public void setPlName(String plName) {
+		this.plName = plName;
 	}
 	
 	

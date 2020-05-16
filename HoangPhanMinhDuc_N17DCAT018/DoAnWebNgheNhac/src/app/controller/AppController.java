@@ -27,25 +27,27 @@ public class AppController {
 	public String home(ModelMap model, HttpServletRequest req, HttpServletResponse res) throws NullPointerException{
 		Render r = new Render(model);
 		SongQuery sQuery = new SongQuery(ftr);
-//		PlayListQuery plQuery = new PlayListQuery(ftr);
-		List<Song> songList = sQuery.getAll();
+		PlayListQuery plQuery = new PlayListQuery(ftr);
 		List<SongBean> sLBean = new ArrayList<>();
+		List<Song> songList = sQuery.getAll();
 		HttpSession httpss = req.getSession();
 		if (httpss.getAttribute("logged") != null){
 			r.setModelAttr("currUsername", httpss.getAttribute("username"));
 		}
 		System.out.print(httpss.getAttribute("logged"));
 		for(Song s: songList){
-//			if (logged){
-//				if (plQuery.getDetail((int)httpss.getAttribute("lovePlId"), s.getId()) == null) 
-//					sLBean.add(new SongBean(s, false));
-//				else sLBean.add(new SongBean(s, true));
-//			}
-//			else sLBean.add(new SongBean(s, false));
-			sLBean.add(new SongBean(s, false));
+			if (httpss.getAttribute("logged") != null){
+				if (plQuery.getDetail((int)httpss.getAttribute("lovePlId"), s.getId()) == null) 
+					sLBean.add(new SongBean(s, false));
+				else sLBean.add(new SongBean(s, true));
+			}
+			else sLBean.add(new SongBean(s, false));
 		}
-		System.out.print(sLBean.get(0).getSong().getSongName());
-		r.setModelAttr("songList", sLBean);
+		if (sLBean.size() > 0){
+			r.setModelAttr("emp", false);
+			r.setModelAttr("songList", sLBean);
+		}
+		else r.setModelAttr("emp", true);
 		return r.render("mainLayout", "home");
 	}
 	

@@ -1,0 +1,228 @@
+html, body{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+a{
+  text-decoration: none;
+}
+
+ul{
+  list-style: none;
+}
+
+.conTainer{
+  height: 100%;
+  display: grid;
+  grid-template-columns: 25% 75%;
+  z-index: -1;
+}
+
+.conTainer .left-ct{
+  position: relative;
+  background: #131C37;
+}
+
+.conTainer .left-ct .title{
+  color: white;
+  letter-spacing: 2px;
+  padding: 25px 0 25px 35px;
+  text-transform: uppercase;
+  font-size: 110%;
+}
+
+.conTainer .left-ct .navi{
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.conTainer .left-ct .navi .navi-item{
+  padding: 15px 0 15px 35px;
+  font-size: 90%;
+  text-transform: uppercase;
+}
+
+.conTainer .left-ct .navi .navi-item a{
+  color: white;
+}
+
+.conTainer .right-ct{
+  background: #0F172E;
+  display: grid;
+  grid-template-columns: 65% 35%;
+}
+
+.conTainer .right-ct .news{
+  /* border-right: 1px solid white; */
+}
+
+.conTainer .right-ct .news .song-list{
+  color: white;
+}
+
+.conTainer .right-ct .news .song-list ul{
+  margin: 0;
+  padding: 0;
+}
+
+.conTainer .right-ct .news .song-list ul li{
+  display: block;
+  width: 100%;
+  /* border: 1px solid white; */
+  display: grid;
+  grid-template-columns: 40% 25% 25% 10%;
+}
+
+.conTainer .right-ct .news .song-list ul li div{
+  display: inline-block;
+  font-size: 90%;
+  padding: 15px 0;
+}
+
+.conTainer .right-ct .news .song-list ul li div:nth-child(1){
+  cursor: pointer;
+}
+
+.conTainer .right-ct .news .song-list ul li div:nth-child(4){
+  cursor: pointer;
+  width:25px; 
+  height:25px;
+}
+
+.conTainer .right-ct .news .song-list ul li div:nth-child(4) img{
+  cursor: pointer;
+  /*filter: invert(99%) sepia(57%) saturate(2%) hue-rotate(25deg) brightness(108%) contrast(100%);*/
+}
+
+.conTainer .right-ct .infor{
+
+}
+
+.conTainer .right-ct .infor .log-nav{
+  height: 10%;
+}
+
+.conTainer .right-ct .infor .log-nav .ul-parent{
+  color: black;
+}
+
+.conTainer .right-ct .infor .log-nav .ul-parent .li-parent{
+  float: right;
+  margin-right: 25px;
+  border: 1px solid white;
+  padding: 5px 15px;
+  background: white;
+}
+
+.conTainer .right-ct .infor .log-nav .ul-parent .li-parent .ul-c-1{
+	padding: 0;
+	text-align: center;
+	display: none;
+}
+
+.conTainer .right-ct .infor .log-nav .ul-parent .li-parent div:nth-child(1){
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-item: center;
+}
+
+.conTainer .right-ct .infor .log-nav .ul-parent .li-parent div:nth-child(1) div{
+	display: inline-block;
+	margin: 0 5px;
+}
+
+.conTainer .right-ct .infor .log-nav .ul-parent .li-parent div:nth-child(1) .arrow-icon{
+	width: 15px;
+	height: 15px;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+	transform: rotate(45deg);
+	margin-left: 15px;
+}
+
+
+.conTainer .right-ct .infor .log-nav .ul-parent .li-parent .ul-c-1 li{
+	padding-bottom: 15px;
+	cursor: pointer;
+}
+
+.conTainer .right-ct .infor .log-nav ul li a{
+  color: gray;
+  font-size: 88%;
+}
+
+.conTainer .right-ct .infor .pl-nav{
+
+}
+
+.conTainer .right-ct .pl-container{
+	position: relative;
+	border: 1px solid white;
+	height: 100%;
+	width: 100%;
+}
+
+.conTainer .right-ct .pl-container .playlist{
+	z-index: -1;
+}
+
+.conTainer .right-ct .pl-container .playlist table{
+	
+}
+
+
+.audio-nav{
+  position: absolute;
+  height: 10%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(245, 245, 245, 0.2);
+  display: grid;
+  grid-template-columns: 25% 75%;
+}
+
+.audio-nav .control{
+  width: 100%;
+  /* border: 1px solid wheat; */
+  display: flex;
+  flex-direction: row;
+}
+
+.audio-nav .control .play-ct{
+  display: flex;
+  /* flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+  width: 10%;
+  cursor: pointer;
+}
+
+.audio-nav .control .timeline{
+  display: grid;
+  width: 80%;
+  grid-template-columns: 15% 70% 15%;
+}
+
+.audio-nav .control .timeline .line{
+  background-color: gray;
+  height: 10%;
+  margin-top: 2px;
+}
+
+.audio-nav .control .timeline .line .current{
+  height: 100%;
+  width: 0;
+  background: whitesmoke;
+}
+
+.audio-nav .control div{
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}

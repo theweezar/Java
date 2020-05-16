@@ -51,4 +51,41 @@ public class PlayListController {
 			res.getWriter().println(false);
 		}
 	}
+	
+	@Transactional
+	@RequestMapping("playlist")
+	public String playlist(ModelMap model, HttpServletRequest req, HttpServletResponse res) throws IOException{
+		Render r = new Render(model);
+		if (req.getSession().getAttribute("logged") != null){
+			PlayListQuery plQuery = new PlayListQuery(ftr);
+			List<PlayList> pl = plQuery.getPlayList((int)req.getSession().getAttribute("userId"), 0);
+			if (pl.size() > 0){
+				r.setModelAttr("playList", pl);
+			}
+		}
+		else res.sendRedirect("./account.htm?m=login");
+		return r.render("mainLayout", "song/playlist");
+	}
+	
+	@Transactional
+	@RequestMapping(value="/newplaylist",method=RequestMethod.POST)
+	public void newplaylist(HttpServletRequest req, HttpServletResponse res) throws IOException{
+		String plName = req.getParameter("plName");
+		PlayList pl = new PlayList();
+		pl.setPlName(plName);
+		pl.setUser(new UserQuery(ftr).get("username="+req.getSession().getAttribute("username")));
+		pl.setLater(0);
+		PlayListQuery plQuery = new PlayListQuery(ftr);
+		plQuery.addPlayList(pl);
+		res.getWriter().print(plName+";"+pl.getId());
+	}
+	
+	@Transactional
+	@RequestMapping(value="/delplaylist",method=RequestMethod.POST)
+	public void delplaylist(HttpServletRequest req, HttpServletResponse res) throws IOException{
+		String plId = req.getParameter("plId");
+		PlayListQuery plQuery = new PlayListQuery(ftr);
+		plQuery.delPlayList(Integer.parseInt(plId));
+		res.getWriter().print("done");
+	}
 }

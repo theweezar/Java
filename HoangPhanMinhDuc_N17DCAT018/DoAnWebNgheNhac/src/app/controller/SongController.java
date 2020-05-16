@@ -66,7 +66,7 @@ public class SongController {
 			}
 			System.out.print(rName);
 			s.setLink(rName + ".mp3");
-			s.setUser(uQr.get("username="+req.getSession().getAttribute("username")).get(0));
+			s.setUser(uQr.get("username="+req.getSession().getAttribute("username")));
 			s.setUploadAt(new Date());
 			// Generate random name for songName
 			s.setSongName(songName);

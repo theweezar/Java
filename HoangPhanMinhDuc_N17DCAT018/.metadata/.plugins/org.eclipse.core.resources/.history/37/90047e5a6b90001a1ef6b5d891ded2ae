@@ -1,9 +1,0 @@
-package ptithcm.entity;
-
-import javax.persistence.*;
-
-@Entity
-@Table
-public class Student {
-	
-}

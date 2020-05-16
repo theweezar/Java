@@ -35,6 +35,7 @@ CREATE TABLE comments(
 
 CREATE TABLE playlist(
 	id INT PRIMARY KEY IDENTITY(1,1),
+	plName NVARCHAR(100) NOT NULL,
 	userId INT NOT NULL,
 	isLater BIT NOT NULL
 )
@@ -67,6 +68,11 @@ INSERT INTO users VALUES
 ('phandai','phandai','phandai@gmail.com'),
 ('trucdong','trucdong','trucdong@gmail.com')
 
+INSERT INTO playlist VALUES
+('love',1,1),
+('love',2,1),
+('love',3,1)
+
 
 INSERT INTO kind VALUES
 ('Nhạc Âu Mỹ'),
@@ -76,8 +82,3 @@ INSERT INTO kind VALUES
 ('Nhạc Rap Việt'),
 ('Nhạc Thiếu Nhi'),
 ('Nhạc Trẻ')
-
-
-ALTER TABLE playlist_detail ADD id INT PRIMARY KEY IDENTITY(1,1)
-
-drop table playlist_detail

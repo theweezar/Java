@@ -131,7 +131,7 @@
 	      <Context docBase="PTITHCMS1L4" path="/PTITHCMS1L4" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L4"/> 
 	      <Context docBase="PTITHCMS1L6" path="/PTITHCMS1L6" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L6"/>
 	      -->
-	      <Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\DoAnWebNgheNhac" path="/DoAnWebNgheNhac" reloadable="true" source="org.eclipse.jst.jee.server:DoAnWebNgheNhac"/></Host>
+	      <Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\DoAnWebNgheNhac" path="/DoAnWebNgheNhac" reloadable="true" source="org.eclipse.jst.jee.server:DoAnWebNgheNhac"/><Context docBase="D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\PTITHCMS1L5" path="/PTITHCMS1L5" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L5"/></Host>
     </Engine>
   </Service>
 </Server>

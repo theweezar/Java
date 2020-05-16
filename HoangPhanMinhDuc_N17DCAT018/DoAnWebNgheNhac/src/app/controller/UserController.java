@@ -47,18 +47,20 @@ public class UserController {
 		
 		UserQuery uQuery = new UserQuery(ftr);
 		PlayListQuery plQuery = new PlayListQuery(ftr);
-		List<User> list = uQuery.get("username="+username);
-		if (list.size() != 0 && list != null){
-			if (password.equals(list.get(0).getPassword())){
+		User cUser = uQuery.get("username="+username);
+		if (cUser != null){
+			if (password.equals(cUser.getPassword())){
 				HttpSession httpss = req.getSession();
 				httpss.setAttribute("logged", true);
 				httpss.setAttribute("username", username);
-				httpss.setAttribute("userId", list.get(0).getId());
+				httpss.setAttribute("userId", cUser.getId());
 //				httpss.setAttribute("userObj", list.get(0));				
-				httpss.setAttribute("lovePlId", plQuery.getPlayList(list.get(0).getId(), 1).get(0).getId());
+				httpss.setAttribute("lovePlId", plQuery.getPlayList(cUser.getId(), 1).get(0).getId());
+				res.sendRedirect("./home.htm");
 			}
+			else res.sendRedirect("./account.htm?m=login");
 		}
-		res.sendRedirect("./home.htm");
+		else res.sendRedirect("./account.htm?m=login");
 	}
 	
 	@Transactional
@@ -67,16 +69,21 @@ public class UserController {
 			HttpServletRequest req, HttpServletResponse res) throws IOException{
 		
 		UserQuery userQuery = new UserQuery(ftr);
+		PlayListQuery plQuery = new PlayListQuery(ftr);
 		
 		String rePw = req.getParameter("rePassword").trim();
 		user.setUsername(user.getUsername().trim());
 		user.setPassword(user.getPassword().trim());
 		user.setEmail(user.getEmail().trim());
 		
-		if (userQuery.get("username="+user.getUsername()) != null){
-			if (userQuery.get("email="+user.getEmail())!= null){
+		if (userQuery.get("username="+user.getUsername()) == null){
+			if (userQuery.get("email="+user.getEmail())== null){
 				if (user.getPassword().equals(rePw)){
 					userQuery.add(user);
+					PlayList pL = new PlayList();
+					pL.setUser(user);
+					pL.setLater(1);
+					plQuery.addPlayList(pL);
 					res.sendRedirect("./userlist.htm");
 				}
 				else res.sendRedirect("./passErr.htm");
@@ -90,10 +97,10 @@ public class UserController {
 	public void logout(HttpServletRequest req, HttpServletResponse res) throws Exception{
 		HttpSession httpss = req.getSession();
 		httpss.removeAttribute("logged");
-		httpss.removeAttribute("userObj");
-//		httpss.removeAttribute("username");
-//		httpss.removeAttribute("userId");
-//		httpss.removeAttribute("lovePlId");
+//		httpss.removeAttribute("userObj");
+		httpss.removeAttribute("username");
+		httpss.removeAttribute("userId");
+		httpss.removeAttribute("lovePlId");
 		res.sendRedirect("./home.htm");
 	}
 	

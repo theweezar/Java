@@ -36,21 +36,21 @@ public class TestController {
 		return "userlist";
 	}
 	
-	@Transactional
-	@RequestMapping("playlist")
-	public void plTest(){
-		PlayListQuery query = new PlayListQuery(ftr);
-		System.out.print(query.getPlayList(1, 1));
-	}
-	
-	@Transactional
-	@RequestMapping("songtest")
-	public void songtest(){
-		SongQuery sQuery = new SongQuery(ftr);
-		for(Song s: sQuery.getAll()){
-			System.out.printf(s.getSongName());
-		}
-		UserQuery uQuery = new UserQuery(ftr);
-		System.out.print("\n"+uQuery.get("username=admin").get(0).getSongs());
-	}
+//	@Transactional
+//	@RequestMapping("playlist")
+//	public void plTest(){
+//		PlayListQuery query = new PlayListQuery(ftr);
+//		System.out.print(query.getPlayList(1, 1));
+//	}
+//	
+//	@Transactional
+//	@RequestMapping("songtest")
+//	public void songtest(){
+//		SongQuery sQuery = new SongQuery(ftr);
+//		for(Song s: sQuery.getAll()){
+//			System.out.printf(s.getSongName());
+//		}
+//		UserQuery uQuery = new UserQuery(ftr);
+//		System.out.print("\n"+uQuery.get("username=admin").get(0).getSongs());
+//	}
 }
