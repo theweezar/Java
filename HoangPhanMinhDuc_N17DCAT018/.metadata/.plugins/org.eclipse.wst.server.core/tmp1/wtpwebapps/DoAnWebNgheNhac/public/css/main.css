@@ -16,7 +16,7 @@ ul{
 .conTainer{
   height: 100%;
   display: grid;
-  grid-template-columns: 25% 75%;
+  grid-template-columns: 15% 85%;
   z-index: -1;
 }
 
@@ -52,7 +52,7 @@ ul{
 .conTainer .right-ct{
   background: #0F172E;
   display: grid;
-  grid-template-columns: 65% 35%;
+  grid-template-columns: 70% 30%;
 }
 
 .conTainer .right-ct .news{
@@ -73,7 +73,7 @@ ul{
   width: 100%;
   /* border: 1px solid white; */
   display: grid;
-  grid-template-columns: 40% 25% 10% 10% 15%;
+  grid-template-columns: 30% 25% 10% 10% 25%;
 }
 
 .conTainer .right-ct .news .song-list ul li div{
