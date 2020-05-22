@@ -130,8 +130,11 @@
 <!-- 	  <Context docBase="PTITHCMS1L3" path="/PTITHCMS1L3" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L3"/>
 	      <Context docBase="PTITHCMS1L4" path="/PTITHCMS1L4" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L4"/> 
 	      <Context docBase="PTITHCMS1L6" path="/PTITHCMS1L6" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L6"/>
+	      
+	      <Context docBase="DoAnWebNgheNhac" path="/DoAnWebNgheNhac" reloadable="true" source="org.eclipse.jst.jee.server:DoAnWebNgheNhac"/>
+	      <Context docBase="PTITHCMS1L5" path="/PTITHCMS1L5" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L5"/>
 	      -->
-	      <Context docBase="DoAnWebNgheNhac" path="/DoAnWebNgheNhac" reloadable="true" source="org.eclipse.jst.jee.server:DoAnWebNgheNhac"/><Context docBase="PTITHCMS1L5" path="/PTITHCMS1L5" reloadable="true" source="org.eclipse.jst.jee.server:PTITHCMS1L5"/></Host>
+	      <Context docBase="WebNgheNhac" path="/WebNgheNhac" reloadable="true" source="org.eclipse.jst.jee.server:WebNgheNhac"/></Host>
     </Engine>
   </Service>
 </Server>

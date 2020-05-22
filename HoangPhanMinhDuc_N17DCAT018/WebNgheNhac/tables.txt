@@ -1,0 +1,6 @@
+users (userId, username, password, email)
+kind (kindId, kindName)
+songs (songId, link, userId, upload_at, name, singerName, musicianName, kindId, view)
+comments (userId, songId, content, comment_at)
+playlist (plId, userId, isLater)
+playlist_detail (plId, songId, add_at)
