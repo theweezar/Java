@@ -33,7 +33,7 @@ public class TestController {
 	public String test(ModelMap model){
 		QueryT query = new QueryT(ftr);
 		model.addAttribute("list", query.select("User"));
-		return "userlist";
+		return "user/userlist";
 	}
 	
 //	@Transactional

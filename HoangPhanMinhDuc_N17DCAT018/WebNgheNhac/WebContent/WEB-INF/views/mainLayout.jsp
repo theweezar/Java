@@ -18,61 +18,71 @@
       <div class="title">.navigation</div>
       <ul class="navi">
         <li class="navi-item">
-          <a href="./home.htm">Home</a>
+          <a href="./home.htm">
+          	Home
+          	<c:if test="${logged }">()</c:if>
+          </a>
+        </li>
+        <c:if test="${logged }">
+        <li class="navi-item">
+          <a href="./playlist.htm">playlist</a>
+        </li>
+       	<li class="navi-item">
+          <a href="./upload.htm">upload</a>
         </li>
         <li class="navi-item">
-          <a href="#">top 100</a>
+          <a href="./changepw.htm">Change password</a>
         </li>
         <li class="navi-item">
-          <a href="#">quốc gia</a>
+          <a href="./logout.htm">Logout</a>
         </li>
+        </c:if>
+        <c:if test="${!logged }">
+        <li class="navi-item">
+          <a href="./account.htm?m=login">Login</a>
+        </li>
+        <li class="navi-item">
+          <a href="./account.htm?m=register">Register</a>
+        </li>
+        </c:if>
       </ul>
     </div>
     <div style="padding: 0; margin: 0;" class="right-ct">
       <jsp:include page="${render}.jsp"></jsp:include>
       <div class="infor">
-        <div class="log-nav">
-          <ul class="ul-parent">
-          	<c:if test="${!logged}">
-          	<li class="li-parent">
-              <a href="./account.htm?m=register">Đăng ký</a>
-            </li>
-            <li class="li-parent">
-              <a href="./account.htm?m=login">Đăng nhập</a>
-            </li>
-          	</c:if>
-          	<c:if test="${logged }">
-          	<li id="acc-nav" class="li-parent">
-          	  <div style="width: 100%">
-          	  	<div>Hi, ${currUsername }</div>
-          	  	<div id="arrow" class="arrow-icon"></div>
-          	  </div>
-          	  <ul class="ul-c-1">
-          	  	<li>
-          	  		
-          	  	</li>
-          	  	<li>
-          	  		<a href="#">Đổi mật khẩu</a>
-          	  	</li>
-          	  	<li>
-          	  		<a href="./playlist.htm">Nhạc cá nhân</a>
-          	  	</li>
-          	  	<li>
-          	  		<a href="./logout.htm">Thoát</a>
-          	  	</li>
-          	  </ul>
-          	</li>
-          	<li class="li-parent">
-          	  <a href="./upload.htm">Tải lên</a>
-          	</li>
-          	</c:if>
-          </ul>
-        </div>
 
         <div class="pl-nav">
-          <ul>
-            <li style="text-transform: uppercase; color: whitesmoke;">My PLaylist</li>
-            
+          <div style="color: whitesmoke; width: 90px; font-size:110%;">Like</div>
+          <ul id="lovePlaylist">
+          	<!-- 
+            <li>
+            	<div class="item">
+            		<div class="play-icon">
+            			<img src="./public/img/play.png"/>
+            		</div>
+            		<div class="infor">
+            			<div class="name">Song name</div>
+            			<div class="singer">By who</div>
+            		</div>
+            	</div>
+            </li>
+             -->
+            <c:if test="${logged }">
+            	<c:forEach var="s" items="${lovePl}">
+            	<li>
+	            	<div name="${s.getSong().getSongName() }" singer="${s.getSong().getSingerName() }" role="choose" songId="${s.getSong().getId()}" class="item" link="${s.getSong().getLink() }">
+	            		<div class="play-icon">
+	            			<img src="./public/img/play.png"/>
+	            		</div>
+	            		<div class="infor">
+	            			<div class="name">${s.getSong().getSongName() }</div>
+	            			<div class="singer">${s.getSong().getSingerName() }</div>
+	            		</div>
+	            	</div>
+	            </li>
+            	</c:forEach>
+            </c:if>
+             
           </ul>
         </div>
       </div>
@@ -83,8 +93,8 @@
   </audio>
   <div class="audio-nav">
     <div class="song-infor">
-      <div class="name">Test DRIVE</div>
-      <div class="singer">JoJI</div>
+      <div id="audioName" class="name">Test DRIVE</div>
+      <div id="audioSinger" class="singer">JoJI</div>
     </div>
     <div class="control">
       <div class="play-ct">

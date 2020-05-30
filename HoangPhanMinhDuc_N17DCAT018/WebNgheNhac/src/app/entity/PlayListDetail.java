@@ -15,8 +15,12 @@ public class PlayListDetail {
 	@JoinColumn(name="plId")
 	private PlayList playlist;
 	
-	@Column(name="songId")
-	private int songId;
+	@ManyToOne
+	@JoinColumn(name="songId")
+	private Song song;
+	
+//	@Column(name="songId")
+//	private int songId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="add_at")
@@ -30,13 +34,13 @@ public class PlayListDetail {
 		this.id = id;
 	}
 
-	public int getSongId() {
-		return songId;
-	}
-
-	public void setSongId(int songId) {
-		this.songId = songId;
-	}
+//	public int getSongId() {
+//		return songId;
+//	}
+//
+//	public void setSongId(int songId) {
+//		this.songId = songId;
+//	}
 
 	public Date getAdd_at() {
 		return add_at;
@@ -52,6 +56,14 @@ public class PlayListDetail {
 
 	public void setPlaylist(PlayList playlist) {
 		this.playlist = playlist;
+	}
+
+	public Song getSong() {
+		return song;
+	}
+
+	public void setSong(Song song) {
+		this.song = song;
 	}
 	
 }

@@ -26,6 +26,21 @@ public class PlayListQuery {
 		}
 	}
 	
+	public void updatePlayList(PlayList playlist){
+		Session session = ftr.openSession();
+		Transaction t = session.beginTransaction();
+		try{
+			session.update(playlist);
+			t.commit();
+		}
+		catch(Exception e){
+			t.rollback();
+		}
+		finally{
+			session.close();
+		}
+	}
+	
 	public void delPlayList(int plId){
 		Session session = ftr.openSession();
 		Transaction t = session.beginTransaction();
@@ -76,7 +91,7 @@ public class PlayListQuery {
 	
 	public PlayListDetail getDetail(int plId, int songId){
 		Session session = ftr.getCurrentSession();
-		String hql = "FROM PlayListDetail dt WHERE dt.playlist.id LIKE :plId AND dt.songId LIKE :songId";
+		String hql = "FROM PlayListDetail dt WHERE dt.playlist.id LIKE :plId AND dt.song.id LIKE :songId";
 		Query query = session.createQuery(hql);
 		query.setParameter("plId", plId);
 		query.setParameter("songId", songId);

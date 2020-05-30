@@ -1,0 +1,31 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="f" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<div class="b-f-upl">
+	<form action="./upload.htm" method="post" enctype="multipart/form-data">
+		<div>
+			<input type="file" name="uplSong"/>
+		</div>
+		<div>
+			<input class="ip-t" placeholder="Tên bài hát" type="text" name="songName"/>
+		</div>
+		<div>
+			<input class="ip-t" placeholder="Tên ca sĩ" type="text" name="singerName"/>
+		</div>
+		<div>
+			<input class="ip-t" placeholder="Tên nhạc sĩ" type="text" name="musicianName"/>
+		</div>
+		<div> 
+			<select id="kindSelect" name="kind">
+				<c:forEach var="k" items="${kind}">
+					<option value="${k.getId()}">${k.getKindName()}</option>
+				</c:forEach>
+			</select>
+		</div>
+		<div>
+			<button type="submit">Tải lên</button>
+		</div>
+	</form>
+</div>

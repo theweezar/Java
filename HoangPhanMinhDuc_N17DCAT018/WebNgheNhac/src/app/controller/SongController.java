@@ -23,18 +23,27 @@ import app.entity.*;
 import app.query.*;
 import app.render.Render;
 
+@Transactional
 @Controller
 public class SongController {
 	@Autowired
 	SessionFactory ftr;
 	
-	@Transactional
+	
 	@ModelAttribute("kind")
 	public List<Kind> getKind(){
 		return new KindQuery(ftr).get();
 	}
 	
-	@Transactional
+	@ModelAttribute("lovePl")
+	public Collection<PlayListDetail> getsongfromlovepl(HttpServletRequest req){
+		if (req.getSession().getAttribute("logged") != null){
+			PlayListQuery plQuery = new PlayListQuery(ftr);
+			return plQuery.getPlayList((int)req.getSession().getAttribute("userId"), 1).get(0).getPlDetail();
+		}
+		else return null;
+	}
+	
 	@RequestMapping(value="upload",method=RequestMethod.GET)
 	public String uploadPage(ModelMap model, HttpServletRequest req, HttpServletResponse res ) throws Exception{
 		Render r = new Render(model);
@@ -42,14 +51,15 @@ public class SongController {
 		if (httpss.getAttribute("logged") == null) res.sendRedirect("./home.htm");
 		//else r.setModelAttr("currUsername", ((User)httpss.getAttribute("userObj")).getUsername());
 		r.setModelAttr("listKind", new KindQuery(ftr).get());
-		return r.render("mainLayout", "upload");
+		return r.render("mainLayout", "song/upload");
 	}
 	
-	@Transactional
+	
 	@RequestMapping(value="upload",method=RequestMethod.POST)
-	public void upload(@RequestParam("uplSong") MultipartFile song, 
+	public String upload(@RequestParam("uplSong") MultipartFile song, ModelMap model, 
 			HttpServletRequest req, HttpServletResponse res) throws IOException{
 		Song s = new Song();
+		Render r = new Render(model);
 		SongQuery query = new SongQuery(ftr);
 		UserQuery uQr = new UserQuery(ftr);
 		String songName = req.getParameter("songName");
@@ -57,9 +67,10 @@ public class SongController {
 		String musicianName = req.getParameter("musicianName");
 		String kindId = req.getParameter("kind");
 		Kind kind = new KindQuery(ftr).get(Integer.parseInt(kindId));
-		System.out.print(kind.getKindName());
-		
-		if (!song.isEmpty()){
+//		Kiểm tra extension của file
+		String ext = song.getOriginalFilename().substring(song.getOriginalFilename().lastIndexOf("."));
+//		==============================
+		if (!song.isEmpty() && ext.equalsIgnoreCase(".mp3")){
 			String rName = "";
 			for(int i = 0; i < 10; i++){
 				rName = rName + (char)(int)(Math.random() * (122 - 97 + 1) + 97);
@@ -77,7 +88,13 @@ public class SongController {
 			song.transferTo(new File(req.getServletContext().getRealPath("/music_src/" + rName + ".mp3")));
 			query.add(s);
 //			D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\DoAnWebNgheNhac\music_src\WYS - Snowman.mp3			
-			res.sendRedirect("./upload.htm");
+//			res.sendRedirect("./upload.htm");
+			r.setModelAttr("success", true);
+			return r.render("mainLayout", "song/upload");
+		}
+		else {
+			r.setModelAttr("error", true);
+			return r.render("mainLayout", "song/upload");
 		}
 	}
 }

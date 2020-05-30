@@ -22,11 +22,12 @@ ul{
 
 .conTainer .left-ct{
   position: relative;
-  background: rgb(41, 43, 51);
+  /*background: #ECF0F1;*/
+  background: #343434;
+  color: whitesmoke;
 }
 
 .conTainer .left-ct .title{
-  color: white;
   letter-spacing: 2px;
   padding: 25px 0 25px 35px;
   text-transform: uppercase;
@@ -34,7 +35,6 @@ ul{
 }
 
 .conTainer .left-ct .navi{
-  color: white;
   margin: 0;
   padding: 0;
 }
@@ -46,11 +46,15 @@ ul{
 }
 
 .conTainer .left-ct .navi .navi-item a{
-  color: white;
+  text-decoration: none;
+  color: whitesmoke;
+  letter-spacing: 1.5px;
 }
 
 .conTainer .right-ct{
-  background: rgb(36, 38, 43);
+  background: url("../../public/img/musicbg.jpg") no-repeat;
+  background-size: cover;
+  /*background: #F2F3F4;*/ 
   display: grid;
   grid-template-columns: 70% 30%;
 }
@@ -61,8 +65,7 @@ ul{
 }
 
 .conTainer .right-ct .news .song-list{
-  color: white;
-  z-index: -1;
+  
 }
 
 .conTainer .right-ct .news .song-list ul{
@@ -72,19 +75,20 @@ ul{
   display: flex;
   flex-direction: column;
   overflow: scroll;
-  height: 500px;
- 
+  height: 450px;
 }
 
 .conTainer .right-ct .news .song-list ul::-webkit-scrollbar{
   display: none;
 }
 
+
 .conTainer .right-ct .news .song-list ul li{
   display: block;
   width: 90%;
-  background: black;
-  margin: 25px 0;
+  /*background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);*/
+  background: rgba(211, 211, 211, 0.8);
+  margin: 15px 0;
   cursor: pointer;
   border-radius: 5px;
 }
@@ -95,9 +99,10 @@ ul{
 }
 
 .conTainer .right-ct .news .song-list ul li .item .title{
-  font-size: 120%;
-  margin: 0 0 15px 25px;
+  font-size: 125%;
+  margin: 0 0 5px 25px;
   font-weight: bold;
+  
 }
 
 .conTainer .right-ct .news .song-list ul li .item .singer{
@@ -112,8 +117,15 @@ ul{
   z-index: 1;
 }
 
+.conTainer .right-ct .news .song-list ul li .item .rmBtn{
+  position: absolute;
+  top:15px;
+  right: 15px;
+  z-index: 1;
+}
+
 .conTainer .right-ct .news .song-list ul li .item #openPl{
-  margin: 15px 0 0 25px;
+  margin: 5px 0 0 25px;
 }
 
 .conTainer .right-ct .news .song-list ul li .item img{
@@ -138,6 +150,13 @@ ul{
 
 .conTainer .right-ct .news .box-add-pl .add2plBtn{
 	margin: 10px 0 0 0;
+}
+
+.conTainer .right-ct .news .box-add-pl .add2plBtn button{
+	padding: 5px 10px;
+	border: 1px solid lightgray;
+	color: whitesmoke;
+	border-radius: 3px;
 }
 
 .conTainer .right-ct .news .box-add-pl .pl select{
@@ -170,11 +189,16 @@ ul{
 	display: none;
 }
 
+.conTainer .right-ct .infor .log-nav .ul-parent .li-parent .ul-c-1 li{
+	padding-bottom: 15px;
+	cursor: pointer;
+}
+
 .conTainer .right-ct .infor .log-nav .ul-parent .li-parent div:nth-child(1){
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	align-item: center;
+	align-items: center;
 }
 
 .conTainer .right-ct .infor .log-nav .ul-parent .li-parent div:nth-child(1) div{
@@ -191,30 +215,94 @@ ul{
 	margin-left: 15px;
 }
 
-
-.conTainer .right-ct .infor .log-nav .ul-parent .li-parent .ul-c-1 li{
-	padding-bottom: 15px;
-	cursor: pointer;
-}
-
 .conTainer .right-ct .infor .log-nav ul li a{
   color: gray;
   font-size: 88%;
 }
 
 .conTainer .right-ct .infor .pl-nav{
+  position: relative;
+  z-index:0;
+  margin-top: 35px;
+  overflow: scroll;
+  height: 80%;
+}
 
+.conTainer .right-ct .infor .pl-nav::-webkit-scrollbar{
+	width: 5px;
+}
+
+.conTainer .right-ct .infor .pl-nav::-webkit-scrollbar-thumb{
+	background: whitesmoke;
+}
+
+.conTainer .right-ct .infor .pl-nav::-webkit-scrollbar-corner{
+	display: none;
+}
+
+.conTainer .right-ct .infor .pl-nav ul{
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.conTainer .right-ct .infor .pl-nav ul li{
+  color: whitesmoke;
+  background: whitesmoke;
+  width: 90%;
+  margin: 15px 0;
+  border-radius: 3px;
+}
+
+.conTainer .right-ct .infor .pl-nav ul li .item{
+  display: grid;
+  grid-template-columns: 25% 75%;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.conTainer .right-ct .infor .pl-nav ul li .item .play-icon{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.conTainer .right-ct .infor .pl-nav ul li .item .play-icon img{
+  width: 50px;
+  height: auto;
+}
+
+.conTainer .right-ct .infor .pl-nav ul li .item .infor{
+	
+}
+
+.conTainer .right-ct .infor .pl-nav ul li .item .infor .name{
+	color: black;
+	font-size: 110%;
+}
+
+.conTainer .right-ct .infor .pl-nav ul li .item .infor .singer{
+	color: gray;
+	font-size: 85%;
 }
 
 .conTainer .right-ct .pl-container{
 	position: relative;
-	border: 1px solid white;
 	height: 100%;
 	width: 100%;
 }
 
+.conTainer .right-ct .pl-container .title{
+	margin: 35px 0 0 35px;
+	color: whitesmoke;
+	font-size: 125%;
+	letter-spacing:1px;
+}
+
 .conTainer .right-ct .pl-container .playlist{
-	z-index: -1;
+	margin: 15px 0 0 35px;
 }
 
 .conTainer .right-ct .pl-container .playlist table{
@@ -222,20 +310,62 @@ ul{
 }
 
 .conTainer .right-ct .pl-container .playlist table tr th, .conTainer .right-ct .pl-container .playlist table tr td{
-	border: 1px solid white;
+	
 	padding: 5px 10px;
 }
 
 .conTainer .right-ct .pl-container .playlist table tr td{
+	border: 1px solid black;
 	cursor: pointer;
 }
 
 .conTainer .right-ct .pl-container .playlist table tr .pl-name{
-	width: 75%;
+	width: 80%;
+	background: whitesmoke;
+}
+
+.conTainer .right-ct .pl-container .playlist table tr .pl-name a{
+	text-decoration: none;
+	color: black;
 }
 
 .conTainer .right-ct .pl-container .playlist table #add-pl{
 	cursor: pointer;
+}
+
+.conTainer .right-ct .b-f-upl{
+	margin: 35px 0 0 35px;
+}
+
+.conTainer .right-ct .b-f-upl{
+	margin: 35px 0 0 35px;
+}
+
+.conTainer .right-ct .b-f-upl form .ip-t{
+	margin-top: 15px;
+	background: gray;
+	outline: none;
+	border: 1px solid darkgray;
+	padding: 5px 10px;
+	font-size: 95%;
+	color: white;
+	width: 80%;
+	border-radius: 3px;
+}
+
+.conTainer .right-ct .b-f-upl form .ip-t::placeholder{
+	color: whitesmoke;
+}
+
+.conTainer .right-ct .b-f-upl form .selection{
+	margin: 15px 0 15px 0;
+}
+
+.conTainer .right-ct .b-f-upl form .btn-success{
+	padding: 10px 15px;
+	outline: none;
+	border-radius: 3px;
+	border: 1px solid green;
 }
 
 .audio-nav{
@@ -247,6 +377,16 @@ ul{
   background-color: rgba(245, 245, 245, 0.2);
   display: grid;
   grid-template-columns: 25% 75%;
+  color: white;
+}
+
+.audio-nav .song-infor{
+	padding-left: 35px;
+}
+
+.audio-nav .song-infor .singer{
+	font-size: 85%;
+	margin-top: 5px;
 }
 
 .audio-nav .control{
@@ -275,6 +415,7 @@ ul{
   background-color: gray;
   height: 10%;
   margin-top: 2px;
+  cursor: pointer;
 }
 
 .audio-nav .control .timeline .line .current{
@@ -286,6 +427,5 @@ ul{
 .audio-nav .control div{
   justify-content: center;
   align-items: center;
-  color: white;
   text-align: center;
 }

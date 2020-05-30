@@ -35,4 +35,19 @@ public class UserQuery {
 		query.setParameter("data", row[1]);
 		return (User)query.uniqueResult();
 	}
+	
+	public void update(User user){
+		Session session = ftr.openSession();
+		Transaction t = session.beginTransaction();
+		try{
+			session.update(user);
+			t.commit();
+		}
+		catch(Exception e){
+			t.rollback();
+		}
+		finally{
+			session.close();
+		}
+	}
 }

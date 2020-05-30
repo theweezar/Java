@@ -17,12 +17,21 @@ import app.entity.*;
 import app.render.*;
 import app.query.*;
 
+@Transactional
 @Controller
 public class AppController {
 	@Autowired
 	SessionFactory ftr;
 	
-	@Transactional
+	@ModelAttribute("lovePl")
+	public Collection<PlayListDetail> getsongfromlovepl(HttpServletRequest req){
+		if (req.getSession().getAttribute("logged") != null){
+			PlayListQuery plQuery = new PlayListQuery(ftr);
+			return plQuery.getPlayList((int)req.getSession().getAttribute("userId"), 1).get(0).getPlDetail();
+		}
+		else return null;
+	}
+	
 	@RequestMapping("home")
 	public String home(ModelMap model, HttpServletRequest req, HttpServletResponse res) throws NullPointerException{
 		Render r = new Render(model);
@@ -41,7 +50,7 @@ public class AppController {
 			}
 			else r.setModelAttr("empPl", true);
 		}
-		System.out.print(httpss.getAttribute("logged"));
+//		System.out.print(httpss.getAttribute("logged"));
 		for(Song s: songList){
 			if (httpss.getAttribute("logged") != null){
 				if (plQuery.getDetail((int)httpss.getAttribute("lovePlId"), s.getId()) == null) 
@@ -55,7 +64,7 @@ public class AppController {
 			r.setModelAttr("songList", sLBean);
 		}
 		else r.setModelAttr("emp", true);
-		return r.render("mainLayout", "home");
+		return r.render("mainLayout", "song/home");
 	}
 	
 }

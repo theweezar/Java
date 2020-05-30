@@ -1,5 +1,6 @@
 package app.entity;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -11,6 +12,9 @@ public class Song {
 	@GeneratedValue
 	@Column(name="id")
 	private int id;
+	
+	@OneToMany(mappedBy="song", fetch=FetchType.EAGER)
+	private Collection<PlayListDetail> details;
 	
 	@Column(name="link")
 	private String link;
@@ -130,6 +134,14 @@ public class Song {
 
 	public void setKind(Kind kind) {
 		this.kind = kind;
+	}
+
+	public Collection<PlayListDetail> getDetails() {
+		return details;
+	}
+
+	public void setDetails(Collection<PlayListDetail> details) {
+		this.details = details;
 	}
 	
 	

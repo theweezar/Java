@@ -14,42 +14,110 @@
 <body>
 	<div class="wallpp"></div>
 	<c:if test="${mode == 1}">
-		<div class="login-page">
-			<h3>.Login</h3>
+		<div class="account-page">
+			<div class="title">Sign In</div>
 			<form:form action="./login.htm" method="POST" modelAttribute="user">
-				<div>
-					<form:input placeholder="Username" path="username"/>
+				<div class="ip-g">
+					<form:input class="ip" placeholder="Username" path="username"/>
+					<form:errors class="err" path="username"/>
 				</div>
-				<div>
-					<form:password placeholder="Password" path="password"/>
+				<div class="ip-g">
+					<form:password class="ip" placeholder="Password" path="password"/>
+					<form:errors class="err" path="password"/>
 				</div>
-				<div>
+				<div class="ip-g">
 					<form:button type="submit">Login</form:button>
 				</div>
+				<table class="option">
+					<tr>
+						<td><a href="./forgetpw.htm">*Quên mật khẩu</a></td>
+						<td style="text-align: right;"><a href="./account.htm?m=register">Đăng ký</a></td>
+					</tr>
+				</table>
 			</form:form>
 		</div>
 	</c:if>
 	<c:if test="${mode == 2}">
-		<div class="register-page">
-			<h3>.Register</h3>
+		<div class="account-page">
+			<div class="title">Register</div>
 			<form:form action="./register.htm" method="POST" modelAttribute="user">
-				<div>
-					<form:input placeholder="Username" path="username"/>
+				<div class="ip-g">
+					<form:input class="ip" placeholder="Username" path="username"/>
+					<form:errors class="err" path="username"/>
 				</div>
-				<div>
-					<form:password placeholder="Password" path="password"/>
+				<div class="ip-g">
+					<form:password class="ip" placeholder="Password" path="password"/>
+					<form:errors class="err" path="password"/>
 				</div>
-				<div>
-					<input name="rePassword" placeholder="Re password" type="password"/>
+				<div class="ip-g">
+					<input class="ip" name="rePassword" placeholder="Re password" type="password"/>
 				</div>
-				<div>
-					<form:input placeholder="Email" path="email"/>
+				<div class="ip-g">
+					<form:input class="ip" placeholder="Email" path="email"/>
+					<form:errors class="err" path="email"/>
 				</div>
-				<div>
+				<div style="text-align: center;" class="ip-g">
 					<form:button type="submit">Submit</form:button>
+				</div>
+				<div style="text-align: center;">
+					<a href="./account.htm?m=login">Quay về đăng nhập</a>
 				</div>
 			</form:form>
 		</div>
+	</c:if>
+	<c:if test="${mode == 3 }">
+		<div class="account-page">
+			<div class="title">Change password</div>
+			<form:form action="./changepw.htm" method="POST" modelAttribute="user">
+				<div class="ip-g">
+					<form:password class="ip" placeholder="Current password" path="password"/>
+					<form:errors class="err" path="password"/>
+				</div>
+				<div class="ip-g">
+					<input class="ip" name="newPassword" placeholder="Cofirm" type="password"/>
+				</div>
+				<div class="ip-g">
+					<input class="ip" name="rePassword" placeholder="Cofirm" type="password"/>
+				</div>
+				<div style="text-align: center;" class="ip-g">
+					<form:button type="submit">Submit</form:button>
+				</div>
+				<div style="text-align: center;">
+					<a href="./home.htm">Quay về trang chủ</a>
+				</div>
+				<c:if test="${error1 }">
+					<script>
+						alert("Không để trống");
+					</script>
+				</c:if>
+				<c:if test="${error2 }">
+					<script>
+						alert("Nhập sai password mới");
+					</script>
+				</c:if>
+			</form:form>
+		</div>
+	</c:if>
+	<c:if test="${mode == 4 }">
+		<div class="account-page">
+			<div class="title">Retrieve Password</div>
+			<form:form action="./forgetpw.htm" method="POST" modelAttribute="user">
+				<div class="ip-g">
+					<form:input class="ip" placeholder="Username" path="username"/>
+				</div>
+				<div class="ip-g">
+					<input class="ip" name="code" placeholder="Code" type="text"/>
+				</div>
+				<div style="text-align: center;" class="ip-g">
+					<button id="sendCode" style="margin-bottom: 10px">Send code</button>
+					<form:button type="submit">Submit</form:button>
+				</div>
+				<div style="text-align: center;">
+					<a href="./home.htm">Quay về trang chủ</a>
+				</div>
+			</form:form>
+		</div>
+		
 	</c:if>
 </body>
 </html>
