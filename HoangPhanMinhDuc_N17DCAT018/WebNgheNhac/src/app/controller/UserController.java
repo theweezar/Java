@@ -4,6 +4,8 @@ package app.controller;
 import org.hibernate.SessionFactory;
 //import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -14,7 +16,9 @@ import com.sun.javafx.iio.ios.IosDescriptor;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Pattern;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.*;
 
 import app.entity.*;
@@ -26,6 +30,8 @@ import app.render.Render;
 public class UserController {
 	@Autowired
 	SessionFactory ftr;
+	@Autowired
+	JavaMailSender mailer;
 	
 	
 	@RequestMapping("account")
@@ -99,6 +105,7 @@ public class UserController {
 		user.setPassword(user.getPassword().trim());
 		user.setEmail(user.getEmail().trim());
 		
+		
 		if (user.getUsername().length() == 0){
 			err.rejectValue("username", "user", "Username is empty");
 		}
@@ -111,6 +118,9 @@ public class UserController {
 		else if (userQuery.get("username="+user.getUsername()) != null){
 			err.rejectValue("username", "user", "Username is existed");
 		}
+		else if (!Pattern.matches(".+@\\w+.(.\\w+){1,}", user.getEmail())){
+			err.rejectValue("email", "user", "Email is incorrect");
+		}
 		else if (userQuery.get("email="+user.getEmail()) != null){
 			err.rejectValue("email", "user", "Email is existed");
 		}
@@ -120,10 +130,11 @@ public class UserController {
 		else{
 			userQuery.add(user);
 			PlayList pL = new PlayList();
+			pL.setPlName("love");
 			pL.setUser(user);
 			pL.setLater(1);
 			plQuery.addPlayList(pL);
-			res.sendRedirect("./userlist.htm");
+			res.sendRedirect("./login.htm");
 		}
 		model.addAttribute("mode", 2);
 		return "user/account";
@@ -179,14 +190,76 @@ public class UserController {
 	@RequestMapping(value="/gencode",method=RequestMethod.POST)
 	public void sendcode(@ModelAttribute User user, ModelMap model, 
 			HttpServletRequest req, HttpServletResponse res) throws IOException{
-		
-		
+		int code = 0;
+		for(int i = 0; i < 6; i++){
+			code += (int)(Math.random() * (9 - 0 + 1) + 0);
+			code *= 10;
+		}
+		try{
+			UserQuery uQuery = new UserQuery(ftr);
+			String username = req.getParameter("username") == null ? "" : req.getParameter("username").trim();
+			if (!username.equals("")){
+				User u = uQuery.get("username="+username);
+				if (u != null){
+					String from = "hpmduc1999@gmail.com";
+					String to = u.getEmail();
+					String subject = "Quên mật khẩu";
+					String body = "Mã lấy lại mật khẩu : " + code;
+					MimeMessage mail = mailer.createMimeMessage() ;
+					MimeMessageHelper helper = new MimeMessageHelper(mail);
+					helper.setFrom(from,from);
+					helper.setTo(to);
+					helper.setReplyTo(from,from);
+					helper.setSubject(subject);
+					helper.setText(body, true);
+					mailer.send(mail);
+					req.getSession().setAttribute("code", code);
+					req.getSession().setAttribute("forgetUsername", username);
+					res.getWriter().print("Gửi code thành công");	
+				}
+				else res.getWriter().print("Username trống hoặc sai ! Vui lòng nhập lại");
+			}
+			else res.getWriter().print("Username trống hoặc sai ! Vui lòng nhập lại");
+		}catch(Exception ex){
+			res.getWriter().print("Gửi code thất bại");
+		}
 	}
 	
 	@RequestMapping(value="/forgetpw",method=RequestMethod.POST)
 	public String retrievepw(@ModelAttribute User user, ModelMap model, 
 			HttpServletRequest req, HttpServletResponse res) throws IOException{
-		
+		String code = req.getParameter("code") == null ? "" : req.getParameter("code").trim();
+		if (req.getSession().getAttribute("code") == null){
+			model.addAttribute("mode", 4);
+			System.out.println("Chua nhap");
+		}
+		else if (!code.equals(req.getSession().getAttribute("code").toString())){
+			model.addAttribute("mode", 4);
+			System.out.println("Nhap code sai");
+		}
+		else {
+			System.out.println("Nhap dung code");
+			model.addAttribute("mode", 5);
+		}
+		return "user/account";
+	}
+	
+	@RequestMapping(value="/confirmchangepw",method=RequestMethod.POST)
+	public String confirmchangepw(@ModelAttribute User user, ModelMap model, 
+			HttpServletRequest req, HttpServletResponse res) throws IOException{
+		String newPw = user.getPassword().trim();
+		String confirm = req.getParameter("confirm") == null ? "" : req.getParameter("confirm");
+		if (!newPw.equals(confirm)){
+			model.addAttribute("mode", 5);
+			model.addAttribute("error3", true);
+		}
+		else{
+			UserQuery uQuery = new UserQuery(ftr);
+			User u = uQuery.get("username="+req.getSession().getAttribute("forgetUsername"));
+			u.setPassword(newPw);
+			uQuery.update(u);
+			res.sendRedirect("./login.htm");
+		}
 		return "user/account";
 	}
 	

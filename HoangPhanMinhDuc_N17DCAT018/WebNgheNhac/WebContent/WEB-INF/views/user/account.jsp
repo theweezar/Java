@@ -10,6 +10,7 @@
 <title>Login</title>
 <link rel="stylesheet" href="./public/css/account.css">
 <link rel="stylesheet" href="./public/css/bootstrap.css">
+<script src="./public/js/jquery.min.js"></script>
 </head>
 <body>
 	<div class="wallpp"></div>
@@ -74,10 +75,10 @@
 					<form:errors class="err" path="password"/>
 				</div>
 				<div class="ip-g">
-					<input class="ip" name="newPassword" placeholder="Cofirm" type="password"/>
+					<input id="newPassword" class="ip" name="newPassword" placeholder="New password" type="password"/>
 				</div>
 				<div class="ip-g">
-					<input class="ip" name="rePassword" placeholder="Cofirm" type="password"/>
+					<input id="rePassword" class="ip" name="rePassword" placeholder="Cofirm" type="password"/>
 				</div>
 				<div style="text-align: center;" class="ip-g">
 					<form:button type="submit">Submit</form:button>
@@ -106,7 +107,7 @@
 					<form:input class="ip" placeholder="Username" path="username"/>
 				</div>
 				<div class="ip-g">
-					<input class="ip" name="code" placeholder="Code" type="text"/>
+					<input id="code" class="ip" name="code" placeholder="Code" type="text"/>
 				</div>
 				<div style="text-align: center;" class="ip-g">
 					<button id="sendCode" style="margin-bottom: 10px">Send code</button>
@@ -119,5 +120,28 @@
 		</div>
 		
 	</c:if>
+	<c:if test="${mode == 5 }">
+		<div class="account-page">
+			<div class="title">Retrieve Password</div>
+			<form:form action="./confirmchangepw.htm" method="POST" modelAttribute="user">
+				<div class="ip-g">
+					<form:password class="ip" placeholder="New password" path="password"/>
+				</div>
+				<div class="ip-g">
+					<input id="password" class="ip" name="confirm" placeholder="Confirm" type="password"/>
+				</div>
+				<div style="text-align: center;" class="ip-g">
+					<form:button type="submit">Submit</form:button>
+				</div>
+				<div style="text-align: center;">
+					<a href="./home.htm">Quay về trang chủ</a>
+				</div>
+			</form:form>
+		</div>
+		<c:if test="${error3 }">
+			<script>alert("Nhập sai mật khẩu")</script>
+		</c:if>
+	</c:if>
+	<script src="./public/js/account.js"></script>
 </body>
 </html>

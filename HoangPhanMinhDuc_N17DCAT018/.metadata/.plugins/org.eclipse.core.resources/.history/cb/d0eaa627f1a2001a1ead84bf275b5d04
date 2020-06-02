@@ -1,0 +1,12 @@
+$(function(){
+  $("button#sendCode").click(function(e){
+	  e.preventDefault();
+    $.ajax({
+      type:"POST",
+      url:"./gencode.htm",
+      success: (d) => {
+        alert(`Code là: ${d}`);
+      }
+    })
+  });
+})

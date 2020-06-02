@@ -29,6 +29,11 @@ public class SongController {
 	@Autowired
 	SessionFactory ftr;
 	
+	@ModelAttribute("userName")
+	public String showUsername(HttpServletRequest req){
+		if (req.getSession().getAttribute("logged") != null) return req.getSession().getAttribute("username").toString();
+		else return "";
+	}
 	
 	@ModelAttribute("kind")
 	public List<Kind> getKind(){

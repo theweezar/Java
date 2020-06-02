@@ -23,7 +23,9 @@
 			</div>
 		</c:if>
 		<c:if test="${empPl }">
-			<h3>Không có playlist cá nhân</h3>
+			<div id="boxPl" class="box-add-pl">
+				<h3>Không có playlist cá nhân</h3>
+			</div>
 		</c:if>
 	</c:if>
   <div class="song-list">

@@ -82,3 +82,11 @@ INSERT INTO kind VALUES
 ('Nhạc Rap Việt'),
 ('Nhạc Thiếu Nhi'),
 ('Nhạc Trẻ')
+
+create table Code(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	userId INT NOT NULL UNIQUE,
+	code varchar(10) NOT NULL
+)
+
+ALTER TABLE Code ADD FOREIGN KEY (userId) REFERENCES users(id);

@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="${cssLink}.css">
 <link rel="stylesheet" href="${bootstrap}.css">
 <script src="${jsLink}.js"></script>
-<title>Layout</title>
+<title>Music</title>
 </head>
 <body>
 	<div class="conTainer">
@@ -20,7 +20,7 @@
         <li class="navi-item">
           <a href="./home.htm">
           	Home
-          	<c:if test="${logged }">()</c:if>
+          	<c:if test="${logged }">(${userName })</c:if>
           </a>
         </li>
         <c:if test="${logged }">
@@ -52,7 +52,10 @@
       <div class="infor">
 
         <div class="pl-nav">
-          <div style="color: whitesmoke; width: 90px; font-size:110%;">Like</div>
+        <c:if test="${logged }">
+        <div style="color: whitesmoke; width: 90px; font-size:110%;">Like</div>
+        </c:if>
+          
           <ul id="lovePlaylist">
           	<!-- 
             <li>

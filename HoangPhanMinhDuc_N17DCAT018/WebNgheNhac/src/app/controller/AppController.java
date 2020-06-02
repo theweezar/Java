@@ -23,6 +23,12 @@ public class AppController {
 	@Autowired
 	SessionFactory ftr;
 	
+	@ModelAttribute("userName")
+	public String showUsername(HttpServletRequest req){
+		if (req.getSession().getAttribute("logged") != null) return req.getSession().getAttribute("username").toString();
+		else return "";
+	}
+	
 	@ModelAttribute("lovePl")
 	public Collection<PlayListDetail> getsongfromlovepl(HttpServletRequest req){
 		if (req.getSession().getAttribute("logged") != null){
