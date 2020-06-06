@@ -130,7 +130,7 @@ public class UserController {
 		else{
 			userQuery.add(user);
 			PlayList pL = new PlayList();
-			pL.setPlName("love");
+			pL.setPlName("LIKE PLAYLIST");
 			pL.setUser(user);
 			pL.setLater(1);
 			plQuery.addPlayList(pL);

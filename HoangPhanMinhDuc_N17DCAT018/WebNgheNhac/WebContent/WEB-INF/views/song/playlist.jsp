@@ -13,8 +13,10 @@
 			<c:forEach var="pl" items="${playList }">
 			<tr pl-id="${pl.getId()}">
 				<td class="pl-name"><a href="./playlist.htm?plId=${pl.getId() }">${pl.getPlName() }</a></td>
+				<c:if test="${pl.isLater() == 0}">
 				<td id="update-pl" class="bg-success">Sửa tên</td>
 				<td id="del-pl" role="del-pl" class="bg-danger">Xóa</td>
+				</c:if>
 			</tr>
 			</c:forEach>
 			<tr id="add-pl" class="text-white">

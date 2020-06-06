@@ -3,6 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="f" %>
 <div class="news">
+	<div class="search-bar">
+		<input type="text" placeholder="Search" id="searchBar" class="ip-search"/>
+		<button id="searchBtn">Search</button>
+	</div>
 	<c:if test="${logged }">
 		<c:if test="${!empPl }">
 			<div id="boxPl" class="box-add-pl">

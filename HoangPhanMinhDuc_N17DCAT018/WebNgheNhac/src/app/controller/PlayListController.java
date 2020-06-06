@@ -76,17 +76,19 @@ public class PlayListController {
 		if (req.getSession().getAttribute("logged") == null){
 			res.sendRedirect("./account.htm?m=login");
 		}
+//		./playlist.htm?plId=...
 		if (plId == null){
 			List<PlayList> pl = plQuery.getPlayList((int)req.getSession().getAttribute("userId"), 0);
-			if (pl.size() > 0){
-				r.setModelAttr("playList", pl);
-			}
+			List<PlayList> likePl = plQuery.getPlayList((int)req.getSession().getAttribute("userId"), 1);
+			pl.add(0, likePl.get(0));
+			r.setModelAttr("playList", pl);
 			return r.render("mainLayout", "song/playlist");
 		}
 		else {
 			PlayList playList = plQuery.getPlayList(Integer.parseInt(plId));
 			r.setModelAttr("plName", playList.getPlName());
 			r.setModelAttr("plId", playList.getId());
+			r.setModelAttr("plIsLater", playList.isLater());
 			if (playList.getPlDetail().size() > 0){
 				r.setModelAttr("emp", false);
 				r.setModelAttr("songList", playList.getPlDetail());

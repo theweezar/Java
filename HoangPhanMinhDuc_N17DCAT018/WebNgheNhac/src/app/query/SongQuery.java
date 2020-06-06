@@ -32,5 +32,12 @@ public class SongQuery {
 		}
 	}
 	
+	public List<Song> search(String name) {
+		Session session = ftr.getCurrentSession();
+		String hql = "FROM Song s WHERE LOCATE(:name,s.songName) BETWEEN 1 AND 100";
+		Query query = session.createQuery(hql);
+		query.setParameter("name", name);
+		return query.list();
+	}
 	
 }

@@ -37,7 +37,6 @@
 <fullyQualifiedTypeName name="ptithcm.entity.Departs"/>
 <fullyQualifiedTypeName name="org.springframework.format.annotation.DateTimeFormat"/>
 <fullyQualifiedTypeName name="javax.persistence.OneToMany"/>
-<fullyQualifiedTypeName name="app.query.SongQuery"/>
 <fullyQualifiedTypeName name="app.render.Render"/>
 <fullyQualifiedTypeName name="app.entity.PlayList"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMethod"/>
@@ -56,8 +55,9 @@
 <fullyQualifiedTypeName name="javax.persistence.JoinColumn"/>
 <fullyQualifiedTypeName name="app.entity.User"/>
 <fullyQualifiedTypeName name="com.sun.javafx.iio.ios.IosDescriptor"/>
-<fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
-<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
 <fullyQualifiedTypeName name="java.util.regex.Pattern"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="app.query.SongQuery"/>
 </qualifiedTypeNameHistroy>

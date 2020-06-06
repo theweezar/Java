@@ -269,11 +269,40 @@ $(function(){
       },
       success: d => {
         console.log(d);
-        $(this).parent().parent().remove();
+        if ($(this).parents("div.song-list").attr("isLater") === "1"){
+          $(`ul#lovePlaylist li div[songid='${songId}']`).parent().remove();
+        }
+        $(this).parents("li").remove();
       }
     })
   })
 
+  // Search for song
+
+  const search = function(name=""){
+    if (name != ""){
+      console.log(name);
+      $.ajax({
+        type:"POST",
+        url:"./search.htm",
+        data:{
+          name: name
+        },
+        success: function(rs){
+          console.log(rs);
+        }
+      })
+    }
+  }
+
+  $("input#searchBar").keyup(function(e){
+    if (e.keyCode == 13){
+      search($(this).val().trim());  
+    }
+  });
   
+  $("button#searchBtn").click(function(){
+    search($("input#searchBar").val().trim());
+  })
 
 })

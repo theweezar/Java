@@ -67,10 +67,10 @@ public class SongController {
 		Render r = new Render(model);
 		SongQuery query = new SongQuery(ftr);
 		UserQuery uQr = new UserQuery(ftr);
-		String songName = req.getParameter("songName");
-		String singerName = req.getParameter("singerName");
-		String musicianName = req.getParameter("musicianName");
-		String kindId = req.getParameter("kind");
+		String songName = req.getParameter("songName").trim();
+		String singerName = req.getParameter("singerName").trim();
+		String musicianName = req.getParameter("musicianName").trim() == "" ? "Không biết":req.getParameter("musicianName").trim();
+		String kindId = req.getParameter("kind").trim();
 		Kind kind = new KindQuery(ftr).get(Integer.parseInt(kindId));
 //		Kiểm tra extension của file
 		String ext = song.getOriginalFilename().substring(song.getOriginalFilename().lastIndexOf("."));
@@ -101,5 +101,16 @@ public class SongController {
 			r.setModelAttr("error", true);
 			return r.render("mainLayout", "song/upload");
 		}
+	}
+	
+	@RequestMapping(value="search", method=RequestMethod.POST)
+	public void searchSong(HttpServletRequest req, HttpServletResponse res) throws IOException {
+		String name = req.getParameter("name");
+		SongQuery sQuery = new SongQuery(ftr);
+		System.out.println(sQuery.search(name));
+		for(Song s:sQuery.search(name)) {
+			System.out.println(s.getSongName());
+		}
+		res.getWriter().print("search");
 	}
 }

@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="f" %>
 
 <div class="news">
-  <div plId="${plId }" class="song-list">
+  <div plId="${plId }" isLater="${plIsLater }" class="song-list">
   	<h3 style="margin: 15px 0 0 35px; color: whitesmoke;">${plName}</h3>
     <ul>
       <c:if test="${!emp}">

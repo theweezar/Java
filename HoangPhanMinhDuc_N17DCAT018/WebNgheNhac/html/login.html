@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="./bootstrap.css">
+  <link rel="stylesheet" href="./account.css">
+</head>
+<body>
+  <!-- This is the background -->
+  <div class="wallpp"></div>
+
+  <!-- This is the main form. You just need change something below from here -->
+	<div class="account-page">
+		<div class="title-1">Sign In</div>
+		<!-- <form:form action="./login.htm" method="POST" modelAttribute="user">
+			<div class="ip-g">
+				<div class="title-2">Username</div>
+				<form:input class="ip" placeholder="Username" path="username"/>
+				<form:errors class="err" path="username"/>
+			</div>
+			<div class="ip-g">
+				<div class="title-2">Password</div>
+				<form:password class="ip" placeholder="Password" path="password"/>
+				<form:errors class="err" path="password"/>
+			</div>
+			<div class="ip-g">
+				<form:button type="submit">Login</form:button>
+			</div>
+			<table class="option">
+				<tr>
+					<td><a href="./forgetpw.htm">*Forget password</a></td>
+					<td style="text-align: right;"><a href="./account.htm?m=register">Register</a></td>
+				</tr>
+			</table>
+    </form:form> -->
+    <form>
+      <div class="ip-g">
+        <div class="title-2">Username</div>
+        <input class="ip" type="text" name="password" id="username" placeholder="Username">
+				<!-- <form:input class="ip" placeholder="Username" path="username"/>
+				<form:errors class="err" path="username"/> -->
+			</div>
+			<div class="ip-g">
+        <div class="title-2">Password</div>
+        <input class="ip" type="password" name="password" id="password" placeholder="Password">
+				<!-- <form:password class="ip" placeholder="Password" path="password"/>
+				<form:errors class="err" path="password"/> -->
+			</div>
+			<div class="ip-g">
+        <button type="submit">Login</button>
+				<!-- <form:button type="submit">Login</form:button> -->
+			</div>
+			<table class="option">
+				<tr>
+					<td><a href="./forgetpw.htm">*Forget password</a></td>
+					<td style="text-align: right;"><a href="./account.htm?m=register">Register</a></td>
+				</tr>
+			</table>
+    </form>
+    <!-- End main form -->
+	</div>
+</body>
+</html>

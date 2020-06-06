@@ -64,6 +64,29 @@ ul{
   position: relative;
 }
 
+.conTainer .right-ct .news .search-bar{
+	margin: 25px 0 0 35px;
+}
+
+.conTainer .right-ct .news .search-bar .ip-search{
+	padding: 8px 15px;
+	width: 75%;
+	background: #474747;
+	border: 1px solid #333333;
+	border-radius: 25px 0 0 25px;
+	outline: none;
+	color: whitesmoke;
+}
+
+.conTainer .right-ct .news .search-bar #searchBtn{
+	padding: 8px 15px;
+	border-radius: 0 25px 25px 0;
+	background: #141414;
+	outline: none;
+	border: 1px solid #333333;
+	color: whitesmoke;
+}
+
 .conTainer .right-ct .news .song-list{
   
 }

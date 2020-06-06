@@ -96,8 +96,8 @@
   </audio>
   <div class="audio-nav">
     <div class="song-infor">
-      <div id="audioName" class="name">Test DRIVE</div>
-      <div id="audioSinger" class="singer">JoJI</div>
+      <div id="audioName" class="name"></div>
+      <div id="audioSinger" class="singer"></div>
     </div>
     <div class="control">
       <div class="play-ct">
