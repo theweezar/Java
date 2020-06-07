@@ -282,16 +282,20 @@ $(function(){
   const search = function(name=""){
     if (name != ""){
       console.log(name);
-      $.ajax({
-        type:"POST",
-        url:"./search.htm",
-        data:{
-          name: name
-        },
-        success: function(rs){
-          console.log(rs);
-        }
-      })
+      let a = document.createElement("a");
+      a.href = `./home.htm?search=${name}`;
+      a.click();
+      
+      // $.ajax({
+      //   type:"GET",
+      //   url:"./search.htm",
+      //   data:{
+      //     name: name
+      //   },
+      //   success: function(rs){
+      //     console.log(rs);
+      //   }
+      // })
     }
   }
 

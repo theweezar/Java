@@ -23,12 +23,14 @@ public class AppController {
 	@Autowired
 	SessionFactory ftr;
 	
+//	Khi đăng nhập để nó load userName để trình bày ở frontend
 	@ModelAttribute("userName")
 	public String showUsername(HttpServletRequest req){
 		if (req.getSession().getAttribute("logged") != null) return req.getSession().getAttribute("username").toString();
 		else return "";
 	}
 	
+//	Này để trong cái chỗ Like ngay góc bên phải frontend
 	@ModelAttribute("lovePl")
 	public Collection<PlayListDetail> getsongfromlovepl(HttpServletRequest req){
 		if (req.getSession().getAttribute("logged") != null){
@@ -38,15 +40,21 @@ public class AppController {
 		else return null;
 	}
 	
-	@RequestMapping("home")
+	@RequestMapping(value="home", method=RequestMethod.GET)
 	public String home(ModelMap model, HttpServletRequest req, HttpServletResponse res) throws NullPointerException{
 		Render r = new Render(model);
+		String name = req.getParameter("search");
 		SongQuery sQuery = new SongQuery(ftr);
 		PlayListQuery plQuery = new PlayListQuery(ftr);
+//		SongBean dưới này có thêm thuộc tính xét xem được add vào Love PLaylist hay chưa
 		List<SongBean> sLBean = new ArrayList<>();
-		List<Song> songList = sQuery.getAll();
+		List<Song> songList = new ArrayList<>();
 		List<PlayList> playList = new ArrayList<>();
 		HttpSession httpss = req.getSession();
+		
+		if (name == null) songList = sQuery.getAll();
+		else songList = sQuery.search(name);
+		
 		if (httpss.getAttribute("logged") != null){
 			r.setModelAttr("currUsername", httpss.getAttribute("username"));
 			playList = plQuery.getPlayList((int)httpss.getAttribute("userId"), 0);
@@ -65,6 +73,8 @@ public class AppController {
 			}
 			else sLBean.add(new SongBean(s, false));
 		}
+//		Kiểm tra số lượng bài hát, nếu ko có thì set biến "emp" = true.
+//		Tránh lỗi NullPointerExcetion
 		if (sLBean.size() > 0){
 			r.setModelAttr("emp", false);
 			r.setModelAttr("songList", sLBean);

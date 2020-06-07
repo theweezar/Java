@@ -19,6 +19,7 @@ import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.http.*;
 
+import app.bean.SongBean;
 import app.entity.*;
 import app.query.*;
 import app.render.Render;
@@ -68,14 +69,22 @@ public class SongController {
 		SongQuery query = new SongQuery(ftr);
 		UserQuery uQr = new UserQuery(ftr);
 		String songName = req.getParameter("songName").trim();
-		String singerName = req.getParameter("singerName").trim();
+		String singerName = req.getParameter("singerName").trim() == "" ? "Không biết":req.getParameter("singerName").trim();
 		String musicianName = req.getParameter("musicianName").trim() == "" ? "Không biết":req.getParameter("musicianName").trim();
 		String kindId = req.getParameter("kind").trim();
 		Kind kind = new KindQuery(ftr).get(Integer.parseInt(kindId));
 //		Kiểm tra extension của file
-		String ext = song.getOriginalFilename().substring(song.getOriginalFilename().lastIndexOf("."));
+//		String ext = song.getOriginalFilename().substring(song.getOriginalFilename().lastIndexOf("."));
 //		==============================
-		if (!song.isEmpty() && ext.equalsIgnoreCase(".mp3")){
+		if (song.isEmpty()) {
+//			Nếu ko có nhạc upload thì báo lỗi
+			r.setModelAttr("error", true);
+		}
+		else if (!song.getOriginalFilename().substring(song.getOriginalFilename().lastIndexOf(".")).equalsIgnoreCase(".mp3")) {
+//			Nếu đuôi file ko phải .mp3 thì báo lỗi
+			r.setModelAttr("error", true);
+		}
+		else {
 			String rName = "";
 			for(int i = 0; i < 10; i++){
 				rName = rName + (char)(int)(Math.random() * (122 - 97 + 1) + 97);
@@ -95,22 +104,7 @@ public class SongController {
 //			D:\programming\Java\HoangPhanMinhDuc_N17DCAT018\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\DoAnWebNgheNhac\music_src\WYS - Snowman.mp3			
 //			res.sendRedirect("./upload.htm");
 			r.setModelAttr("success", true);
-			return r.render("mainLayout", "song/upload");
 		}
-		else {
-			r.setModelAttr("error", true);
-			return r.render("mainLayout", "song/upload");
-		}
-	}
-	
-	@RequestMapping(value="search", method=RequestMethod.POST)
-	public void searchSong(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		String name = req.getParameter("name");
-		SongQuery sQuery = new SongQuery(ftr);
-		System.out.println(sQuery.search(name));
-		for(Song s:sQuery.search(name)) {
-			System.out.println(s.getSongName());
-		}
-		res.getWriter().print("search");
+		return r.render("mainLayout", "song/upload");
 	}
 }
