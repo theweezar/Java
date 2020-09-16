@@ -17,6 +17,7 @@
 		<div>
 			<input class="ip-t" placeholder="Tên nhạc sĩ" type="text" name="musicianName"/>
 		</div>
+		<!--  -->
 		<div class="selection"> 
 			<select id="kindSelect" name="kind">
 				<c:forEach var="k" items="${kind}">

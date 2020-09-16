@@ -105,7 +105,7 @@ public class UserController {
 		user.setPassword(user.getPassword().trim());
 		user.setEmail(user.getEmail().trim());
 		
-		
+//		Kiểm lỗi input 
 		if (user.getUsername().length() == 0){
 			err.rejectValue("username", "user", "Username is empty");
 		}
@@ -128,6 +128,7 @@ public class UserController {
 			err.rejectValue("password", "user", "Repassword is incorrect");
 		}
 		else{
+//			Kiểm lỗi thành công thì tiến hành thêm User và tạo Playlist LIKE cố định
 			userQuery.add(user);
 			PlayList pL = new PlayList();
 			pL.setPlName("LIKE PLAYLIST");
@@ -155,6 +156,7 @@ public class UserController {
 			HttpServletRequest req, HttpServletResponse res, BindingResult err) throws Exception{
 		String newPw = req.getParameter("newPassword").trim();
 		String rePw = req.getParameter("rePassword").trim();
+//		Kiểm lỗi password nhập vào
 		if (user.getPassword().length() == 0){
 			err.rejectValue("password", "user", "Password is empty");
 		}
@@ -162,6 +164,7 @@ public class UserController {
 			model.addAttribute("error1", true);
 		}
 		else{
+//			Nếu password nhập đúng điều kiện thì ta tiếp tục so sánh password hiện tại của User đó
 			UserQuery uQuery = new UserQuery(ftr);
 			User cUser = uQuery.get("username="+(String)req.getSession().getAttribute("username"));
 			if (!cUser.getPassword().equals(user.getPassword().trim())){
@@ -171,6 +174,7 @@ public class UserController {
 				model.addAttribute("error2", true);
 			}
 			else{
+//				Đúng thì đổi password
 				cUser.setPassword(newPw);
 				uQuery.update(cUser);
 				res.sendRedirect("./home.htm");
