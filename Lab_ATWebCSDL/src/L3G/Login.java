@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lab_atwebcsdl;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.*;
+package L3G;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author hpmdu
@@ -17,43 +20,9 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    
-    
     public Login() {
         initComponents();
     }
-    
-    public String encryptThisString(String input) 
-    { 
-        try { 
-            // getInstance() method is called with algorithm SHA-1 
-            MessageDigest md = MessageDigest.getInstance("SHA-1"); 
-  
-            // digest() method is called 
-            // to calculate message digest of the input string 
-            // returned as array of byte 
-            byte[] messageDigest = md.digest(input.getBytes()); 
-  
-            // Convert byte array into signum representation 
-            BigInteger no = new BigInteger(1, messageDigest); 
-  
-            // Convert message digest into hex value 
-            String hashtext = no.toString(16); 
-  
-            // Add preceding 0s to make it 32 bit 
-            while (hashtext.length() < 32) { 
-                hashtext = "0" + hashtext; 
-            } 
-  
-            // return the HashText 
-            return hashtext; 
-        } 
-  
-        // For specifying wrong message digest algorithms 
-        catch (NoSuchAlgorithmException e) { 
-            throw new RuntimeException(e); 
-        } 
-    } 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,18 +34,24 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        labelUsername = new javax.swing.JLabel();
-        labelPassword = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         userName = new javax.swing.JTextField();
-        passWord = new javax.swing.JPasswordField();
         loginBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        passWord = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        labelUsername.setText("Tên đăng nhập");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setText("Tên đăng nhập");
 
-        labelPassword.setText("Mật khẩu");
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setText("Mật khẩu");
 
+        userName.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        loginBtn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         loginBtn.setText("Đăng nhập");
         loginBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -84,38 +59,46 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel1.setText("Đăng nhập");
+
+        passWord.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelUsername)
-                    .addComponent(labelPassword))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(userName)
-                    .addComponent(passWord, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE))
-                .addContainerGap(52, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(loginBtn)
-                .addContainerGap())
+                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(loginBtn)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(passWord))))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelUsername)
-                    .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelPassword)
-                    .addComponent(passWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
-                .addComponent(loginBtn)
+                .addContainerGap(34, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(userName)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(passWord))
+                .addGap(37, 37, 37)
+                .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -137,26 +120,25 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         MssqlConnection mssql = new MssqlConnection();
         Connection conn = mssql.getConnection();
-        Message msgPanel = new Message();
-        boolean ok = false;
-        String sql = "select * from NHANVIEN where TENDN = ?";
         try{
+            String sql = "select * from NHANVIEN_CMH where TENDN = ? and MATKHAU = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, userName.getText());
+            ps.setString(2, passWord.getText());
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                if (this.encryptThisString(passWord.getText()).equalsIgnoreCase(rs.getString("MATKHAU"))) ok = true;
+                JOptionPane.showMessageDialog(this, "Dang nhap thanh cong");
+                this.setVisible(false);
+                Option opt = new Option();
+                opt.setMANV(rs.getString("MANV"));
+                new Option().setVisible(true);
             }
-            if (ok) {
-                msgPanel.setMessage("Đăng nhập thành công");
+            else{
+                JOptionPane.showMessageDialog(this, "Sai ten tai khoan hoac mat khau", "Canh bao", JOptionPane.WARNING_MESSAGE);
             }
-            else {
-                msgPanel.setMessage("Tên đăng nhập và mật khẩu không hợp lệ");
-            }
-            msgPanel.setVisible(true);
         }
-        catch(SQLException ex){
-            msgPanel.setMessage("Kết nối SQL thất bại");
+        catch(SQLException e){
+            e.printStackTrace();
         }
     }//GEN-LAST:event_loginBtnMouseClicked
 
@@ -196,9 +178,10 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel labelPassword;
-    private javax.swing.JLabel labelUsername;
     private javax.swing.JButton loginBtn;
     private javax.swing.JPasswordField passWord;
     private javax.swing.JTextField userName;
