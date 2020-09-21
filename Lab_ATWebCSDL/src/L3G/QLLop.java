@@ -48,7 +48,7 @@ public class QLLop extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         classTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        editBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
@@ -79,10 +79,10 @@ public class QLLop extends javax.swing.JFrame {
             classTable.getColumnModel().getColumn(0).setPreferredWidth(25);
         }
 
-        jButton1.setText("Chỉnh sửa thông tin");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        editBtn.setText("Chỉnh sửa thông tin");
+        editBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                editBtnMouseClicked(evt);
             }
         });
 
@@ -102,7 +102,7 @@ public class QLLop extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jButton1))
+                            .addComponent(editBtn))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -114,7 +114,7 @@ public class QLLop extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(editBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(jButton2)
                 .addContainerGap())
@@ -134,11 +134,30 @@ public class QLLop extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void editBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editBtnMouseClicked
         // TODO add your handling code here:
         String maSV = classTable.getValueAt(classTable.getSelectedRow(), 0).toString();
-        
-    }//GEN-LAST:event_jButton1MouseClicked
+        System.out.println(maSV);
+        UpdateSV updateSV = new UpdateSV();
+        updateSV.setMaSV(maSV);
+        updateSV.update_SV();
+        Thread t = new Thread() {
+            public void run() {
+                synchronized(this) {
+                    while (updateSV.isVisible())
+                        try {
+                            this.wait();
+                        } 
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    System.out.println("Working now");
+                }
+            }
+        };
+        t.start();
+        this.showList();
+    }//GEN-LAST:event_editBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -209,7 +228,7 @@ public class QLLop extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable classTable;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton editBtn;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;

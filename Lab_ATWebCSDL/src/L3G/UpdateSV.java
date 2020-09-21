@@ -5,7 +5,14 @@
  */
 package L3G;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,6 +23,8 @@ public class UpdateSV extends javax.swing.JFrame {
     /**
      * Creates new form UpdateSV
      */
+    
+    private String maSV;
     
     public UpdateSV() {
         initComponents();
@@ -60,6 +69,40 @@ public class UpdateSV extends javax.swing.JFrame {
             }
         }
     }
+    
+    public void setMaSV(String maSV){
+        this.maSV = maSV;
+        System.out.println(this.maSV);
+    }
+    
+    public void update_SV(){
+        // TODO add your handling code here:
+        this.setVisible(true);
+        MssqlConnection mssql = new MssqlConnection();
+        Connection conn = mssql.getConnection();
+        try{
+            String sql = "select * from SINHVIEN where MASV = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, this.maSV);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                Date ngaysinh = rs.getDate("NGAYSINH");
+                hoTen.setText(rs.getString("HOTEN"));
+                month.setSelectedIndex(ngaysinh.getMonth());
+                year.setSelectedIndex(ngaysinh.getYear() + 1900 - 1980);
+                this.calculateDay();
+                day.setSelectedIndex(ngaysinh.getDate() - 1);
+                diaChi.setText(rs.getString("DIACHI"));
+                tenDN.setText(rs.getString("TENDN"));
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Da xay ra loi", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,7 +119,7 @@ public class UpdateSV extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        saveBtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         hoTen = new javax.swing.JTextField();
         diaChi = new javax.swing.JTextField();
@@ -86,6 +129,7 @@ public class UpdateSV extends javax.swing.JFrame {
         year = new javax.swing.JComboBox<>();
         matKhau = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,8 +148,13 @@ public class UpdateSV extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Mật khẩu mới");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Lưu thay đổi");
+        saveBtn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        saveBtn.setText("Lưu thay đổi");
+        saveBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                saveBtnMouseClicked(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton2.setText("Quay lại");
@@ -128,10 +177,11 @@ public class UpdateSV extends javax.swing.JFrame {
             }
         });
 
-        matKhau.setText("jPasswordField1");
-
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel6.setText("Chỉnh sửa thông tin sinh viên");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 2, 16)); // NOI18N
+        jLabel7.setText("*Mật khẩu để trống thì không thay đổi");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -143,7 +193,10 @@ public class UpdateSV extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(saveBtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -153,20 +206,20 @@ public class UpdateSV extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(35, 35, 35)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(tenDN)
                             .addComponent(diaChi)
                             .addComponent(matKhau)
-                            .addComponent(hoTen)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(hoTen)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(year, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -174,7 +227,7 @@ public class UpdateSV extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(hoTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -196,9 +249,11 @@ public class UpdateSV extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(matKhau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(saveBtn)
                     .addComponent(jButton2))
                 .addContainerGap())
         );
@@ -226,6 +281,43 @@ public class UpdateSV extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.calculateDay();
     }//GEN-LAST:event_yearActionPerformed
+
+    private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        MssqlConnection mssql = new MssqlConnection();
+        Connection conn = mssql.getConnection();
+        try{
+            boolean changePw = false;
+            String sql = "";
+            if (!matKhau.getText().trim().equals("")) {
+                changePw = true;
+                sql = "update SINHVIEN set HOTEN = ?, NGAYSINH = ?, DIACHI = ?, TENDN = ?, MATKHAU = HASHBYTES('MD5', ?)"
+                        + " where MASV = '" + this.maSV + "'";
+            }
+            else{
+                sql = "update SINHVIEN set HOTEN = ?, NGAYSINH = ?, DIACHI = ?, TENDN = ?"
+                        + " where MASV = '" + this.maSV + "'";
+            }
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, hoTen.getText().trim());
+            ps.setString(3, diaChi.getText().trim());
+            ps.setString(4, tenDN.getText().trim());
+            if (changePw){
+                System.out.println("doi mk");
+                ps.setString(5, matKhau.getText().trim());
+            }
+            ps.setDate(2, new Date(Integer.parseInt(year.getSelectedItem().toString()) - 1900, 
+                    month.getSelectedIndex() + 1, Integer.parseInt(day.getSelectedItem().toString())));
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Thay doi thanh cong");
+        }
+        catch(SQLException e){
+            JOptionPane.showMessageDialog(this, "Co loi xay ra", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            e.printStackTrace();
+        }
+        this.setVisible(false);
+    }//GEN-LAST:event_saveBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -266,7 +358,6 @@ public class UpdateSV extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> day;
     private javax.swing.JTextField diaChi;
     private javax.swing.JTextField hoTen;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -274,9 +365,11 @@ public class UpdateSV extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField matKhau;
     private javax.swing.JComboBox<String> month;
+    private javax.swing.JButton saveBtn;
     private javax.swing.JTextField tenDN;
     private javax.swing.JComboBox<String> year;
     // End of variables declaration//GEN-END:variables
