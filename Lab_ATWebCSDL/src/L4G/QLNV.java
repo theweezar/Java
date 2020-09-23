@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package L4Per;
+package L4G;
 
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -31,7 +31,7 @@ public class QLNV extends javax.swing.JFrame {
     public QLNV() {
         initComponents();
         okBtn.setVisible(false);
-        this.load();
+//        this.load();
     }
     
     public void load(){
@@ -55,11 +55,10 @@ public class QLNV extends javax.swing.JFrame {
         }
     }
     
-    public void refresh(){
+    public void refresh(NhanVien nv){
         DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
         Vector vt = new Vector();
         if (listNV.size() != 0){
-            NhanVien nv = listNV.get(listNV.size() - 1);
             vt.add(nv.getMaNV());
             vt.add(nv.getHoTen());
             vt.add(nv.geteMail());
@@ -74,9 +73,6 @@ public class QLNV extends javax.swing.JFrame {
         insertBtn.setVisible(!visible);
         delBtn.setVisible(!visible);
         editBtn.setVisible(!visible);
-        saveBtn.setVisible(!visible);
-        khongBtn.setVisible(!visible);
-        escBtn.setVisible(!visible);
         maNV.setEditable(!visible);
     }
     
@@ -113,6 +109,11 @@ public class QLNV extends javax.swing.JFrame {
         }
         return false;
     }
+    
+    public void saveToDB(NhanVien nv){
+        Hash hash = new Hash();
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -144,9 +145,6 @@ public class QLNV extends javax.swing.JFrame {
         insertBtn = new javax.swing.JButton();
         delBtn = new javax.swing.JButton();
         editBtn = new javax.swing.JButton();
-        saveBtn = new javax.swing.JButton();
-        khongBtn = new javax.swing.JButton();
-        escBtn = new javax.swing.JButton();
         okBtn = new javax.swing.JButton();
 
         jCheckBoxMenuItem1.setSelected(true);
@@ -217,22 +215,6 @@ public class QLNV extends javax.swing.JFrame {
             }
         });
 
-        saveBtn.setText("Lưu");
-        saveBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                saveBtnMouseClicked(evt);
-            }
-        });
-
-        khongBtn.setText("Không");
-
-        escBtn.setText("Thoát");
-        escBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                escBtnMouseClicked(evt);
-            }
-        });
-
         okBtn.setText("OK");
         okBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -249,7 +231,7 @@ public class QLNV extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(insertBtn)
                                 .addGap(18, 18, 18)
@@ -257,12 +239,6 @@ public class QLNV extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(editBtn)
                                 .addGap(18, 18, 18)
-                                .addComponent(saveBtn)
-                                .addGap(18, 18, 18)
-                                .addComponent(khongBtn)
-                                .addGap(18, 18, 18)
-                                .addComponent(escBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 282, Short.MAX_VALUE)
                                 .addComponent(okBtn))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -282,8 +258,8 @@ public class QLNV extends javax.swing.JFrame {
                                     .addGap(18, 18, 18)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(luong, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-                                        .addComponent(hoTen, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(matKhau, javax.swing.GroupLayout.Alignment.LEADING)))
+                                        .addComponent(matKhau, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(hoTen, javax.swing.GroupLayout.Alignment.LEADING)))
                                 .addComponent(jLabel2)
                                 .addComponent(jLabel1)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -327,9 +303,6 @@ public class QLNV extends javax.swing.JFrame {
                     .addComponent(insertBtn)
                     .addComponent(delBtn)
                     .addComponent(editBtn)
-                    .addComponent(saveBtn)
-                    .addComponent(khongBtn)
-                    .addComponent(escBtn)
                     .addComponent(okBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -348,72 +321,18 @@ public class QLNV extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void insertBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertBtnMouseClicked
-        // TODO add your handling code here:
-        if (maNV.getText().trim().equals("") && hoTen.getText().trim().equals("") && eMail.getText().trim().equals("")
-                && luong.getText().trim().equals("") && tenDN.getText().trim().equals("")
-                && matKhau.getText().trim().equals("")){
-            JOptionPane.showMessageDialog(this, "Vui long khong de trong", "Canh bao", JOptionPane.WARNING_MESSAGE);
-        }
-        else if (this.maNVExist(maNV.getText().trim())){
-            JOptionPane.showMessageDialog(this, "Ma nhan vien da ton tai", "Canh bao", JOptionPane.WARNING_MESSAGE);
-        }
-        else if (!this.isNum(luong.getText().trim())){
-            JOptionPane.showMessageDialog(this, "Nhap luong nhan vien sai", "Canh bao", JOptionPane.WARNING_MESSAGE);
-        }
-        else{
-            NhanVien nv = new NhanVien(maNV.getText(), hoTen.getText(), eMail.getText(),
-                luong.getText(),tenDN.getText(),matKhau.getText());
-            this.listNV.add(nv);
-            JOptionPane.showMessageDialog(this, "Them nhan vien thanh cong");
-            this.refresh();
-            this.eraseTextField();
-        }
-    }//GEN-LAST:event_insertBtnMouseClicked
-
-    private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
+    private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
         // TODO add your handling code here:
         try{
-            for(int i = 0; i < this.listNV.size(); i++){
-                String sql = "EXEC SP_INS_ENCRYPT_NHANVIEN ?, ?, ?, ?, ?, ?";
-                PreparedStatement ps = this.conn.prepareStatement(sql);
-                ps.setString(1, this.listNV.get(i).getMaNV());
-                ps.setString(2, this.listNV.get(i).getHoTen());
-                ps.setString(3, this.listNV.get(i).geteMail());
-                ps.setInt(4, Integer.parseInt(this.listNV.get(i).getLuong()));
-                ps.setString(5, this.listNV.get(i).getTenDN());
-                ps.setString(6, this.listNV.get(i).getMatKhau());
-                ps.execute();
-            }
-            JOptionPane.showMessageDialog(this, "Luu du lieu thanh cong");
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Co loi khi luu du lieu", "Canh bao", JOptionPane.WARNING_MESSAGE);
-        }
-    }//GEN-LAST:event_saveBtnMouseClicked
-
-    private void delBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delBtnMouseClicked
-        // TODO add your handling code here:
-        DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
-        try{
-            String sql = "DELETE FROM NHANVIEN WHERE MANV = ?";
+            String sql = "EXEC SP_UPD_NHANVIEN ?, ?, ?, ?, ?, ?";
             PreparedStatement ps = this.conn.prepareStatement(sql);
-            ps.setString(1, nvList.getValueAt(nvList.getSelectedRow(), 0).toString());
-            int selectedOption = JOptionPane.showConfirmDialog(null, 
-                                  "Dữ liệu sẽ xóa trực tiếp vào cơ sở dữ liệu. Bạn có muốn tiếp tục", 
-                                  "Choose", 
-                                  JOptionPane.YES_NO_OPTION); 
-            if (selectedOption == JOptionPane.YES_OPTION) {
-                ps.execute();
-                dtm.removeRow(nvList.getSelectedRow());
-                nvList.setModel(dtm);
-            }
+            ResultSet rs = ps.executeQuery();
+
         }
         catch(SQLException e){
             e.printStackTrace();
         }
-    }//GEN-LAST:event_delBtnMouseClicked
+    }//GEN-LAST:event_okBtnMouseClicked
 
     private void editBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editBtnMouseClicked
         // TODO add your handling code here:
@@ -434,23 +353,50 @@ public class QLNV extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_editBtnMouseClicked
 
-    private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
+    private void delBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delBtnMouseClicked
         // TODO add your handling code here:
+        DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
         try{
-            String sql = "EXEC SP_UPD_NHANVIEN ?, ?, ?, ?, ?, ?";
+            String sql = "DELETE FROM NHANVIEN WHERE MANV = ?";
             PreparedStatement ps = this.conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            
+            ps.setString(1, nvList.getValueAt(nvList.getSelectedRow(), 0).toString());
+            int selectedOption = JOptionPane.showConfirmDialog(null,
+                "Dữ liệu sẽ xóa trực tiếp vào cơ sở dữ liệu. Bạn có muốn tiếp tục",
+                "Choose",
+                JOptionPane.YES_NO_OPTION);
+            if (selectedOption == JOptionPane.YES_OPTION) {
+                ps.execute();
+                dtm.removeRow(nvList.getSelectedRow());
+                nvList.setModel(dtm);
+            }
         }
         catch(SQLException e){
             e.printStackTrace();
         }
-    }//GEN-LAST:event_okBtnMouseClicked
+    }//GEN-LAST:event_delBtnMouseClicked
 
-    private void escBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_escBtnMouseClicked
+    private void insertBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertBtnMouseClicked
         // TODO add your handling code here:
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-    }//GEN-LAST:event_escBtnMouseClicked
+        if (maNV.getText().trim().equals("") && hoTen.getText().trim().equals("") && eMail.getText().trim().equals("")
+            && luong.getText().trim().equals("") && tenDN.getText().trim().equals("")
+            && matKhau.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(this, "Vui long khong de trong", "Canh bao", JOptionPane.WARNING_MESSAGE);
+        }
+        else if (this.maNVExist(maNV.getText().trim())){
+            JOptionPane.showMessageDialog(this, "Ma nhan vien da ton tai", "Canh bao", JOptionPane.WARNING_MESSAGE);
+        }
+        else if (!this.isNum(luong.getText().trim())){
+            JOptionPane.showMessageDialog(this, "Nhap luong nhan vien sai", "Canh bao", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            NhanVien nv = new NhanVien(maNV.getText(), hoTen.getText(), eMail.getText(),
+                luong.getText(),tenDN.getText(),matKhau.getText());
+            this.saveToDB(nv);
+            JOptionPane.showMessageDialog(this, "Them nhan vien thanh cong");
+            this.refresh(nv);
+            this.eraseTextField();
+        }
+    }//GEN-LAST:event_insertBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -478,6 +424,7 @@ public class QLNV extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(QLNV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -491,7 +438,6 @@ public class QLNV extends javax.swing.JFrame {
     private javax.swing.JButton delBtn;
     private javax.swing.JTextField eMail;
     private javax.swing.JButton editBtn;
-    private javax.swing.JButton escBtn;
     private javax.swing.JTextField hoTen;
     private javax.swing.JButton insertBtn;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
@@ -505,13 +451,11 @@ public class QLNV extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton khongBtn;
     private javax.swing.JTextField luong;
     private javax.swing.JTextField maNV;
     private javax.swing.JPasswordField matKhau;
     private javax.swing.JTable nvList;
     private javax.swing.JButton okBtn;
-    private javax.swing.JButton saveBtn;
     private javax.swing.JTextField tenDN;
     // End of variables declaration//GEN-END:variables
 }

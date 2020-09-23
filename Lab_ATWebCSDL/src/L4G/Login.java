@@ -3,11 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package L4Per;
+package L4G;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import L3G.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,34 +23,6 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-    }
-    
-    public static String getMd5(String input) 
-    { 
-        try { 
-  
-            // Static getInstance method is called with hashing MD5 
-            MessageDigest md = MessageDigest.getInstance("MD5"); 
-  
-            // digest() method is called to calculate message digest 
-            //  of an input digest() return array of byte 
-            byte[] messageDigest = md.digest(input.getBytes()); 
-  
-            // Convert byte array into signum representation 
-            BigInteger no = new BigInteger(1, messageDigest); 
-  
-            // Convert message digest into hex value 
-            String hashtext = no.toString(16); 
-            while (hashtext.length() < 32) { 
-                hashtext = "0" + hashtext; 
-            } 
-            return hashtext; 
-        }  
-  
-        // For specifying wrong message digest algorithms 
-        catch (NoSuchAlgorithmException e) { 
-            throw new RuntimeException(e); 
-        } 
     }
 
     /**
@@ -108,12 +78,12 @@ public class Login extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(passWord))))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,24 +119,22 @@ public class Login extends javax.swing.JFrame {
 
     private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnMouseClicked
         // TODO add your handling code here:
-//        JOptionPane.showMessageDialog(this, "Sai ten tai khoan hoac mat khau", "Canh bao", JOptionPane.WARNING_MESSAGE);
         MssqlConnection mssql = new MssqlConnection();
         Connection conn = mssql.getConnection();
-        boolean ok = false;
         try{
-            String sql = "select MATKHAU from NHANVIEN where TENDN = ?";
+            String sql = "select * from NHANVIEN_CMH where TENDN = ? and MATKHAU = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, userName.getText());
+            ps.setString(2, passWord.getText());
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                System.out.println(rs.getString("MATKHAU"));
-                if (rs.getString("MATKHAU").equalsIgnoreCase(new NhanVien().getSHA1(passWord.getText().trim()))){
-                    JOptionPane.showMessageDialog(this, "Dang nhap thanh cong");
-                    ok = true;
-                    this.setVisible(false);
-                }
+                JOptionPane.showMessageDialog(this, "Dang nhap thanh cong");
+                this.setVisible(false);
+                Option opt = new Option();
+                opt.setMANV(rs.getString("MANV"));
+                new Option().setVisible(true);
             }
-            if (!ok){
+            else{
                 JOptionPane.showMessageDialog(this, "Sai ten tai khoan hoac mat khau", "Canh bao", JOptionPane.WARNING_MESSAGE);
             }
         }
