@@ -131,6 +131,7 @@ public class Login extends javax.swing.JFrame {
                 this.setVisible(false);
                 Option opt = new Option();
                 opt.setMANV(rs.getString("MANV"));
+                opt.setTenNV(rs.getString("HOTEN"));
                 new Option().setVisible(true);
             }
             else{

@@ -5,7 +5,6 @@
  */
 package L4G;
 
-import L3G.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -121,18 +120,19 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         MssqlConnection mssql = new MssqlConnection();
         Connection conn = mssql.getConnection();
+        Hash hash = new Hash();
         try{
-            String sql = "select * from NHANVIEN_CMH where TENDN = ? and MATKHAU = ?";
+            String sql = "EXEC SP_SEL_PUBLIC_ENCRYPT_NHANVIEN ?, ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, userName.getText());
-            ps.setString(2, passWord.getText());
+            ps.setString(2, hash.getSHA1(passWord.getText()));
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
                 JOptionPane.showMessageDialog(this, "Dang nhap thanh cong");
                 this.setVisible(false);
-                Option opt = new Option();
-                opt.setMANV(rs.getString("MANV"));
-                new Option().setVisible(true);
+//                Option opt = new Option();
+//                opt.setMANV(rs.getString("MANV"));
+//                new Option().setVisible(true);
             }
             else{
                 JOptionPane.showMessageDialog(this, "Sai ten tai khoan hoac mat khau", "Canh bao", JOptionPane.WARNING_MESSAGE);

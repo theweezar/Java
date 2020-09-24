@@ -91,7 +91,7 @@ public class RSA {
             w.write(key);
             w.close();
         }
-        catch(Exception e){
+        catch(IOException e){
             e.printStackTrace();
         }
     }

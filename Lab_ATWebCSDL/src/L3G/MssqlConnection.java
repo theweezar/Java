@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package L3G;
-import lab_atwebcsdl.*;
 import java.sql.*;
 
 /**

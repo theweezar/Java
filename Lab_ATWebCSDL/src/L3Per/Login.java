@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lab_atwebcsdl;
+package L3Per;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import javax.swing.JOptionPane;
 /**
  *
  * @author hpmdu
@@ -73,8 +74,10 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        labelUsername.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         labelUsername.setText("Tên đăng nhập");
 
+        labelPassword.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         labelPassword.setText("Mật khẩu");
 
         loginBtn.setText("Đăng nhập");
@@ -89,34 +92,36 @@ public class Login extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelUsername)
-                    .addComponent(labelPassword))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(userName)
-                    .addComponent(passWord, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE))
-                .addContainerGap(52, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(loginBtn)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(loginBtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelUsername)
+                            .addComponent(labelPassword))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(userName, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                            .addComponent(passWord))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelUsername)
                     .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelPassword)
                     .addComponent(passWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(loginBtn)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -137,7 +142,6 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         MssqlConnection mssql = new MssqlConnection();
         Connection conn = mssql.getConnection();
-        Message msgPanel = new Message();
         boolean ok = false;
         String sql = "select * from NHANVIEN where TENDN = ?";
         try{
@@ -148,15 +152,14 @@ public class Login extends javax.swing.JFrame {
                 if (this.encryptThisString(passWord.getText()).equalsIgnoreCase(rs.getString("MATKHAU"))) ok = true;
             }
             if (ok) {
-                msgPanel.setMessage("Đăng nhập thành công");
+                JOptionPane.showMessageDialog(this, "Dang nhap thanh cong");
             }
             else {
-                msgPanel.setMessage("Tên đăng nhập và mật khẩu không hợp lệ");
+                JOptionPane.showMessageDialog(this, "Sai ten tai khoan hoac mat khau", "Canh bao", JOptionPane.WARNING_MESSAGE);
             }
-            msgPanel.setVisible(true);
         }
         catch(SQLException ex){
-            msgPanel.setMessage("Kết nối SQL thất bại");
+            JOptionPane.showMessageDialog(this, "Co loi khi ket noi database", "Canh bao", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_loginBtnMouseClicked
 

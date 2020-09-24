@@ -5,6 +5,10 @@
  */
 package L3G;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author hpmdu
@@ -14,11 +18,35 @@ public class QLDiem extends javax.swing.JFrame {
     /**
      * Creates new form QLDiem
      */
+    
+    private List<String> hpList = new ArrayList<>();
+    
     public QLDiem() {
         initComponents();
+        
     }
     
+    public void loadHocPhan(){
+        MssqlConnection mssql = new MssqlConnection();
+        Connection conn = mssql.getConnection();
+        try{
+            String sql = "select * from HOCPHAN";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                HPCBB.addItem(rs.getString("TENHP"));
+                hpList.add(rs.getString("MAHP"));
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
     
+    public void loadSinhVien(){
+        MssqlConnection mssql = new MssqlConnection();
+        Connection conn = mssql.getConnection();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,10 +61,10 @@ public class QLDiem extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        diemTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        HPCBB = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,7 +73,7 @@ public class QLDiem extends javax.swing.JFrame {
 
         jLabel2.setText("Chọn môn: ");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        diemTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"SV01", "TRAN THI HUON", "Go vap - cho hanh thong tay", "9"},
                 {"SV04", "PHAN VAN HAN", "280 AN DUONG VUONG", "2"}
@@ -62,13 +90,13 @@ public class QLDiem extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(diemTable);
 
         jButton1.setText("Chỉnh điểm");
 
         jButton2.setText("Quay lại");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TOAN ROI RAC", "CO SO DU LIEU" }));
+        HPCBB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TOAN ROI RAC", "CO SO DU LIEU" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -84,7 +112,7 @@ public class QLDiem extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(HPCBB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jButton1))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -100,7 +128,7 @@ public class QLDiem extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(HPCBB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -160,13 +188,13 @@ public class QLDiem extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> HPCBB;
+    private javax.swing.JTable diemTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

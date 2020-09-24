@@ -14,7 +14,7 @@ public class MssqlConnection {
     
     public Connection getConnection(){
         Connection conn = null;
-        String uRL = "jdbc:sqlserver://;databaseName=QLSVDG";
+        String uRL = "jdbc:sqlserver://;databaseName=QLSVNhom_L4";
         String userName = "sa";
         String password = "123";
         try {

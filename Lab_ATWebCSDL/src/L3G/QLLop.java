@@ -5,6 +5,8 @@
  */
 package L3G;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,11 +29,15 @@ public class QLLop extends javax.swing.JFrame {
     
     public QLLop() {
         initComponents();
-        this.showList();
     }
     
     public void setMaLop(String maLop){
         this.maLop = maLop;
+        System.out.println("Ma lop: " + this.getMaLop());
+    }
+    
+    public String getMaLop(){
+        return this.maLop;
     }
 
     /**
@@ -139,24 +145,35 @@ public class QLLop extends javax.swing.JFrame {
         String maSV = classTable.getValueAt(classTable.getSelectedRow(), 0).toString();
         System.out.println(maSV);
         UpdateSV updateSV = new UpdateSV();
-        updateSV.setMaSV(maSV);
-        updateSV.update_SV();
-        Thread t = new Thread() {
-            public void run() {
-                synchronized(this) {
-                    while (updateSV.isVisible())
-                        try {
-                            this.wait();
-                        } 
-                        catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    System.out.println("Working now");
+        updateSV.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // call terminate
+                DefaultTableModel dtm = (DefaultTableModel) classTable.getModel();
+                MssqlConnection mssql = new MssqlConnection();
+                Connection conn = mssql.getConnection();
+                try{
+                    String sql = "select * from SINHVIEN where MASV = ?";
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setString(1, maSV);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()){
+                        classTable.setValueAt(rs.getString("MASV"), classTable.getSelectedRow(), 0);
+                        classTable.setValueAt(rs.getString("HOTEN"), classTable.getSelectedRow(), 1);
+                        classTable.setValueAt(rs.getString("NGAYSINH"), classTable.getSelectedRow(), 2);
+                        classTable.setValueAt(rs.getString("DIACHI"), classTable.getSelectedRow(), 3);
+                        classTable.setValueAt(rs.getString("MALOP"), classTable.getSelectedRow(), 4);
+                        classTable.setValueAt(rs.getString("TENDN"), classTable.getSelectedRow(), 5);
+                        classTable.setValueAt(rs.getString("MATKHAU"), classTable.getSelectedRow(), 6);
+                    }
+                }
+                catch(SQLException excp){
+                    excp.printStackTrace();
                 }
             }
-        };
-        t.start();
-        this.showList();
+        });
+        updateSV.setMaSV(maSV);
+        updateSV.getCurrentInfo_SV();
     }//GEN-LAST:event_editBtnMouseClicked
 
     /**
@@ -170,6 +187,7 @@ public class QLLop extends javax.swing.JFrame {
         try{
             String sql = "select * from SINHVIEN where MALOP = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
+            System.out.println("showList maLop: " + this.getMaLop());
             ps.setString(1, this.maLop);
             ResultSet rs = ps.executeQuery();
             Vector vt;

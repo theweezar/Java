@@ -152,6 +152,7 @@ public class Option extends javax.swing.JFrame {
         qllop.setMaLop(classCBB.getSelectedItem().toString());
         this.setVisible(false);
         qllop.setVisible(true);
+        qllop.showList();
     }//GEN-LAST:event_btn1MouseClicked
 
     private void btn2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn2MouseClicked

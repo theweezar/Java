@@ -75,7 +75,7 @@ public class UpdateSV extends javax.swing.JFrame {
         System.out.println(this.maSV);
     }
     
-    public void update_SV(){
+    public void getCurrentInfo_SV(){
         // TODO add your handling code here:
         this.setVisible(true);
         MssqlConnection mssql = new MssqlConnection();
@@ -289,7 +289,11 @@ public class UpdateSV extends javax.swing.JFrame {
         Connection conn = mssql.getConnection();
         try{
             boolean changePw = false;
+            boolean ok = false;
             String sql = "";
+            if (!hoTen.getText().trim().isEmpty() && !diaChi.getText().trim().isEmpty() && !tenDN.getText().trim().isEmpty()){
+                ok = true;
+            }
             if (!matKhau.getText().trim().equals("")) {
                 changePw = true;
                 sql = "update SINHVIEN set HOTEN = ?, NGAYSINH = ?, DIACHI = ?, TENDN = ?, MATKHAU = HASHBYTES('MD5', ?)"
@@ -299,24 +303,29 @@ public class UpdateSV extends javax.swing.JFrame {
                 sql = "update SINHVIEN set HOTEN = ?, NGAYSINH = ?, DIACHI = ?, TENDN = ?"
                         + " where MASV = '" + this.maSV + "'";
             }
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, hoTen.getText().trim());
-            ps.setString(3, diaChi.getText().trim());
-            ps.setString(4, tenDN.getText().trim());
-            if (changePw){
-                System.out.println("doi mk");
-                ps.setString(5, matKhau.getText().trim());
+            if (ok){
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, hoTen.getText().trim());
+                ps.setString(3, diaChi.getText().trim());
+                ps.setString(4, tenDN.getText().trim());
+                if (changePw){
+                    System.out.println("doi mk");
+                    ps.setString(5, matKhau.getText().trim());
+                }
+                ps.setDate(2, new Date(Integer.parseInt(year.getSelectedItem().toString()) - 1900, 
+                        month.getSelectedIndex() + 1, Integer.parseInt(day.getSelectedItem().toString())));
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Thay doi thanh cong");
+                this.dispose();
             }
-            ps.setDate(2, new Date(Integer.parseInt(year.getSelectedItem().toString()) - 1900, 
-                    month.getSelectedIndex() + 1, Integer.parseInt(day.getSelectedItem().toString())));
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Thay doi thanh cong");
+            else{
+                JOptionPane.showMessageDialog(this, "Vui long dien day du thong tin", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            }
         }
         catch(SQLException e){
             JOptionPane.showMessageDialog(this, "Co loi xay ra", "Canh bao", JOptionPane.WARNING_MESSAGE);
             e.printStackTrace();
         }
-        this.setVisible(false);
     }//GEN-LAST:event_saveBtnMouseClicked
 
     /**

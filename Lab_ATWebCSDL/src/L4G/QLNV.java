@@ -6,7 +6,9 @@
 package L4G;
 
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,17 +29,18 @@ public class QLNV extends javax.swing.JFrame {
      */
     
     private Connection conn = new MssqlConnection().getConnection();
-    private List<NhanVien> listNV = new ArrayList<NhanVien>();
+//    private List<NhanVien> listNV = new ArrayList<NhanVien>();
     public QLNV() {
         initComponents();
-        okBtn.setVisible(false);
-//        this.load();
+        saveBtn.setEnabled(false);
+        this.load();
     }
     
     public void load(){
         DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
+        RSA rsa = new RSA();
         try{
-            String sql = "EXEC SP_SEL_NHANVIEN";
+            String sql = "EXEC SP_SEL_ALL_PUBLIC_ENCRYPT_NHANVIEN";
             PreparedStatement ps = this.conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -45,34 +48,41 @@ public class QLNV extends javax.swing.JFrame {
                 vt.add(rs.getString("MANV"));
                 vt.add(rs.getString("HOTEN"));
                 vt.add(rs.getString("EMAIL"));
-                vt.add(rs.getString("LUONG"));
+                vt.add(rsa.decrypt(rs.getString("LUONG"), rsa.getPrivateKey(rsa.getFileInBytes(new File("privateKey.txt")))));
                 dtm.addRow(vt);
             }
             nvList.setModel(dtm);
         }
-        catch(SQLException e){
+        catch(Exception e){
             e.printStackTrace();
         }
     }
     
     public void refresh(NhanVien nv){
+//        RSA rsa = new RSA();
         DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
         Vector vt = new Vector();
-        if (listNV.size() != 0){
-            vt.add(nv.getMaNV());
-            vt.add(nv.getHoTen());
-            vt.add(nv.geteMail());
-            vt.add(nv.getLuong());
-            dtm.addRow(vt);
-            nvList.setModel(dtm);
-        }
+        vt.add(nv.getMaNV());
+        vt.add(nv.getHoTen());
+        vt.add(nv.geteMail());
+        vt.add(nv.getLuong());
+        dtm.addRow(vt);
+        nvList.setModel(dtm);
     }
     
-    public void setVisibleOkBtn(boolean visible){
-        okBtn.setVisible(visible);
-        insertBtn.setVisible(!visible);
-        delBtn.setVisible(!visible);
-        editBtn.setVisible(!visible);
+    public void updateRow(NhanVien nv){
+//        DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
+        nvList.setValueAt(nv.getMaNV(), nvList.getSelectedRow(), 0);
+        nvList.setValueAt(nv.getHoTen(), nvList.getSelectedRow(), 1);
+        nvList.setValueAt(nv.geteMail(), nvList.getSelectedRow(), 2);
+        nvList.setValueAt(nv.getLuong(), nvList.getSelectedRow(), 3);
+    }
+    
+    public void setEnableSaveBtn(boolean visible){
+        saveBtn.setEnabled(visible);
+        insertBtn.setEnabled(!visible);
+        delBtn.setEnabled(!visible);
+        editBtn.setEnabled(!visible);
         maNV.setEditable(!visible);
     }
     
@@ -112,7 +122,23 @@ public class QLNV extends javax.swing.JFrame {
     
     public void saveToDB(NhanVien nv){
         Hash hash = new Hash();
-        
+        RSA rsa = new RSA();
+        String sql = "EXEC SP_INS_PUBLIC_ENCRYPT_NHANVIEN ?, ?, ?, ?, ?, ?, ?";
+        System.out.println(nv);
+        try{
+            PreparedStatement ps = this.conn.prepareStatement(sql);
+            ps.setString(1, nv.getMaNV());
+            ps.setString(2, nv.getHoTen());
+            ps.setString(3, nv.geteMail());
+            ps.setString(4, rsa.encrypt(nv.getLuong(), rsa.getPublicKey(rsa.getFileInBytes(new File("publicKey.txt")))));
+            ps.setString(5, nv.getTenDN());
+            ps.setString(6, hash.getSHA1(nv.getMatKhau()));
+            ps.setString(7, "publicKey.txt");
+            ps.execute();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -145,7 +171,8 @@ public class QLNV extends javax.swing.JFrame {
         insertBtn = new javax.swing.JButton();
         delBtn = new javax.swing.JButton();
         editBtn = new javax.swing.JButton();
-        okBtn = new javax.swing.JButton();
+        saveBtn = new javax.swing.JButton();
+        exitBtn = new javax.swing.JButton();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -215,10 +242,17 @@ public class QLNV extends javax.swing.JFrame {
             }
         });
 
-        okBtn.setText("OK");
-        okBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        saveBtn.setText("Lưu");
+        saveBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                okBtnMouseClicked(evt);
+                saveBtnMouseClicked(evt);
+            }
+        });
+
+        exitBtn.setText("Thoát");
+        exitBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                exitBtnMouseClicked(evt);
             }
         });
 
@@ -231,44 +265,45 @@ public class QLNV extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(insertBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(delBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(editBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(saveBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exitBtn))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 12, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(insertBtn)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(tenDN, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(90, 90, 90)
+                                        .addComponent(eMail, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
-                                .addComponent(delBtn)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7))
                                 .addGap(18, 18, 18)
-                                .addComponent(editBtn)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(luong, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                                    .addComponent(matKhau, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(hoTen, javax.swing.GroupLayout.Alignment.LEADING)))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(83, 83, 83)
+                                .addComponent(maNV, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(okBtn))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                            .addComponent(jLabel5)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(tenDN, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                            .addComponent(jLabel4)
-                                            .addGap(90, 90, 90)
-                                            .addComponent(eMail, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel8)
-                                        .addComponent(jLabel7))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(luong, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-                                        .addComponent(matKhau, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(hoTen, javax.swing.GroupLayout.Alignment.LEADING)))
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel1)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addGap(83, 83, 83)
-                                    .addComponent(maNV, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jLabel6))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jLabel6)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -303,7 +338,8 @@ public class QLNV extends javax.swing.JFrame {
                     .addComponent(insertBtn)
                     .addComponent(delBtn)
                     .addComponent(editBtn)
-                    .addComponent(okBtn))
+                    .addComponent(saveBtn)
+                    .addComponent(exitBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -321,82 +357,137 @@ public class QLNV extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
+    private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
         // TODO add your handling code here:
-        try{
-            String sql = "EXEC SP_UPD_NHANVIEN ?, ?, ?, ?, ?, ?";
-            PreparedStatement ps = this.conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+        if (saveBtn.isEnabled()){
+            maNV.setEditable(true);
+            try{
+                String sql = "";
+                boolean changePw = false;
+                boolean ok = true;
+                if (hoTen.getText().trim().isEmpty() || eMail.getText().trim().isEmpty() || 
+                        tenDN.getText().trim().isEmpty() || luong.getText().trim().isEmpty()){
+                    ok = false;
+                }
+                else if (!isNum(luong.getText().trim())){
+                    ok = false;
+                }
+                if (!matKhau.getText().trim().equals("")) {
+                    changePw = true;
+                    sql = "SP_UPDATE_ENCRYPT_NHANVIEN_WITH_MATKHAU ?, ?, ?, ?, ?, ?";
+                }
+                else{
+                    sql = "SP_UPDATE_ENCRYPT_NHANVIEN_WITHOUT_MATKHAU ?, ?, ?, ?, ?";
+                }
+                if (ok){
+                    NhanVien nv = new NhanVien(maNV.getText().trim(), hoTen.getText().trim(), eMail.getText().trim(),
+                        luong.getText().trim(),tenDN.getText().trim(),matKhau.getText().trim());
+                    RSA rsa = new RSA();
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setString(1, nv.getMaNV());
+                    ps.setString(2, nv.getHoTen());
+                    ps.setString(3, nv.geteMail());
+                    ps.setString(4, rsa.encrypt(nv.getLuong(), rsa.getPublicKey(rsa.getFileInBytes(new File("publicKey.txt")))));
+                    ps.setString(5, nv.getTenDN());
+                    if (changePw){
+                        Hash hash = new Hash();
+                        System.out.println("doi mk");
+                        ps.setString(5, hash.getSHA1(nv.getMatKhau()));
+                    }
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(this, "Thay doi thanh cong");
+                    this.setEnableSaveBtn(false);
+                    this.eraseTextField();
+                    this.updateRow(nv);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Vui long dien day du thong tin", "Canh bao", JOptionPane.WARNING_MESSAGE);
+                }
 
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_okBtnMouseClicked
+        
+    }//GEN-LAST:event_saveBtnMouseClicked
 
     private void editBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editBtnMouseClicked
         // TODO add your handling code here:
-        try{
-            String sql = "EXEC SP_SEL_DECRYPT_NHANVIEN '" + nvList.getValueAt(nvList.getSelectedRow(), 0).toString() + "'";
-            PreparedStatement ps = this.conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()){
-                hoTen.setText(rs.getString("HOTEN"));
-                eMail.setText(rs.getString("EMAIL"));
-                luong.setText(rs.getString("LUONG"));
-                tenDN.setText(rs.getString("TENDN"));
-                this.setVisibleOkBtn(true);
+        if (editBtn.isEnabled()){
+            RSA rsa = new RSA();
+            try{
+                String sql = "EXEC SP_SEL_TO_UPDATE '" + nvList.getValueAt(nvList.getSelectedRow(), 0).toString() + "'";
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()){
+                    maNV.setText(rs.getString("MANV"));
+                    hoTen.setText(rs.getString("HOTEN"));
+                    eMail.setText(rs.getString("EMAIL"));
+                    luong.setText(rsa.decrypt(rs.getString("LUONG"), rsa.getPrivateKey(rsa.getFileInBytes(new File("privateKey.txt")))));
+                    tenDN.setText(rs.getString("TENDN"));
+                    this.setEnableSaveBtn(true);
+                }
             }
-        }
-        catch(SQLException e){
-            e.printStackTrace();
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_editBtnMouseClicked
 
     private void delBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delBtnMouseClicked
         // TODO add your handling code here:
-        DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
-        try{
-            String sql = "DELETE FROM NHANVIEN WHERE MANV = ?";
-            PreparedStatement ps = this.conn.prepareStatement(sql);
-            ps.setString(1, nvList.getValueAt(nvList.getSelectedRow(), 0).toString());
-            int selectedOption = JOptionPane.showConfirmDialog(null,
-                "Dữ liệu sẽ xóa trực tiếp vào cơ sở dữ liệu. Bạn có muốn tiếp tục",
-                "Choose",
-                JOptionPane.YES_NO_OPTION);
-            if (selectedOption == JOptionPane.YES_OPTION) {
-                ps.execute();
-                dtm.removeRow(nvList.getSelectedRow());
-                nvList.setModel(dtm);
+        if (delBtn.isEnabled()){
+            DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
+            try{
+                String sql = "DELETE FROM NHANVIEN WHERE MANV = ?";
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+                ps.setString(1, nvList.getValueAt(nvList.getSelectedRow(), 0).toString());
+                int selectedOption = JOptionPane.showConfirmDialog(null,
+                    "Dữ liệu sẽ xóa trực tiếp vào cơ sở dữ liệu. Bạn có muốn tiếp tục",
+                    "Choose",
+                    JOptionPane.YES_NO_OPTION);
+                if (selectedOption == JOptionPane.YES_OPTION) {
+                    ps.execute();
+                    dtm.removeRow(nvList.getSelectedRow());
+                    nvList.setModel(dtm);
+                }
             }
-        }
-        catch(SQLException e){
-            e.printStackTrace();
+            catch(SQLException e){
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_delBtnMouseClicked
 
     private void insertBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertBtnMouseClicked
         // TODO add your handling code here:
-        if (maNV.getText().trim().equals("") && hoTen.getText().trim().equals("") && eMail.getText().trim().equals("")
-            && luong.getText().trim().equals("") && tenDN.getText().trim().equals("")
-            && matKhau.getText().trim().equals("")){
-            JOptionPane.showMessageDialog(this, "Vui long khong de trong", "Canh bao", JOptionPane.WARNING_MESSAGE);
-        }
-        else if (this.maNVExist(maNV.getText().trim())){
-            JOptionPane.showMessageDialog(this, "Ma nhan vien da ton tai", "Canh bao", JOptionPane.WARNING_MESSAGE);
-        }
-        else if (!this.isNum(luong.getText().trim())){
-            JOptionPane.showMessageDialog(this, "Nhap luong nhan vien sai", "Canh bao", JOptionPane.WARNING_MESSAGE);
-        }
-        else{
-            NhanVien nv = new NhanVien(maNV.getText(), hoTen.getText(), eMail.getText(),
-                luong.getText(),tenDN.getText(),matKhau.getText());
-            this.saveToDB(nv);
-            JOptionPane.showMessageDialog(this, "Them nhan vien thanh cong");
-            this.refresh(nv);
-            this.eraseTextField();
+        if (insertBtn.isEnabled()){
+            if (maNV.getText().trim().equals("") && hoTen.getText().trim().equals("") && eMail.getText().trim().equals("")
+                && luong.getText().trim().equals("") && tenDN.getText().trim().equals("")
+                && matKhau.getText().trim().equals("")){
+                JOptionPane.showMessageDialog(this, "Vui long khong de trong", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            }
+            else if (this.maNVExist(maNV.getText().trim())){
+                JOptionPane.showMessageDialog(this, "Ma nhan vien da ton tai", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            }
+            else if (!this.isNum(luong.getText().trim())){
+                JOptionPane.showMessageDialog(this, "Nhap luong nhan vien sai", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            }
+            else{
+                NhanVien nv = new NhanVien(maNV.getText(), hoTen.getText(), eMail.getText(),
+                    luong.getText(),tenDN.getText(),matKhau.getText());
+                this.saveToDB(nv);
+                JOptionPane.showMessageDialog(this, "Them nhan vien thanh cong");
+                this.refresh(nv);
+                this.eraseTextField();
+            }
         }
     }//GEN-LAST:event_insertBtnMouseClicked
+
+    private void exitBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitBtnMouseClicked
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_exitBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -438,6 +529,7 @@ public class QLNV extends javax.swing.JFrame {
     private javax.swing.JButton delBtn;
     private javax.swing.JTextField eMail;
     private javax.swing.JButton editBtn;
+    private javax.swing.JButton exitBtn;
     private javax.swing.JTextField hoTen;
     private javax.swing.JButton insertBtn;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
@@ -455,7 +547,7 @@ public class QLNV extends javax.swing.JFrame {
     private javax.swing.JTextField maNV;
     private javax.swing.JPasswordField matKhau;
     private javax.swing.JTable nvList;
-    private javax.swing.JButton okBtn;
+    private javax.swing.JButton saveBtn;
     private javax.swing.JTextField tenDN;
     // End of variables declaration//GEN-END:variables
 }

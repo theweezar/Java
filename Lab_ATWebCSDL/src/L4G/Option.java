@@ -23,6 +23,7 @@ public class Option extends javax.swing.JFrame {
     
     private String MaNV = "NVA";
     private String TenNV = "NGUYEN VAN A";
+    private Connection conn = new MssqlConnection().getConnection();
     
     public Option() {
         initComponents();
@@ -40,8 +41,6 @@ public class Option extends javax.swing.JFrame {
     }
 
     public void getClassList(){
-        MssqlConnection mssql = new MssqlConnection();
-        Connection conn = mssql.getConnection();
         try{
             String sql = "select * from LOP where MANV = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
