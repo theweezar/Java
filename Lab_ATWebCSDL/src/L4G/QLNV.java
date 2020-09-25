@@ -395,13 +395,13 @@ public class QLNV extends javax.swing.JFrame {
                         ps.setString(5, hash.getSHA1(nv.getMatKhau()));
                     }
                     ps.executeUpdate();
-                    JOptionPane.showMessageDialog(this, "Thay doi thanh cong");
+                    JOptionPane.showMessageDialog(this, "Thay đổi thành công");
                     this.setEnableSaveBtn(false);
                     this.eraseTextField();
                     this.updateRow(nv);
                 }
                 else{
-                    JOptionPane.showMessageDialog(this, "Vui long dien day du thong tin", "Canh bao", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Vui lòng điền đẩy đủ thông tin", "Canh bao", JOptionPane.WARNING_MESSAGE);
                 }
 
             }
@@ -465,19 +465,19 @@ public class QLNV extends javax.swing.JFrame {
             if (maNV.getText().trim().equals("") && hoTen.getText().trim().equals("") && eMail.getText().trim().equals("")
                 && luong.getText().trim().equals("") && tenDN.getText().trim().equals("")
                 && matKhau.getText().trim().equals("")){
-                JOptionPane.showMessageDialog(this, "Vui long khong de trong", "Canh bao", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Vui lòng không để trống", "Canh bao", JOptionPane.WARNING_MESSAGE);
             }
             else if (this.maNVExist(maNV.getText().trim())){
-                JOptionPane.showMessageDialog(this, "Ma nhan vien da ton tai", "Canh bao", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Mã nhân viên đã tồn tại", "Canh bao", JOptionPane.WARNING_MESSAGE);
             }
             else if (!this.isNum(luong.getText().trim())){
-                JOptionPane.showMessageDialog(this, "Nhap luong nhan vien sai", "Canh bao", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Nhập lương nhân viên sai", "Canh bao", JOptionPane.WARNING_MESSAGE);
             }
             else{
                 NhanVien nv = new NhanVien(maNV.getText(), hoTen.getText(), eMail.getText(),
                     luong.getText(),tenDN.getText(),matKhau.getText());
                 this.saveToDB(nv);
-                JOptionPane.showMessageDialog(this, "Them nhan vien thanh cong");
+                JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công");
                 this.refresh(nv);
                 this.eraseTextField();
             }

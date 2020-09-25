@@ -14,11 +14,20 @@ public class QLDiem extends javax.swing.JFrame {
     /**
      * Creates new form QLDiem
      */
+    
+    private String maLop = "CNTT-D17";
+    
     public QLDiem() {
         initComponents();
     }
     
+    public void loadSubject(){
+        
+    }
     
+    public void setMaLop(String maLop){
+        this.maLop = maLop;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,10 +42,10 @@ public class QLDiem extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        scoreTable = new javax.swing.JTable();
+        edit = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
+        subJect = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,30 +54,34 @@ public class QLDiem extends javax.swing.JFrame {
 
         jLabel2.setText("Chọn môn: ");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        scoreTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"SV01", "TRAN THI HUON", "Go vap - cho hanh thong tay", "9"},
-                {"SV04", "PHAN VAN HAN", "280 AN DUONG VUONG", "2"}
+
             },
             new String [] {
-                "MASV", "Họ tên", "Địa chỉ", "Điểm"
+                "MASV", "Họ tên", "Điểm"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(scoreTable);
 
-        jButton1.setText("Chỉnh điểm");
+        edit.setText("Chỉnh điểm");
 
-        jButton2.setText("Quay lại");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TOAN ROI RAC", "CO SO DU LIEU" }));
+        backBtn.setText("Quay lại");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -84,12 +97,12 @@ public class QLDiem extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jButton1))
+                                .addComponent(subJect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(edit))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                        .addComponent(backBtn)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -100,13 +113,13 @@ public class QLDiem extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(subJect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(edit)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(backBtn)
                 .addContainerGap())
         );
 
@@ -161,13 +174,13 @@ public class QLDiem extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton backBtn;
+    private javax.swing.JButton edit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable scoreTable;
+    private javax.swing.JComboBox<String> subJect;
     // End of variables declaration//GEN-END:variables
 }

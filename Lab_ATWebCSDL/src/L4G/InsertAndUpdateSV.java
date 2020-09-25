@@ -18,17 +18,35 @@ import javax.swing.JOptionPane;
  *
  * @author hpmdu
  */
-public class UpdateSV extends javax.swing.JFrame {
+public class InsertAndUpdateSV extends javax.swing.JFrame {
 
     /**
      * Creates new form UpdateSV
      */
     
     private String maSV;
+    private String maLop;
+    private Boolean edit = null;
+    private Connection conn = new MssqlConnection().getConnection();
+    private SinhVien newSv = null;
     
-    public UpdateSV() {
+    public InsertAndUpdateSV() {
         initComponents();
         this.setMonthYearItem();
+    }
+    
+    public void fixTitle(){
+        if (edit) {
+            title.setText("Chỉnh sửa thông tin sinh viên");
+            warning.setText("*Mật khẩu để trống thì không thay đổi");
+        }
+        else {
+            title.setText("Nhập thông tin sinh viên");
+            warning.setText("*Không được bỏ trống");
+            hoTen.setText("");
+            diaChi.setText("");
+            tenDN.setText("");
+        }
     }
     
     public void setMonthYearItem(){
@@ -75,13 +93,23 @@ public class UpdateSV extends javax.swing.JFrame {
         System.out.println(this.maSV);
     }
     
-    public void update_SV(){
+    public void setEditSV(boolean e){
+        this.edit = e;
+        this.fixTitle();
+    }
+    
+    public void setMalop(String maLop){
+        this.maLop = maLop;
+    }
+    
+    public SinhVien getSv(){
+        return newSv;
+    }
+    
+    public void getInforSV(){
         // TODO add your handling code here:
-        this.setVisible(true);
-        MssqlConnection mssql = new MssqlConnection();
-        Connection conn = mssql.getConnection();
         try{
-            String sql = "select * from SINHVIEN where MASV = ?";
+            String sql = "EXEC SP_SEL_ENCRYPT_SINHVIEN ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, this.maSV);
             ResultSet rs = ps.executeQuery();
@@ -96,12 +124,88 @@ public class UpdateSV extends javax.swing.JFrame {
                 tenDN.setText(rs.getString("TENDN"));
             }
             else{
-                JOptionPane.showMessageDialog(this, "Da xay ra loi", "Canh bao", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Có lỗi xảy ra", "Canh bao", JOptionPane.WARNING_MESSAGE);
             }
         }
         catch(SQLException e){
             e.printStackTrace();
         }
+    }
+    
+    public void insertSV(){
+        try{
+            Hash hash = new Hash();
+            boolean ok = true;
+            if (hoTen.getText().trim().isEmpty() || diaChi.getText().trim().isEmpty() || tenDN.getText().trim().isEmpty() || 
+                    matKhau.getText().trim().isEmpty()){
+                ok = false;
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            }
+            if (ok){
+                SinhVien sv = new SinhVien(this.maSV, hoTen.getText().trim(), 
+                    new Date(Integer.parseInt(year.getSelectedItem().toString()) - 1900, 
+                    month.getSelectedIndex() + 1, Integer.parseInt(day.getSelectedItem().toString())), 
+                diaChi.getText().trim(), this.maLop, tenDN.getText().trim(), hash.getMd5(matKhau.getText().trim()));
+                
+                String sql = "SP_INS_ENCRYPT_SINHVIEN ?, ?, ?, ?, ?, ?, ?";
+                PreparedStatement ps = this.conn.prepareStatement(sql);
+                ps.setString(1, this.maSV);
+                ps.setString(2, sv.getHoTen());
+                ps.setDate(3, sv.getNgaysinh());
+                ps.setString(4, sv.getDiaChi());
+                ps.setString(5, sv.getMaLop());
+                ps.setString(6, sv.getTenDN());
+                ps.setString(7, sv.getMatKhau());
+                ps.execute();
+                // Gán vào để return ra ngoài sau đó đẩy lên table
+                newSv = sv;
+                JOptionPane.showMessageDialog(this, "Thêm sinh viên thành công");
+                this.dispose();
+            }
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateSV(){
+        try{
+            boolean changePw = false;
+            String sql = "";
+            if (!matKhau.getText().trim().equals("")) {
+                changePw = true;
+                sql = "EXEC SP_UPD_SINHVIEN_WITH_MATKHAU ?, ?, ?, ?, ?, ?";
+            }
+            else{
+                sql = "EXEC SP_UPD_SINHVIEN_WITHOUT_MATKHAU ?, ?, ?, ?, ?";
+            }
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, this.maSV);
+            ps.setString(2, hoTen.getText().trim());
+            Date newDate = new Date(Integer.parseInt(year.getSelectedItem().toString()) - 1900, 
+                    month.getSelectedIndex() + 1, Integer.parseInt(day.getSelectedItem().toString()));
+            ps.setDate(3, newDate);
+            ps.setString(4, diaChi.getText().trim());
+            ps.setString(5, tenDN.getText().trim());
+            SinhVien sv = new SinhVien(this.maSV, hoTen.getText().trim(), newDate, diaChi.getText().trim(), 
+                    this.maLop, tenDN.getText().trim(), null);
+            if (changePw){
+                Hash hash = new Hash();
+                String mK = hash.getMd5(matKhau.getText().trim());
+                ps.setString(6, mK);
+                sv.setMatKhau(mK);
+            }
+            ps.executeUpdate();
+            this.newSv = sv;
+            JOptionPane.showMessageDialog(this, "Thay đổi thành công");
+            this.dispose();
+        }
+        catch(SQLException e){
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            e.printStackTrace();
+        }
+        this.setVisible(false);
     }
 
     /**
@@ -120,7 +224,7 @@ public class UpdateSV extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         saveBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
         hoTen = new javax.swing.JTextField();
         diaChi = new javax.swing.JTextField();
         tenDN = new javax.swing.JTextField();
@@ -128,10 +232,10 @@ public class UpdateSV extends javax.swing.JFrame {
         month = new javax.swing.JComboBox<>();
         year = new javax.swing.JComboBox<>();
         matKhau = new javax.swing.JPasswordField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        title = new javax.swing.JLabel();
+        warning = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Họ tên");
@@ -149,15 +253,20 @@ public class UpdateSV extends javax.swing.JFrame {
         jLabel5.setText("Mật khẩu mới");
 
         saveBtn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        saveBtn.setText("Lưu thay đổi");
+        saveBtn.setText("Lưu");
         saveBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 saveBtnMouseClicked(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton2.setText("Quay lại");
+        backBtn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        backBtn.setText("Quay lại");
+        backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backBtnMouseClicked(evt);
+            }
+        });
 
         hoTen.setText("jTextField1");
 
@@ -177,11 +286,11 @@ public class UpdateSV extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel6.setText("Chỉnh sửa thông tin sinh viên");
+        title.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        title.setText("Tiêu đề theo chức năng thêm hoặc sửa");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 2, 16)); // NOI18N
-        jLabel7.setText("*Mật khẩu để trống thì không thay đổi");
+        warning.setFont(new java.awt.Font("Tahoma", 2, 16)); // NOI18N
+        warning.setText("*warning theo chức năng");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -191,11 +300,11 @@ public class UpdateSV extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(backBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(saveBtn))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
+                        .addComponent(title)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,7 +321,7 @@ public class UpdateSV extends javax.swing.JFrame {
                             .addComponent(hoTen)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
+                                    .addComponent(warning)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(day, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -226,7 +335,7 @@ public class UpdateSV extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -250,11 +359,11 @@ public class UpdateSV extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(matKhau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
+                .addComponent(warning)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveBtn)
-                    .addComponent(jButton2))
+                    .addComponent(backBtn))
                 .addContainerGap())
         );
 
@@ -285,39 +394,18 @@ public class UpdateSV extends javax.swing.JFrame {
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
         // TODO add your handling code here:
         // TODO add your handling code here:
-        MssqlConnection mssql = new MssqlConnection();
-        Connection conn = mssql.getConnection();
-        try{
-            boolean changePw = false;
-            String sql = "";
-            if (!matKhau.getText().trim().equals("")) {
-                changePw = true;
-                sql = "update SINHVIEN set HOTEN = ?, NGAYSINH = ?, DIACHI = ?, TENDN = ?, MATKHAU = HASHBYTES('MD5', ?)"
-                        + " where MASV = '" + this.maSV + "'";
-            }
-            else{
-                sql = "update SINHVIEN set HOTEN = ?, NGAYSINH = ?, DIACHI = ?, TENDN = ?"
-                        + " where MASV = '" + this.maSV + "'";
-            }
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, hoTen.getText().trim());
-            ps.setString(3, diaChi.getText().trim());
-            ps.setString(4, tenDN.getText().trim());
-            if (changePw){
-                System.out.println("doi mk");
-                ps.setString(5, matKhau.getText().trim());
-            }
-            ps.setDate(2, new Date(Integer.parseInt(year.getSelectedItem().toString()) - 1900, 
-                    month.getSelectedIndex() + 1, Integer.parseInt(day.getSelectedItem().toString())));
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Thay doi thanh cong");
+        if (this.edit) {
+            this.updateSV();
         }
-        catch(SQLException e){
-            JOptionPane.showMessageDialog(this, "Co loi xay ra", "Canh bao", JOptionPane.WARNING_MESSAGE);
-            e.printStackTrace();
+        else {
+            this.insertSV();
         }
-        this.setVisible(false);
     }//GEN-LAST:event_saveBtnMouseClicked
+
+    private void backBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backBtnMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_backBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -336,42 +424,44 @@ public class UpdateSV extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UpdateSV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InsertAndUpdateSV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UpdateSV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InsertAndUpdateSV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UpdateSV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InsertAndUpdateSV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UpdateSV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InsertAndUpdateSV.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UpdateSV().setVisible(true);
+                new InsertAndUpdateSV().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
     private javax.swing.JComboBox<String> day;
     private javax.swing.JTextField diaChi;
     private javax.swing.JTextField hoTen;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField matKhau;
     private javax.swing.JComboBox<String> month;
     private javax.swing.JButton saveBtn;
     private javax.swing.JTextField tenDN;
+    private javax.swing.JLabel title;
+    private javax.swing.JLabel warning;
     private javax.swing.JComboBox<String> year;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,11 +5,14 @@
  */
 package L4G;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,6 +36,61 @@ public class QLLop extends javax.swing.JFrame {
     public void setMaLop(String maLop){
         this.maLop = maLop;
     }
+    
+    public void showList(){
+        DefaultTableModel dtm = (DefaultTableModel) classTable.getModel();
+        Connection conn = new MssqlConnection().getConnection();
+        try{
+            String sql = "SELECT * FROM SINHVIEN WHERE MALOP = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, this.maLop);
+            ResultSet rs = ps.executeQuery();
+            Vector vt;
+            while(rs.next()){
+                vt = new Vector();
+                vt.add(rs.getString("MASV"));
+                vt.add(rs.getString("HOTEN"));
+                vt.add(rs.getDate("NGAYSINH"));
+                vt.add(rs.getString("DIACHI"));
+                vt.add(rs.getString("MALOP"));
+                vt.add(rs.getString("TENDN"));
+                vt.add(rs.getString("MATKHAU"));
+                dtm.addRow(vt);
+            }
+            classTable.setModel(dtm);
+            ps.close();
+            rs.close();
+            conn.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateTable(SinhVien sv){
+//        classTable.setValueAt(rs.getString("MASV"), classTable.getSelectedRow(), 0);
+        classTable.setValueAt(sv.getHoTen(), classTable.getSelectedRow(), 1);
+        classTable.setValueAt(sv.getNgaysinh(), classTable.getSelectedRow(), 2);
+        classTable.setValueAt(sv.getDiaChi(), classTable.getSelectedRow(), 3);
+//        classTable.setValueAt(rs.getString("MALOP"), classTable.getSelectedRow(), 4);
+        classTable.setValueAt(sv.getTenDN(), classTable.getSelectedRow(), 5);
+        if (sv.getMatKhau() != null) classTable.setValueAt(sv.getMatKhau(), classTable.getSelectedRow(), 6);
+    }
+    
+    public void insertTable(SinhVien sv){
+        DefaultTableModel dtm = (DefaultTableModel) classTable.getModel();
+        Vector vt = new Vector();
+        vt.add(sv.getMaSv());
+        vt.add(sv.getHoTen());
+        vt.add(sv.getNgaysinh());
+        vt.add(sv.getDiaChi());
+        vt.add(sv.getMaLop());
+        vt.add(sv.getTenDN());
+        vt.add(sv.getMatKhau());
+        dtm.addRow(vt);
+        System.out.println("Nhập vào table MASV: " + sv.getMaSv());
+        classTable.setModel(dtm);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,7 +107,9 @@ public class QLLop extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         classTable = new javax.swing.JTable();
         editBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
+        insertBtn = new javax.swing.JButton();
+        delBtn = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
@@ -79,14 +139,33 @@ public class QLLop extends javax.swing.JFrame {
             classTable.getColumnModel().getColumn(0).setPreferredWidth(25);
         }
 
-        editBtn.setText("Chỉnh sửa thông tin");
+        editBtn.setText("Sửa");
         editBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 editBtnMouseClicked(evt);
             }
         });
 
-        jButton2.setText("Quay lại");
+        backBtn.setText("Quay lại");
+        backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backBtnMouseClicked(evt);
+            }
+        });
+
+        insertBtn.setText("Thêm");
+        insertBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                insertBtnMouseClicked(evt);
+            }
+        });
+
+        delBtn.setText("Xóa");
+        delBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                delBtnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -98,11 +177,16 @@ public class QLLop extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2))
+                        .addComponent(backBtn))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(editBtn))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(insertBtn)
+                                .addGap(18, 18, 18)
+                                .addComponent(delBtn)
+                                .addGap(18, 18, 18)
+                                .addComponent(editBtn)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -113,10 +197,14 @@ public class QLLop extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(editBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(editBtn)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(insertBtn)
+                        .addComponent(delBtn)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(backBtn)
                 .addContainerGap())
         );
 
@@ -137,62 +225,106 @@ public class QLLop extends javax.swing.JFrame {
     private void editBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editBtnMouseClicked
         // TODO add your handling code here:
         String maSV = classTable.getValueAt(classTable.getSelectedRow(), 0).toString();
-        System.out.println(maSV);
-        UpdateSV updateSV = new UpdateSV();
+        System.out.println("MASV chọn: " + maSV);
+        InsertAndUpdateSV updateSV = new InsertAndUpdateSV();
+        updateSV.setEditSV(true);
         updateSV.setMaSV(maSV);
-        updateSV.update_SV();
-        Thread t = new Thread() {
-            public void run() {
-                synchronized(this) {
-                    while (updateSV.isVisible())
-                        try {
-                            this.wait();
-                        } 
-                        catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    System.out.println("Working now");
+        updateSV.setMalop(maLop);
+        updateSV.getInforSV();
+        updateSV.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // call terminate
+                try{
+                    Connection conn = new MssqlConnection().getConnection();
+                    String sql = "EXEC SP_SEL_ENCRYPT_SINHVIEN ?";
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setString(1, maSV);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()){
+//                            SinhVien sv = new SinhVien(rs.getString("MASV"), rs.getString("HOTEN"), rs.getDate("NGAYSINH"), 
+//                                rs.getString("DIACHI"), rs.getString("MALOP"), rs.getString("TENDN"), rs.getString("MATKHAU"));
+                        updateTable(updateSV.getSv());
+                    }
+                }
+                catch(SQLException excp){
+                    excp.printStackTrace();
                 }
             }
-        };
-        t.start();
-        this.showList();
+        });
+        updateSV.setVisible(true);
     }//GEN-LAST:event_editBtnMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    
-    public void showList(){
+    private void insertBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_insertBtnMouseClicked
+        // TODO add your handling code here:
+        InsertAndUpdateSV svf = new InsertAndUpdateSV();
+        svf.setEditSV(false);
+        if (classTable.getRowCount() != 0){
+            String maSvLast = classTable.getValueAt(classTable.getRowCount() - 1, 0).toString();
+            int maSo = Integer.parseInt(maSvLast.substring(2, maSvLast.length()));
+            String t = maSo < 9 ? "SV0" + (maSo + 1):"SV" + (maSo + 1);
+            System.out.println("MASV mới: " + t );
+            svf.setMaSV(t);
+            svf.addWindowListener(new WindowAdapter(){
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    // call terminate
+                    try{
+                        Connection conn = new MssqlConnection().getConnection();
+                        String sql = "EXEC SP_SEL_ENCRYPT_SINHVIEN ?";
+                        PreparedStatement ps = conn.prepareStatement(sql);
+                        ps.setString(1, t);
+                        ResultSet rs = ps.executeQuery();
+                        if (rs.next()){
+//                            SinhVien sv = new SinhVien(rs.getString("MASV"), rs.getString("HOTEN"), rs.getDate("NGAYSINH"), 
+//                                rs.getString("DIACHI"), rs.getString("MALOP"), rs.getString("TENDN"), rs.getString("MATKHAU"));
+                            insertTable(svf.getSv());
+                        }
+                    }
+                    catch(SQLException excp){
+                        excp.printStackTrace();
+                    }
+                }
+            });
+        }
+        else{
+            svf.setMaSV("SV01");
+        }
+        svf.setMalop(this.maLop);
+        svf.setVisible(true);
+    }//GEN-LAST:event_insertBtnMouseClicked
+
+    private void delBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delBtnMouseClicked
+        // TODO add your handling code here:
         DefaultTableModel dtm = (DefaultTableModel) classTable.getModel();
-        MssqlConnection mssql = new MssqlConnection();
-        Connection conn = mssql.getConnection();
+        Connection conn = new MssqlConnection().getConnection();
         try{
-            String sql = "select * from SINHVIEN where MALOP = ?";
+            String sql = "DELETE FROM SINHVIEN WHERE MASV = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, this.maLop);
-            ResultSet rs = ps.executeQuery();
-            Vector vt;
-            while(rs.next()){
-                vt = new Vector();
-                vt.add(rs.getString("MASV"));
-                vt.add(rs.getString("HOTEN"));
-                vt.add(rs.getString("NGAYSINH"));
-                vt.add(rs.getString("DIACHI"));
-                vt.add(rs.getString("MALOP"));
-                vt.add(rs.getString("TENDN"));
-                vt.add(rs.getString("MATKHAU"));
-                dtm.addRow(vt);
-            }
-            classTable.setModel(dtm);
-            ps.close();
-            rs.close();
-            conn.close();
+            ps.setString(1, classTable.getValueAt(classTable.getSelectedRow(), 0).toString());
+            int selectedOption = JOptionPane.showConfirmDialog(null,
+                    "Dữ liệu sẽ xóa trực tiếp vào cơ sở dữ liệu. Bạn có muốn tiếp tục",
+                    "Choose",
+                    JOptionPane.YES_NO_OPTION);
+                if (selectedOption == JOptionPane.YES_OPTION) {
+                    ps.execute();
+                    dtm.removeRow(classTable.getSelectedRow());
+                    classTable.setModel(dtm);
+                }
         }
         catch(SQLException e){
             e.printStackTrace();
         }
-    }
+    }//GEN-LAST:event_delBtnMouseClicked
+
+    private void backBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backBtnMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_backBtnMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -228,9 +360,11 @@ public class QLLop extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
     private javax.swing.JTable classTable;
+    private javax.swing.JButton delBtn;
     private javax.swing.JButton editBtn;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton insertBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel1;

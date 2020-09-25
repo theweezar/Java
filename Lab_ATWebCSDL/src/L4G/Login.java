@@ -128,14 +128,15 @@ public class Login extends javax.swing.JFrame {
             ps.setString(2, hash.getSHA1(passWord.getText()));
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                JOptionPane.showMessageDialog(this, "Dang nhap thanh cong");
-                this.setVisible(false);
-//                Option opt = new Option();
-//                opt.setMANV(rs.getString("MANV"));
-//                new Option().setVisible(true);
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
+                Option opt = new Option();
+                opt.setMANV(rs.getString("MANV"));
+                opt.setTenNV(rs.getString("HOTEN"));
+                opt.setVisible(true);
+                this.dispose();
             }
             else{
-                JOptionPane.showMessageDialog(this, "Sai ten tai khoan hoac mat khau", "Canh bao", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sai tên tài khoản hoặc mật khẩu", "Canh bao", JOptionPane.WARNING_MESSAGE);
             }
         }
         catch(SQLException e){
