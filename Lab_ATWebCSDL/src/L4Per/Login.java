@@ -26,34 +26,6 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
     }
-    
-    public static String getMd5(String input) 
-    { 
-        try { 
-  
-            // Static getInstance method is called with hashing MD5 
-            MessageDigest md = MessageDigest.getInstance("MD5"); 
-  
-            // digest() method is called to calculate message digest 
-            //  of an input digest() return array of byte 
-            byte[] messageDigest = md.digest(input.getBytes()); 
-  
-            // Convert byte array into signum representation 
-            BigInteger no = new BigInteger(1, messageDigest); 
-  
-            // Convert message digest into hex value 
-            String hashtext = no.toString(16); 
-            while (hashtext.length() < 32) { 
-                hashtext = "0" + hashtext; 
-            } 
-            return hashtext; 
-        }  
-  
-        // For specifying wrong message digest algorithms 
-        catch (NoSuchAlgorithmException e) { 
-            throw new RuntimeException(e); 
-        } 
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -154,13 +126,14 @@ public class Login extends javax.swing.JFrame {
         Connection conn = mssql.getConnection();
         boolean ok = false;
         try{
-            String sql = "select MATKHAU from NHANVIEN where TENDN = ?";
+            String sql = "SELECT CONVERT(VARCHAR(MAX),MATKHAU) AS MATKHAU FROM NHANVIEN WHERE TENDN = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, userName.getText());
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
+                Hash hash = new Hash();
                 System.out.println(rs.getString("MATKHAU"));
-                if (rs.getString("MATKHAU").equalsIgnoreCase(new NhanVien().getSHA1(passWord.getText().trim()))){
+                if (rs.getString("MATKHAU").equalsIgnoreCase(hash.getSHA1(passWord.getText().trim()))){
                     JOptionPane.showMessageDialog(this, "Dang nhap thanh cong");
                     ok = true;
                     this.setVisible(false);

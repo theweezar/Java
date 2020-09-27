@@ -35,7 +35,7 @@ public class RSA {
     // Create a private key and a public key. We will store the public key in database
     public KeyPair generateKeyPair() throws Exception {
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-        generator.initialize(2048, new SecureRandom());
+        generator.initialize(512, new SecureRandom());
         KeyPair pair = generator.generateKeyPair();
         return pair;
     }

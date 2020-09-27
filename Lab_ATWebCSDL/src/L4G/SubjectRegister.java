@@ -5,6 +5,7 @@
  */
 package L4G;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,9 +32,15 @@ public class SubjectRegister extends javax.swing.JFrame {
     
     public SubjectRegister() {
         initComponents();
-        getSubjectList();
         getChoosenList();
-        show2List();
+        getSubjectList();
+        for(HocPhan h2: l2){
+            for(int i = 0; i < l1.size(); i++){
+                if (l1.get(i).getMaHP().equalsIgnoreCase(h2.getMaHP())){
+                    sJList.setValueAt("Đã chọn", i, 3);
+                }
+            }
+        }
     }
     
     public void getSubjectList(){
@@ -45,6 +52,8 @@ public class SubjectRegister extends javax.swing.JFrame {
             while(rs.next()){
                 l1.add(new HocPhan(rs.getString("MAHP"), rs.getString("TENHP"), rs.getString("SOTC")));
             }
+            DefaultTableModel dtm = this.addInTable(sJList, l1);
+            sJList.setModel(dtm);
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -61,6 +70,7 @@ public class SubjectRegister extends javax.swing.JFrame {
             while(rs.next()){
                 l2.add(new HocPhan(rs.getString("MAHP"), rs.getString("TENHP"), rs.getString("SOTC")));
             }
+            
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -68,8 +78,8 @@ public class SubjectRegister extends javax.swing.JFrame {
     }
     
     public void delRegistedSubject(HocPhan h){
-        for(HocPhan e: l1){
-            if (e.getMaHP().equalsIgnoreCase(h.getMaHP())) l1.remove(e);
+        for(HocPhan e: l2){
+            if (e.getMaHP().equalsIgnoreCase(h.getMaHP())) l2.remove(e);
         }
     }
     
@@ -85,16 +95,55 @@ public class SubjectRegister extends javax.swing.JFrame {
         return dtm;
     }
     
-    public void show2List(){
-        for(int i = 0; i < l2.size(); i++){
-            if (l1.equals(l2.get(i))){
-                this.delRegistedSubject(l2.get(i));
+    public boolean existInList(HocPhan h){
+        for(HocPhan hp: l2){
+            if (hp.getMaHP().equalsIgnoreCase(h.getMaHP())){
+                return true;
             }
         }
-        DefaultTableModel dtm1 = this.addInTable(list1, l1);
-        DefaultTableModel dtm2 = this.addInTable(list2, l2);
-        list1.setModel(dtm1);
-        list2.setModel(dtm2);
+        return false;
+    }
+    
+    public void existAndDelete(HocPhan h){
+        for(int i = 0; i < l2.size(); i++){
+            if (l2.get(i).getMaHP().equalsIgnoreCase(h.getMaHP())) {
+                System.out.println("Đã xóa");
+                l2.remove(i);
+                this.removeFromDb(h);
+                sJList.setValueAt("", i, 3);
+                break;
+            }
+        }
+    }
+    
+    public void addToDb(HocPhan h){
+        Connection conn = new MssqlConnection().getConnection();
+        RSA rsa = new RSA();
+        try{
+            String sql = "EXEC SP_REGISTER_SUBJECT ?, ?, ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, this.maSV);
+            ps.setString(2, h.getMaHP());
+            ps.setString(3, rsa.encrypt("0", rsa.getPublicKey(rsa.getFileInBytes(new File("publicKey.txt")))));
+            ps.execute();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void removeFromDb(HocPhan h){
+        Connection conn = new MssqlConnection().getConnection();
+        try{
+            String sql = "DELETE FROM BANGDIEM WHERE MASV = ? AND MAHP = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, this.maSV);
+            ps.setString(2, h.getMaHP());
+            ps.execute();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -109,32 +158,29 @@ public class SubjectRegister extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        list1 = new javax.swing.JTable();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        list2 = new javax.swing.JTable();
+        sJList = new javax.swing.JTable();
         chooseBtn = new javax.swing.JButton();
-        saveBtn = new javax.swing.JButton();
         cancelBtn = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Đăng ký môn học");
 
-        list1.setModel(new javax.swing.table.DefaultTableModel(
+        sJList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Mã môn học", "Tên môn học", "Số tín chỉ"
+                "Mã môn học", "Tên môn học", "Số tín chỉ", "Trạng thái"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -145,32 +191,11 @@ public class SubjectRegister extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(list1);
-
-        list2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Mã môn học", "Tên môn học", "Số tín chỉ"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane3.setViewportView(list2);
+        sJList.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(sJList);
+        if (sJList.getColumnModel().getColumnCount() > 0) {
+            sJList.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         chooseBtn.setText("Đăng ký");
         chooseBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -179,11 +204,14 @@ public class SubjectRegister extends javax.swing.JFrame {
             }
         });
 
-        saveBtn.setText("Lưu");
-
         cancelBtn.setText("Hủy");
+        cancelBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelBtnMouseClicked(evt);
+            }
+        });
 
-        jButton4.setText("Quay lại");
+        backBtn.setText("Quay lại");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -191,18 +219,15 @@ public class SubjectRegister extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(chooseBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(saveBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cancelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jButton4))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(cancelBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(chooseBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(backBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -211,19 +236,15 @@ public class SubjectRegister extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(chooseBtn)
                         .addGap(18, 18, 18)
-                        .addComponent(saveBtn)))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancelBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addContainerGap())
+                        .addComponent(cancelBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backBtn))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -246,8 +267,29 @@ public class SubjectRegister extends javax.swing.JFrame {
 
     private void chooseBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chooseBtnMouseClicked
         // TODO add your handling code here:
-        
+        if (sJList.getSelectedRow() >= 0){
+            int i = sJList.getSelectedRow();
+            HocPhan h = new HocPhan(sJList.getValueAt(i, 0).toString(), sJList.getValueAt(i, 1).toString(), 
+                    sJList.getValueAt(i, 2).toString());
+            if (!existInList(h)) {
+                l2.add(h);
+                this.addToDb(h);
+                System.out.println("Đã thêm");
+                sJList.setValueAt("Đã chọn", i, 3);
+            }
+        }
     }//GEN-LAST:event_chooseBtnMouseClicked
+
+    private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
+        // TODO add your handling code here:
+        if (sJList.getSelectedRow() >= 0){
+            int i = sJList.getSelectedRow();
+            HocPhan h = new HocPhan(sJList.getValueAt(i, 0).toString(), sJList.getValueAt(i, 1).toString(), 
+                    sJList.getValueAt(i, 2).toString());
+            existAndDelete(h);
+            
+        }
+    }//GEN-LAST:event_cancelBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -286,15 +328,12 @@ public class SubjectRegister extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JButton chooseBtn;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable list1;
-    private javax.swing.JTable list2;
-    private javax.swing.JButton saveBtn;
+    private javax.swing.JTable sJList;
     // End of variables declaration//GEN-END:variables
 }

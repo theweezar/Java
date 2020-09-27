@@ -28,6 +28,8 @@ public class QLNV extends javax.swing.JFrame {
     
     private Connection conn = new MssqlConnection().getConnection();
     private List<NhanVien> listNV = new ArrayList<NhanVien>();
+    private String secretKey = "n17dcat018";
+    
     public QLNV() {
         initComponents();
         okBtn.setVisible(false);
@@ -36,6 +38,8 @@ public class QLNV extends javax.swing.JFrame {
     
     public void load(){
         DefaultTableModel dtm = (DefaultTableModel) nvList.getModel();
+        AES256 aes = new AES256();
+        aes.setSecretPw(this.secretKey);
         try{
             String sql = "EXEC SP_SEL_NHANVIEN";
             PreparedStatement ps = this.conn.prepareStatement(sql);
@@ -45,7 +49,7 @@ public class QLNV extends javax.swing.JFrame {
                 vt.add(rs.getString("MANV"));
                 vt.add(rs.getString("HOTEN"));
                 vt.add(rs.getString("EMAIL"));
-                vt.add(rs.getString("LUONG"));
+                vt.add(aes.decrypt(rs.getString("LUONG")));
                 dtm.addRow(vt);
             }
             nvList.setModel(dtm);
@@ -362,8 +366,8 @@ public class QLNV extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Nhap luong nhan vien sai", "Canh bao", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            NhanVien nv = new NhanVien(maNV.getText(), hoTen.getText(), eMail.getText(),
-                luong.getText(),tenDN.getText(),matKhau.getText());
+            NhanVien nv = new NhanVien(maNV.getText().trim(), hoTen.getText().trim(), eMail.getText().trim(),
+                luong.getText().trim(), tenDN.getText().trim(), new Hash().getSHA1(matKhau.getText().trim()));
             this.listNV.add(nv);
             JOptionPane.showMessageDialog(this, "Them nhan vien thanh cong");
             this.refresh();
@@ -374,13 +378,15 @@ public class QLNV extends javax.swing.JFrame {
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
         // TODO add your handling code here:
         try{
+            AES256 aes = new AES256();
+            aes.setSecretPw(this.secretKey);
             for(int i = 0; i < this.listNV.size(); i++){
                 String sql = "EXEC SP_INS_ENCRYPT_NHANVIEN ?, ?, ?, ?, ?, ?";
                 PreparedStatement ps = this.conn.prepareStatement(sql);
                 ps.setString(1, this.listNV.get(i).getMaNV());
                 ps.setString(2, this.listNV.get(i).getHoTen());
                 ps.setString(3, this.listNV.get(i).geteMail());
-                ps.setInt(4, Integer.parseInt(this.listNV.get(i).getLuong()));
+                ps.setString(4, aes.encrypt(this.listNV.get(i).getLuong()));
                 ps.setString(5, this.listNV.get(i).getTenDN());
                 ps.setString(6, this.listNV.get(i).getMatKhau());
                 ps.execute();
@@ -417,6 +423,8 @@ public class QLNV extends javax.swing.JFrame {
 
     private void editBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editBtnMouseClicked
         // TODO add your handling code here:
+        AES256 aes = new AES256();
+        aes.setSecretPw(this.secretKey);
         try{
             String sql = "EXEC SP_SEL_DECRYPT_NHANVIEN '" + nvList.getValueAt(nvList.getSelectedRow(), 0).toString() + "'";
             PreparedStatement ps = this.conn.prepareStatement(sql);
@@ -424,7 +432,7 @@ public class QLNV extends javax.swing.JFrame {
             if (rs.next()){
                 hoTen.setText(rs.getString("HOTEN"));
                 eMail.setText(rs.getString("EMAIL"));
-                luong.setText(rs.getString("LUONG"));
+                luong.setText(aes.decrypt(rs.getString("LUONG")));
                 tenDN.setText(rs.getString("TENDN"));
                 this.setVisibleOkBtn(true);
             }
@@ -434,13 +442,39 @@ public class QLNV extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_editBtnMouseClicked
 
+    private void updateRow(NhanVien nv, int vt){
+        nvList.setValueAt(nv.getMaNV(), vt, 0);
+        nvList.setValueAt(nv.getHoTen(), vt, 1);
+        nvList.setValueAt(nv.geteMail(), vt, 2);
+        nvList.setValueAt(nv.getLuong(), vt, 3);
+    }
+    
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
         // TODO add your handling code here:
         try{
-            String sql = "EXEC SP_UPD_NHANVIEN ?, ?, ?, ?, ?, ?";
+            String sql = "";
+            String maNV = nvList.getValueAt(nvList.getSelectedRow(), 0).toString();
+            boolean cPw = true;
+            if (matKhau.getText().trim().isEmpty()){
+                sql = "EXEC SP_UPD_NHANVIEN_WITHOUT_MATKHAU ?, ?, ?, ?, ?";
+                cPw = false;
+            }
+            else{
+                sql = "EXEC SP_UPD_NHANVIEN_WITH_MATKHAU ?, ?, ?, ?, ?, ?";
+            }
+            AES256 aes = new AES256();
+            aes.setSecretPw(this.secretKey);
             PreparedStatement ps = this.conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            
+            ps.setString(1, maNV);
+            ps.setString(2, hoTen.getText().trim());
+            ps.setString(3, eMail.getText().trim());
+            ps.setString(4, aes.encrypt(luong.getText().trim()));
+            ps.setString(5, tenDN.getText().trim());
+            if (cPw) ps.setString(6, matKhau.getText().trim());
+            updateRow(new NhanVien(maNV, hoTen.getText().trim(), eMail.getText().trim(), luong.getText().trim(), null, null), 
+                    nvList.getSelectedRow());
+            ps.executeUpdate();
+            this.setVisibleOkBtn(false);
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -449,7 +483,7 @@ public class QLNV extends javax.swing.JFrame {
 
     private void escBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_escBtnMouseClicked
         // TODO add your handling code here:
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        this.dispose();
     }//GEN-LAST:event_escBtnMouseClicked
 
     /**
