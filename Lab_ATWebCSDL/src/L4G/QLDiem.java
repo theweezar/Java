@@ -5,6 +5,18 @@
  */
 package L4G;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author hpmdu
@@ -16,13 +28,28 @@ public class QLDiem extends javax.swing.JFrame {
      */
     
     private String maLop = "CNTT-D17";
+    private List<String> maHpList = new ArrayList<String>();
     
     public QLDiem() {
         initComponents();
+        loadSubject();
     }
     
     public void loadSubject(){
-        
+        Connection conn = new MssqlConnection().getConnection();
+        try{
+            String sql = "EXEC SP_SEL_SUBJECT_IN_CLASS ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, this.maLop);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                this.maHpList.add(rs.getString("MAHP"));
+                subJect.addItem(rs.getString("TENHP"));
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
     }
     
     public void setMaLop(String maLop){
@@ -80,8 +107,25 @@ public class QLDiem extends javax.swing.JFrame {
         jScrollPane1.setViewportView(scoreTable);
 
         edit.setText("Chỉnh điểm");
+        edit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                editMouseClicked(evt);
+            }
+        });
 
         backBtn.setText("Quay lại");
+        backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backBtnMouseClicked(evt);
+            }
+        });
+
+        subJect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "(Chọn môn)" }));
+        subJect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subJectActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -92,12 +136,12 @@ public class QLDiem extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 767, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(subJect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(subJect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(edit))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -136,6 +180,58 @@ public class QLDiem extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void subJectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subJectActionPerformed
+        // TODO add your handling code here:
+        System.out.println(subJect.getSelectedIndex());
+        if (subJect.getSelectedIndex() > 0){
+            Connection conn = new MssqlConnection().getConnection();
+            try{
+                RSA rsa = new RSA();
+                String sql = "SP_SEL_SINHVIEN_IN_HOCPHAN ?, ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, this.maHpList.get(subJect.getSelectedIndex() - 1));
+                ps.setString(2, this.maLop);
+                ResultSet rs = ps.executeQuery();
+                DefaultTableModel dtm = (DefaultTableModel) scoreTable.getModel();
+                
+                for(int i = dtm.getRowCount() - 1; i >= 0; i--) dtm.removeRow(i);
+                
+                while(rs.next()){
+                    Vector vt = new Vector();
+                    vt.add(rs.getString("MASV"));
+                    vt.add(rs.getString("HOTEN"));
+                    vt.add(rsa.decrypt(rs.getString("DIEMTHI"), rsa.getPrivateKey(rsa.getFileInBytes(new File("privateKey.txt")))));
+                    dtm.addRow(vt);
+                }
+                scoreTable.setModel(dtm);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_subJectActionPerformed
+
+    private void editMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseClicked
+        // TODO add your handling code here:
+        UpdateDiem upd = new UpdateDiem();
+        upd.setMaHP(this.maHpList.get(subJect.getSelectedIndex() - 1));
+        upd.setMaSV(scoreTable.getValueAt(scoreTable.getSelectedRow(), 0).toString());
+        upd.setDiemCu(scoreTable.getValueAt(scoreTable.getSelectedRow(), 2).toString());
+        upd.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // call terminate
+                scoreTable.setValueAt(upd.getDiemCu(), scoreTable.getSelectedRow(), 2);
+            }
+        });
+        upd.setVisible(true);
+    }//GEN-LAST:event_editMouseClicked
+
+    private void backBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backBtnMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_backBtnMouseClicked
 
     /**
      * @param args the command line arguments

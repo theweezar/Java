@@ -184,7 +184,7 @@ public class InsertAndUpdateSV extends javax.swing.JFrame {
             ps.setString(1, this.maSV);
             ps.setString(2, hoTen.getText().trim());
             Date newDate = new Date(Integer.parseInt(year.getSelectedItem().toString()) - 1900, 
-                    month.getSelectedIndex() + 1, Integer.parseInt(day.getSelectedItem().toString()));
+                    month.getSelectedIndex(), Integer.parseInt(day.getSelectedItem().toString()));
             ps.setDate(3, newDate);
             ps.setString(4, diaChi.getText().trim());
             ps.setString(5, tenDN.getText().trim());
@@ -197,6 +197,7 @@ public class InsertAndUpdateSV extends javax.swing.JFrame {
                 sv.setMatKhau(mK);
             }
             ps.executeUpdate();
+            System.out.println(newDate.toString());
             this.newSv = sv;
             JOptionPane.showMessageDialog(this, "Thay đổi thành công");
             this.dispose();

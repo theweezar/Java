@@ -30,7 +30,7 @@ public class QLLop extends javax.swing.JFrame {
     
     public QLLop() {
         initComponents();
-        this.showList();
+//        this.showList();
     }
     
     public void setMaLop(String maLop){

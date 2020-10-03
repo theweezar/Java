@@ -28,7 +28,7 @@ public class SubjectRegister extends javax.swing.JFrame {
     
     private List<HocPhan> l1 = new ArrayList<>(); // all subject
     private List<HocPhan> l2 = new ArrayList<>(); // choosen subject
-    private String maSV = "SV01";
+    private String maSV = "SV05";
     
     public SubjectRegister() {
         initComponents();
@@ -212,6 +212,11 @@ public class SubjectRegister extends javax.swing.JFrame {
         });
 
         backBtn.setText("Quay lại");
+        backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backBtnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -290,6 +295,11 @@ public class SubjectRegister extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_cancelBtnMouseClicked
+
+    private void backBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backBtnMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_backBtnMouseClicked
 
     /**
      * @param args the command line arguments

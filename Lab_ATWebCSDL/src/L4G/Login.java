@@ -23,6 +23,33 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
     }
+    
+    public void nhanVienLogin(){
+        MssqlConnection mssql = new MssqlConnection();
+        Connection conn = mssql.getConnection();
+        Hash hash = new Hash();
+        try{
+            String sql = "EXEC SP_SEL_PUBLIC_ENCRYPT_NHANVIEN ?, ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, userName.getText());
+            ps.setString(2, hash.getSHA1(passWord.getText()));
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
+                Option opt = new Option();
+                opt.setMANV(rs.getString("MANV"));
+                opt.setTenNV(rs.getString("HOTEN"));
+                opt.setVisible(true);
+                this.dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Sai tên tài khoản hoặc mật khẩu", "Canh bao", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,30 +145,7 @@ public class Login extends javax.swing.JFrame {
 
     private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnMouseClicked
         // TODO add your handling code here:
-        MssqlConnection mssql = new MssqlConnection();
-        Connection conn = mssql.getConnection();
-        Hash hash = new Hash();
-        try{
-            String sql = "EXEC SP_SEL_PUBLIC_ENCRYPT_NHANVIEN ?, ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, userName.getText());
-            ps.setString(2, hash.getSHA1(passWord.getText()));
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()){
-                JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
-                Option opt = new Option();
-                opt.setMANV(rs.getString("MANV"));
-                opt.setTenNV(rs.getString("HOTEN"));
-                opt.setVisible(true);
-                this.dispose();
-            }
-            else{
-                JOptionPane.showMessageDialog(this, "Sai tên tài khoản hoặc mật khẩu", "Canh bao", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
+        this.nhanVienLogin();
     }//GEN-LAST:event_loginBtnMouseClicked
 
     /**

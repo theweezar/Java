@@ -153,6 +153,7 @@ public class Option extends javax.swing.JFrame {
         // TODO add your handling code here:
         QLLop qllop = new QLLop();
         qllop.setMaLop(classCBB.getSelectedItem().toString());
+        qllop.showList();
         this.setVisible(false);
         qllop.setVisible(true);
         qllop.addWindowListener(new WindowAdapter(){
@@ -169,6 +170,12 @@ public class Option extends javax.swing.JFrame {
         qld.setMaLop(classCBB.getSelectedItem().toString());
         this.setVisible(false);
         qld.setVisible(true);
+        qld.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e){
+                setVisible(true);
+            }
+        });
     }//GEN-LAST:event_scoreBtnMouseClicked
 
     /**

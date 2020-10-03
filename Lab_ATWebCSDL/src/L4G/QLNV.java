@@ -392,7 +392,7 @@ public class QLNV extends javax.swing.JFrame {
                     if (changePw){
                         Hash hash = new Hash();
                         System.out.println("doi mk");
-                        ps.setString(5, hash.getSHA1(nv.getMatKhau()));
+                        ps.setString(6, hash.getSHA1(nv.getMatKhau()));
                     }
                     ps.executeUpdate();
                     JOptionPane.showMessageDialog(this, "Thay đổi thành công");
