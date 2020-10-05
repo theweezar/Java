@@ -25,8 +25,12 @@ public class RegexCheck {
     public boolean isValidFileName(String fName){
         // Kiểm tra kí tự unicode
         Pattern p1 = Pattern.compile("(.*)[\\/:*?\"<>|ẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴắằẳẵặăấầẩẫậâáàãảạđếềểễệêéèẻẽẹíìỉĩịốồổỗộôớờởỡợơóòõỏọứừửữựưúùủũụýỳỷỹỵ](.*)");
-        // Kiểm tra đuôi file. Ví dụ: name.txt chứ ko được name.rar.txt
-        Pattern p2 = Pattern.compile("([.]+(\\W|\\w+\\W+))");
+        // Kiểm tra đuôi file. Ví dụ: đuôi file ko dc có kí tự đặc biệt
+        Pattern p2 = Pattern.compile("([.]+(\\W|(.*)\\W+))");
+//        if (fName.trim().isEmpty()) return false;
+//        else if (p1.matcher(fName).matches()) return false;
+//        else if (p2.matcher(fName).matches()) return false;
+//        return true;
         return !(p1.matcher(fName).matches() || p2.matcher(fName).matches() || fName.trim().isEmpty());
     }
     
@@ -36,9 +40,8 @@ public class RegexCheck {
     
     public static void main(String[] args) {
         RegexCheck r = new RegexCheck();
-        System.out.println(r.isValidFileName("minhduc.t/xt"));
-        
+        System.out.println(r.isValidFileName("minhduc.txt"));
         int a = 9;
-        System.out.println(r.isNum("" + 9));
+        System.out.println(r.isNum("" + "a"));
     }
 }
