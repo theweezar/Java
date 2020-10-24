@@ -21,20 +21,24 @@ public class QLNVClient {
     private Socket client = null;
     private DataOutputStream out = null;
     private DataInputStream in = null;
+    private Scanner scan = null;
     
     public QLNVClient() throws IOException{
         this.client = new Socket("localhost", 1234);
         this.out = new DataOutputStream(this.client.getOutputStream());
         this.in = new DataInputStream(this.client.getInputStream());
+        this.scan = new Scanner(System.in);
     }
     
     public void run(){
-        
+        String s;
+        while(true){
+            
+        }
     }
     
     public static void main(String[] args) throws IOException{
         QLNVClient qlnv = new QLNVClient();
         qlnv.run();
-        
     }
 }
