@@ -1,0 +1,11 @@
+Bài Tập 1: Viết chương trình client - server qua giao thức UDP
+Client: nhập đường dẫn nguồn, tên file, đường dẫn đích và hiển thị kết quả.
+Server: thực hiện kiểm tra file có tồn tại trong thư mục đường dẫn hk?
+nếu có: thực hiện di chuyển file tới thư mục đích và thông báo cho client "file đã di chuyển thành công".
+nếu không: thông báo cho client "file không tồn tại"
+
+
+
+Bài Tập 2: Viết chương trình client - server qua giao thức UDP
+Client: nhập n và m tương ứng số dòng và cột của ma trận, và nhập các phần tử của ma trận đó.
+Server: thực hiện tìm 2 số lớn nhất và thứ hai trong ma trận và trả về cho client 2 số đó cộng vị trí xuất hiện của nó. Đồng thời tìm các số nguyên tố và tính tổng các số nguyên tố đó. Trả về cho client các số nguyên tố và tổng.
