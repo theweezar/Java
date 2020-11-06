@@ -48,6 +48,18 @@ public class UdpClient {
         return strRec;
     }
     
+    public void option1() throws IOException {
+        scan.nextLine();
+        String source, dest;
+        System.out.print("Nhập đường link nguồn: "); // D:\\MATRANMANG.txt
+        source = scan.nextLine().trim();
+        System.out.print("Nhập đường link đích: "); // D:\\udp_copy\\MATRANMANG.txt
+        dest = scan.nextLine().trim();
+        sendPacket(source.getBytes());
+        sendPacket(dest.getBytes());
+        System.out.println(receiveData());
+    }
+    
     public int getNumber(String title, boolean smallerThanZero){
         int a = 0;
         while(true){
@@ -81,13 +93,13 @@ public class UdpClient {
             }
         }
         sendPacket(s.getBytes());
+        System.out.println(receiveData());
     }
     
     public int menu() throws IOException {
         String[] items = {
-            "Option 1",
-            "Option 2",
-            "Option 3"
+            "Di chuyển file",
+            "Tìm 2 số lớn nhất và vị trí của chúng trong ma trận, tìm và tính tổng các số nguyên tố trong ma trận đó"
         };
         int opt = 0;
         System.out.println("------------------------------------");
@@ -115,11 +127,12 @@ public class UdpClient {
             // Vì opt vẫn là int nên ta dùng nó trong switch case
             switch(opt){
                 case 1:
-                    System.out.println("Option 1");
+//                    System.out.println("Option 1");
                     sendPacket(String.format("%d", opt).getBytes());
+                    option1();
                     break;
                 case 2:
-                    System.out.println("Option 2");
+//                    System.out.println("Option 2");
                     sendPacket(String.format("%d", opt).getBytes());
                     option2();
                     break;
