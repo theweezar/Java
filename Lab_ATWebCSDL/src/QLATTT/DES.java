@@ -92,13 +92,15 @@ public class DES {
             //Instantiate the encrypter/decrypter
             DES des = new DES(keyFactory.generateSecret(key));
 //            String plain = "Hoang Phan Minh Duc - N17DCAT018";
-            byte[] plainFromFile = des.getFileInBytes(new File("C:\\Users\\hpmdu\\OneDrive\\Documents\\Nam_4\\QuanLyATTT\\LabCuoiKi\\plaintext\\plain2.txt"));
+            File pFile = new File("C:\\Users\\hpmdu\\OneDrive\\Documents\\Nam_4\\QuanLyATTT\\LabCuoiKi\\plaintext\\plain4.txt");
+            byte[] plainFromFile = des.getFileInBytes(pFile);
             byte[] crypted = des.encryptBase64(plainFromFile);
 //            System.out.println("Mã hóa:\n" + Base64.getEncoder().encodeToString(crypted));
             
             byte[] decrypted = des.decryptBase64(crypted);
 //            System.out.println("Giải mã: \n" + new String(decrypted, "UTF-8"));
             double endSec = ((double)System.nanoTime() - start) / 1000000000;
+            System.out.println("File name: " + pFile.getName());
             System.out.println("Thời gian hoàn thành mã hóa và giải mã: " + endSec);
             
         } catch (Exception e) {
