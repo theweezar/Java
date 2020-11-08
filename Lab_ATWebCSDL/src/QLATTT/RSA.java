@@ -151,10 +151,25 @@ public class RSA {
     public static void main(String[] args) {
         RSA rsa = new RSA();
         try{
-            KeyPair key = rsa.generateKeyPair(512);
-            String pathPublicKey = "C:\\Users\\hpmdu\\OneDrive\\Documents\\Nam_4\\QuanLyATTT\\LabCuoiKi\\plaintext\\publickey.txt";
-            String pathPrivateKey = "C:\\Users\\hpmdu\\OneDrive\\Documents\\Nam_4\\QuanLyATTT\\LabCuoiKi\\plaintext\\privatekey.txt";
-            rsa.saveKeyPair(pathPublicKey, pathPrivateKey, key);
+            // Phần tạo khóa
+//            KeyPair key = rsa.generateKeyPair(2048);
+//            String pathPublicKey = "C:\\Users\\hpmdu\\OneDrive\\Documents\\Nam_4\\QuanLyATTT\\LabCuoiKi\\plaintext\\publickey.txt";
+//            String pathPrivateKey = "C:\\Users\\hpmdu\\OneDrive\\Documents\\Nam_4\\QuanLyATTT\\LabCuoiKi\\plaintext\\privatekey.txt";
+//            rsa.saveKeyPair(pathPublicKey, pathPrivateKey, key);
+            
+            // Phần mã hóa
+            String plain = "Hoang Phan Minh Duc – N17DCAT018 – D17CQAT01, hien tai dang lam bai bao cao mon quan ly an toan thong tin";
+            String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCUyWq/OHeLzbTsuE6L66/vxKS8Z8m+CcFYJx6EgclJv9v/IWCCKf1pFPOVw3/tMgwxWSeB149cpPZeSjY5h8lQmjMlS0XdkiqM6RB+T43YD7ZHHlvFiViqafdjHgSGfnLKliexu0UQjX9f49loAT8pE9JkfmiJ+PAMxOS7BL7bRwIDAQAB".trim();
+            String privateKey = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAJTJar84d4vNtOy4Tovrr+/EpLxnyb4JwVgnHoSByUm/2/8hYIIp/WkU85XDf+0yDDFZJ4HXj1yk9l5KNjmHyVCaMyVLRd2SKozpEH5PjdgPtkceW8WJWKpp92MeBIZ+csqWJ7G7RRCNf1/j2WgBPykT0mR+aIn48AzE5LsEvttHAgMBAAECgYAp00EdxgrdExOUI+94p+WKWlYQ3IA62tUuKbkLeMyT3cpDOye9D368JnafGBkDHbmNuclAV89mNL1JHkWGAKTXhPJ3A7NmBdhT7WD7o/0vtJos2pGyO/t9E/EMzwz/Em3bql0eXyp9dPT35cXWv4Lm/jvqtrYP+ttx5xakuQG1iQJBAMba4AnNPdt7dNvnF+VzJm7VGXZ6nEyhTVgwLZpUG9EcHK2hTG4zgd1noDm62keTp20L6q8O/KrsMXdvRKiUzn0CQQC/iy9P6r0u1cE/zH5Joeq6i+wLQPXpOJQePaU02Qg02aUNvZfO0H06ixlEdlbYrRHUweCILeVj+mzBTKrSMCgTAkAoXU9yzeWLgtDivlL8cVZQ0xLbGOJXL7radtUa6Y3H8ZPkrsQr7mqi/aDpdwNN2iv3F58or7scGtujqcNfEO2lAkB839raeSkZLZYtZ741dvA26h3bQGCRyacXCA16pLuq6PGoQaCE3nul/SVd8uCvpjVnxXYCkhlo0sywQLFlEqwtAkBBns4ZJqNbWcFvcG4P1G0vKcidasaF4zlwlJUMpCpoDsgKrks9CnM5gtnFWhibYEOpBGMYrETL3mQgEjOGjlBG".trim();
+            
+            PublicKey pubKey = rsa.getPublicKey(publicKey.getBytes());
+            PrivateKey priKey = rsa.getPrivateKey(privateKey.getBytes());
+            
+            String encrypted = rsa.encrypt(plain, pubKey);
+            encrypted = "He7GXlfVvmE1mR5nX3RFQwvwzD4CWXeEjsWkmTyHWKdXd+y3SkKWVKf+S4UhgDOSsGq1N8si3Zbavgr0HIJASV1dA0a0ZPiVDsGRkEqEX9QsjBc6gQ4jesoozK4VPIBjpyqOk1fk+0OugWLtWajv8vs5pAABAe6cBsQu5jXEm4Q=";
+            System.out.printf("Mã hóa: \n%s\n", encrypted);
+            String decrypted = rsa.decrypt(encrypted, priKey);
+            System.out.printf("Giải mã: \n%s\n", decrypted);
         }
         catch(Exception e){
             e.printStackTrace();
