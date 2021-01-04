@@ -28,7 +28,7 @@ public class SubjectRegister extends javax.swing.JFrame {
     
     private List<HocPhan> l1 = new ArrayList<>(); // all subject
     private List<HocPhan> l2 = new ArrayList<>(); // choosen subject
-    private String maSV = "SV05";
+    private String maSV = "SV03";
     
     public SubjectRegister() {
         initComponents();
@@ -240,7 +240,7 @@ public class SubjectRegister extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(chooseBtn)
@@ -249,7 +249,7 @@ public class SubjectRegister extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(backBtn))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -273,6 +273,7 @@ public class SubjectRegister extends javax.swing.JFrame {
     private void chooseBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chooseBtnMouseClicked
         // TODO add your handling code here:
         if (sJList.getSelectedRow() >= 0){
+            
             int i = sJList.getSelectedRow();
             HocPhan h = new HocPhan(sJList.getValueAt(i, 0).toString(), sJList.getValueAt(i, 1).toString(), 
                     sJList.getValueAt(i, 2).toString());

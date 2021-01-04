@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package L4G;
+package L3G;
 
+import L4G.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -21,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author hpmdu
  */
-public class QLDiem extends javax.swing.JFrame {
+public class QLDiem_L4 extends javax.swing.JFrame {
 
     /**
      * Creates new form QLDiem
@@ -30,7 +31,7 @@ public class QLDiem extends javax.swing.JFrame {
     private String maLop = "D17KT";
     private List<String> maHpList = new ArrayList<String>();
     
-    public QLDiem() {
+    public QLDiem_L4() {
         initComponents();
 //        loadSubject();
     }
@@ -214,18 +215,18 @@ public class QLDiem extends javax.swing.JFrame {
 
     private void editMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseClicked
         // TODO add your handling code here:
-        UpdateDiem upd = new UpdateDiem();
-        upd.setMaHP(this.maHpList.get(subJect.getSelectedIndex() - 1));
-        upd.setMaSV(scoreTable.getValueAt(scoreTable.getSelectedRow(), 0).toString());
-        upd.setDiemCu(scoreTable.getValueAt(scoreTable.getSelectedRow(), 2).toString());
-        upd.addWindowListener(new WindowAdapter(){
-            @Override
-            public void windowClosed(WindowEvent e) {
-                // call terminate
-                scoreTable.setValueAt(upd.getDiemCu(), scoreTable.getSelectedRow(), 2);
-            }
-        });
-        upd.setVisible(true);
+//        UpdateDiem upd = new UpdateDiem();
+//        upd.setMaHP(this.maHpList.get(subJect.getSelectedIndex() - 1));
+//        upd.setMaSV(scoreTable.getValueAt(scoreTable.getSelectedRow(), 0).toString());
+//        upd.setDiemCu(scoreTable.getValueAt(scoreTable.getSelectedRow(), 2).toString());
+//        upd.addWindowListener(new WindowAdapter(){
+//            @Override
+//            public void windowClosed(WindowEvent e) {
+//                // call terminate
+//                scoreTable.setValueAt(upd.getDiemCu(), scoreTable.getSelectedRow(), 2);
+//            }
+//        });
+//        upd.setVisible(true);
     }//GEN-LAST:event_editMouseClicked
 
     private void backBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backBtnMouseClicked
@@ -250,21 +251,23 @@ public class QLDiem extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(QLDiem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QLDiem_L4.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(QLDiem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QLDiem_L4.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(QLDiem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QLDiem_L4.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(QLDiem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(QLDiem_L4.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                QLDiem qld = new QLDiem();
+                QLDiem_L4 qld = new QLDiem_L4();
                 qld.loadSubject();
                 qld.setVisible(true);
             }

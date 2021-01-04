@@ -61,29 +61,32 @@ public class InsertAndUpdateSV extends javax.swing.JFrame {
     
     public void calculateDay(){
         int[] m31 = {1,3,5,7,8,10,12};
+        boolean is30 = true;
         day.removeAllItems();
-        for(int i = 0; i < m31.length; i++){
-            if (month.getSelectedIndex() + 1 == m31[i]){
-                System.out.println("Tháng có 31 ngày");
-                for(int j = 1; j <= 31; j++){
-                    day.addItem("" + j);
-                }
-                break;
+        if (month.getSelectedIndex() + 1 == 2){
+            System.out.println("Tháng 2");
+            int endDay = Integer.parseInt(year.getSelectedItem().toString()) % 4 != 0 ? 28:29;
+            for(int j = 1; j <= endDay; j++){
+                day.addItem("" + j);
             }
-            else if (month.getSelectedIndex() + 1 == 2){
-                System.out.println("Tháng 2");
-                int endDay = Integer.parseInt(year.getSelectedItem().toString()) % 4 != 0 ? 28:29;
-                for(int j = 1; j <= endDay; j++){
-                    day.addItem("" + j);
+            is30 = false;
+        }
+        else {
+            for(int i = 0; i < m31.length; i++){
+                if (month.getSelectedIndex() + 1 == m31[i]){
+                    System.out.println("Tháng có 31 ngày");
+                    for(int j = 1; j <= 31; j++){
+                        day.addItem("" + j);
+                    }
+                    is30 = false;
+                    break;
                 }
-                break;
             }
-            else{
-                System.out.println("Tháng có 30 ngày");
-                for(int j = 1; j <= 30; j++){
-                    day.addItem("" + j);
-                }
-                break;
+        }
+        if (is30){
+            System.out.println("Tháng có 30 ngày");
+            for(int j = 1; j <= 30; j++){
+                day.addItem("" + j);
             }
         }
     }
@@ -144,7 +147,7 @@ public class InsertAndUpdateSV extends javax.swing.JFrame {
             if (ok){
                 SinhVien sv = new SinhVien(this.maSV, hoTen.getText().trim(), 
                     new Date(Integer.parseInt(year.getSelectedItem().toString()) - 1900, 
-                    month.getSelectedIndex() + 1, Integer.parseInt(day.getSelectedItem().toString())), 
+                    month.getSelectedIndex(), Integer.parseInt(day.getSelectedItem().toString())), 
                 diaChi.getText().trim(), this.maLop, tenDN.getText().trim(), hash.getMd5(matKhau.getText().trim()));
                 
                 String sql = "SP_INS_ENCRYPT_SINHVIEN ?, ?, ?, ?, ?, ?, ?";

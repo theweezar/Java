@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package L3G;
+package Udp;
 import java.sql.*;
 
 /**
@@ -14,7 +14,7 @@ public class MssqlConnection {
     
     public Connection getConnection(){
         Connection conn = null;
-        String uRL = "jdbc:sqlserver://;databaseName=QLSVNhom";
+        String uRL = "jdbc:sqlserver://127.0.0.1:1433;databaseName=THB4";
         String userName = "sa";
         String password = "123";
         try {
@@ -28,7 +28,6 @@ public class MssqlConnection {
     }
     
     public static void main(String[] args) {
-        MssqlConnection mssql = new MssqlConnection();
-        Connection conn = mssql.getConnection();
+        new MssqlConnection().getConnection(); 
     }
 }

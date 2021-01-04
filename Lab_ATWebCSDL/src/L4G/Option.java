@@ -168,6 +168,7 @@ public class Option extends javax.swing.JFrame {
         // TODO add your handling code here:
         QLDiem qld = new QLDiem();
         qld.setMaLop(classCBB.getSelectedItem().toString());
+        qld.loadSubject();
         this.setVisible(false);
         qld.setVisible(true);
         qld.addWindowListener(new WindowAdapter(){

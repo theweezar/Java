@@ -132,7 +132,8 @@ public class Login extends javax.swing.JFrame {
                 Option opt = new Option();
                 opt.setMANV(rs.getString("MANV"));
                 opt.setTenNV(rs.getString("HOTEN"));
-                new Option().setVisible(true);
+                opt.getClassList();
+                opt.setVisible(true);
             }
             else{
                 JOptionPane.showMessageDialog(this, "Sai ten tai khoan hoac mat khau", "Canh bao", JOptionPane.WARNING_MESSAGE);

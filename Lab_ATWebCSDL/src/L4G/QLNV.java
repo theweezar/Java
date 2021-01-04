@@ -357,61 +357,6 @@ public class QLNV extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
-        // TODO add your handling code here:
-        if (saveBtn.isEnabled()){
-            maNV.setEditable(true);
-            try{
-                String sql = "";
-                boolean changePw = false;
-                boolean ok = true;
-                if (hoTen.getText().trim().isEmpty() || eMail.getText().trim().isEmpty() || 
-                        tenDN.getText().trim().isEmpty() || luong.getText().trim().isEmpty()){
-                    ok = false;
-                }
-                else if (!isNum(luong.getText().trim())){
-                    ok = false;
-                }
-                if (!matKhau.getText().trim().equals("")) {
-                    changePw = true;
-                    sql = "SP_UPDATE_ENCRYPT_NHANVIEN_WITH_MATKHAU ?, ?, ?, ?, ?, ?";
-                }
-                else{
-                    sql = "SP_UPDATE_ENCRYPT_NHANVIEN_WITHOUT_MATKHAU ?, ?, ?, ?, ?";
-                }
-                if (ok){
-                    NhanVien nv = new NhanVien(maNV.getText().trim(), hoTen.getText().trim(), eMail.getText().trim(),
-                        luong.getText().trim(),tenDN.getText().trim(),matKhau.getText().trim());
-                    RSA rsa = new RSA();
-                    PreparedStatement ps = conn.prepareStatement(sql);
-                    ps.setString(1, nv.getMaNV());
-                    ps.setString(2, nv.getHoTen());
-                    ps.setString(3, nv.geteMail());
-                    ps.setString(4, rsa.encrypt(nv.getLuong(), rsa.getPublicKey(rsa.getFileInBytes(new File("publicKey.txt")))));
-                    ps.setString(5, nv.getTenDN());
-                    if (changePw){
-                        Hash hash = new Hash();
-                        System.out.println("doi mk");
-                        ps.setString(6, hash.getSHA1(nv.getMatKhau()));
-                    }
-                    ps.executeUpdate();
-                    JOptionPane.showMessageDialog(this, "Thay đổi thành công");
-                    this.setEnableSaveBtn(false);
-                    this.eraseTextField();
-                    this.updateRow(nv);
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "Vui lòng điền đẩy đủ thông tin", "Canh bao", JOptionPane.WARNING_MESSAGE);
-                }
-
-            }
-            catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        
-    }//GEN-LAST:event_saveBtnMouseClicked
-
     private void editBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editBtnMouseClicked
         // TODO add your handling code here:
         if (editBtn.isEnabled()){
@@ -488,6 +433,61 @@ public class QLNV extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_exitBtnMouseClicked
+
+    private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
+        // TODO add your handling code here:
+        if (saveBtn.isEnabled()){
+            maNV.setEditable(true);
+            try{
+                String sql = "";
+                boolean changePw = false;
+                boolean ok = true;
+                if (hoTen.getText().trim().isEmpty() || eMail.getText().trim().isEmpty() ||
+                    tenDN.getText().trim().isEmpty() || luong.getText().trim().isEmpty()){
+                    ok = false;
+                }
+                else if (!isNum(luong.getText().trim())){
+                    ok = false;
+                }
+                if (!matKhau.getText().trim().equals("")) {
+                    changePw = true;
+                    sql = "SP_UPDATE_ENCRYPT_NHANVIEN_WITH_MATKHAU ?, ?, ?, ?, ?, ?";
+                }
+                else{
+                    sql = "SP_UPDATE_ENCRYPT_NHANVIEN_WITHOUT_MATKHAU ?, ?, ?, ?, ?";
+                }
+                if (ok){
+                    NhanVien nv = new NhanVien(maNV.getText().trim(), hoTen.getText().trim(), eMail.getText().trim(),
+                        luong.getText().trim(),tenDN.getText().trim(),matKhau.getText().trim());
+                    RSA rsa = new RSA();
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setString(1, nv.getMaNV());
+                    ps.setString(2, nv.getHoTen());
+                    ps.setString(3, nv.geteMail());
+                    ps.setString(4, rsa.encrypt(nv.getLuong(), rsa.getPublicKey(rsa.getFileInBytes(new File("publicKey.txt")))));
+                    ps.setString(5, nv.getTenDN());
+                    if (changePw){
+                        Hash hash = new Hash();
+                        System.out.println("doi mk");
+                        ps.setString(6, hash.getSHA1(nv.getMatKhau()));
+                    }
+                    ps.executeUpdate();
+                    JOptionPane.showMessageDialog(this, "Thay đổi thành công");
+                    this.setEnableSaveBtn(false);
+                    this.eraseTextField();
+                    this.updateRow(nv);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Vui lòng điền đẩy đủ thông tin", "Canh bao", JOptionPane.WARNING_MESSAGE);
+                }
+
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+    }//GEN-LAST:event_saveBtnMouseClicked
 
     /**
      * @param args the command line arguments

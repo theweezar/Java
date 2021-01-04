@@ -276,8 +276,8 @@ public class QLLop extends javax.swing.JFrame {
                         ps.setString(1, t);
                         ResultSet rs = ps.executeQuery();
                         if (rs.next()){
-//                            SinhVien sv = new SinhVien(rs.getString("MASV"), rs.getString("HOTEN"), rs.getDate("NGAYSINH"), 
-//                                rs.getString("DIACHI"), rs.getString("MALOP"), rs.getString("TENDN"), rs.getString("MATKHAU"));
+                            SinhVien sv = new SinhVien(rs.getString("MASV"), rs.getString("HOTEN"), rs.getDate("NGAYSINH"), 
+                                rs.getString("DIACHI"), rs.getString("MALOP"), rs.getString("TENDN"), rs.getString("MATKHAU"));
                             insertTable(svf.getSv());
                         }
                     }

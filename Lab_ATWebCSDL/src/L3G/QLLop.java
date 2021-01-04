@@ -25,7 +25,7 @@ public class QLLop extends javax.swing.JFrame {
      */
     
     // Default var for maLop
-    private String maLop = "CNTT-D17";
+    private String maLop = "D17CN";
     
     public QLLop() {
         initComponents();
@@ -55,7 +55,7 @@ public class QLLop extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         classTable = new javax.swing.JTable();
         editBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
@@ -92,7 +92,12 @@ public class QLLop extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Quay lại");
+        backBtn.setText("Quay lại");
+        backBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backBtnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -104,7 +109,7 @@ public class QLLop extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2))
+                        .addComponent(backBtn))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -122,7 +127,7 @@ public class QLLop extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(editBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(backBtn)
                 .addContainerGap())
         );
 
@@ -175,6 +180,11 @@ public class QLLop extends javax.swing.JFrame {
         updateSV.setMaSV(maSV);
         updateSV.getCurrentInfo_SV();
     }//GEN-LAST:event_editBtnMouseClicked
+
+    private void backBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backBtnMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_backBtnMouseClicked
 
     /**
      * @param args the command line arguments
@@ -239,15 +249,17 @@ public class QLLop extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new QLLop().setVisible(true);
+                QLLop qll = new QLLop();
+                qll.showList();
+                qll.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
     private javax.swing.JTable classTable;
     private javax.swing.JButton editBtn;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JPanel jPanel1;

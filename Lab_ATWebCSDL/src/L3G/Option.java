@@ -5,6 +5,8 @@
  */
 package L3G;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,13 +23,13 @@ public class Option extends javax.swing.JFrame {
      * Creates new form Option
      */
     
-    private String MaNV = "NVA";
+    private String MaNV = "NV01";
     private String TenNV = "NGUYEN VAN A";
     
     public Option() {
         initComponents();
-        nvName.setText("Tên nhân viên: " + this.TenNV);
-        getClassList();
+//        nvName.setText("Tên nhân viên: " + this.TenNV);
+//        getClassList();
     }
     
     public void setMANV(String MaNV){
@@ -149,15 +151,36 @@ public class Option extends javax.swing.JFrame {
     private void btn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn1MouseClicked
         // TODO add your handling code here:
         QLLop qllop = new QLLop();
+//        qllop.setMaLop(classCBB.getSelectedItem().toString());
+//        this.setVisible(false);
+//        qllop.setVisible(true);
+//        qllop.showList();
+
         qllop.setMaLop(classCBB.getSelectedItem().toString());
+        qllop.showList();
         this.setVisible(false);
         qllop.setVisible(true);
-        qllop.showList();
+        qllop.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e){
+                setVisible(true);
+            }
+        });
     }//GEN-LAST:event_btn1MouseClicked
 
     private void btn2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn2MouseClicked
         // TODO add your handling code here:
-        
+        QLDiem_L4 qld = new QLDiem_L4();
+        qld.setMaLop(classCBB.getSelectedItem().toString());
+        qld.loadSubject();
+        this.setVisible(false);
+        qld.setVisible(true);
+        qld.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e){
+                setVisible(true);
+            }
+        });
     }//GEN-LAST:event_btn2MouseClicked
 
     /**
@@ -190,7 +213,9 @@ public class Option extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Option().setVisible(true);
+                Option opt = new Option();
+                opt.getClassList();
+                opt.setVisible(true);
             }
         });
     }
