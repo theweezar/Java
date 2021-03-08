@@ -87,7 +87,7 @@ public class ThuatToan {
     }
     
     public static void main(String[] args) {
-        int[] arr = {7,7,4,5,2,6,8,9};
+        int[] arr = {7,7,4,8,2,6,3,9};
         ThuatToan.bai_1(arr);
         
     }
