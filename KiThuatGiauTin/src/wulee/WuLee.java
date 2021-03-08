@@ -11,6 +11,22 @@ package wulee;
  */
 public class WuLee {
     
+    private Image s_image = null;
+    private String message;
+    private boolean[][] key;
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+    public void readImage(String path){
+        s_image.readImage("cat.jpeg");
+    }
+    
+    public void generateKeyFromString(String keyString){
+        
+    }
+    
     public static boolean[] get8BitBinaryArray(int decimal){
         boolean[] bitArrray = new boolean[8];
         String binString = String.format("%8s", Integer.toBinaryString(decimal)).replaceAll(" ", "0");
@@ -35,7 +51,7 @@ public class WuLee {
         int sum = 0;
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                
+                if (bitArray[i][j]) sum++;
             }
         }
         return sum;
@@ -47,5 +63,12 @@ public class WuLee {
     
     public void hide(){
         
+    }
+    
+    public static void main(String[] args) {
+        Image image = new Image();
+        
+        Pixel[][] block = image.get2DArrayPixel(0, 0, 8, 8);
+        image.print2DArrayPixel(block);
     }
 }

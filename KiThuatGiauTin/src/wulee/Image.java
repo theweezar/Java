@@ -103,7 +103,7 @@ public class Image {
         for(int i = 0; i < array2D.length; i++){
             // Duyệt x
             for(int j = 0; j < array2D[i].length; j++){
-                System.out.printf("%d ",array2D[i][j].getRed());
+                System.out.printf("%d ",array2D[i][j].getBlue());
             }
             System.out.println();
         }
