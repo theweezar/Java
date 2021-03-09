@@ -19,6 +19,19 @@ public class Image {
     private BufferedImage source = null;
     private int height = 1024;
     private int width = 1024;
+    public static int CHANNEL_RED = 1;
+    public static int CHANNEL_GREEN = 2;
+    public static int CHANNEL_BLUE = 3;
+    public static int CHANNEL_ALPHAL = 4;
+    
+    
+    public int getHeight(){
+        return source.getHeight();
+    }
+    
+    public int getWidth(){
+        return source.getWidth();
+    }
     
     public void readImage(String path){
         try{ 
@@ -70,6 +83,11 @@ public class Image {
         return new Pixel(a, r, g, b);
     }
     
+    public void setPixel(int x, int y, Pixel p){
+        int rgb = (p.getAlphal()<<24) | (p.getRed()<<16) | (p.getGreen()<<8) | p.getBlue(); 
+        source.setRGB(x, y, rgb);
+    }
+    
     public Pixel[][] get2DArrayPixel(int xStart, int yStart, int width, int height){
         if (xStart < 0 || xStart > source.getWidth()){
             return null;
@@ -86,34 +104,107 @@ public class Image {
         if (yStart + height > source.getHeight()){
             return null;
         }
-        
+    
         Pixel[][] array2D = new Pixel[height][width];
         // Duyệt y
         for(int i = 0; i < height; i++){
             // Duyệt x
             for(int j = 0; j < width; j++){
-                array2D[i][j] = getPixel(j, i);
+                array2D[i][j] = getPixel(xStart + j, yStart + i);
             }
         }
-        
         return array2D;
     }
     
-    public void print2DArrayPixel(Pixel[][] array2D){
-        for(int i = 0; i < array2D.length; i++){
-            // Duyệt x
-            for(int j = 0; j < array2D[i].length; j++){
-                System.out.printf("%d ",array2D[i][j].getBlue());
-            }
-            System.out.println();
+    public void set2DArrayPixel(int xStart, int yStart, int width, int height, Pixel[][] array2D){
+        if (xStart < 0 || xStart > source.getWidth()){
+            return;
         }
+        if (yStart < 0 || yStart > source.getHeight()){
+            return;
+        }
+        if (width < 0 || height < 0){
+            return;
+        }
+        if (xStart + width > source.getWidth()){
+            return;
+        }
+        if (yStart + height > source.getHeight()){
+            return;
+        }
+        // Hàm này còn chưa xong nhớ chỉnh sửa lại
+        
+        // Duyệt y
+        for(int i = 0; i < height; i++){
+            // Duyệt x
+            for(int j = 0; j < width; j++){
+                array2D[i][j] = getPixel(xStart + j, yStart + i);
+            }
+        }
+        
+    }
+    
+    public static int[][] getChannel(int channel, Pixel[][] block){
+        int[][] channel_array = new int[block.length][block[0].length];
+        if (channel == Image.CHANNEL_RED){
+            for(int i = 0; i < block.length; i++){
+                for(int j = 0; j < block[i].length; j++){
+                    channel_array[i][j] = block[i][j].getRed();
+                }
+            }
+        }
+        if (channel == Image.CHANNEL_GREEN){
+            for(int i = 0; i < block.length; i++){
+                for(int j = 0; j < block[i].length; j++){
+                    channel_array[i][j] = block[i][j].getGreen();
+                }
+            }
+        }
+        if (channel == Image.CHANNEL_BLUE){
+            for(int i = 0; i < block.length; i++){
+                for(int j = 0; j < block[i].length; j++){
+                    channel_array[i][j] = block[i][j].getBlue();
+                }
+            }
+        }
+        return channel_array;
+    }
+    
+    public static void print2DArrayPixel(int channel, Pixel[][] array2D){
+        if (channel == Image.CHANNEL_RED){
+            for(int i = 0; i < array2D.length; i++){
+                for(int j = 0; j < array2D[i].length; j++){
+                    System.out.printf("%d ",array2D[i][j].getRed());
+                }
+                System.out.println();
+            }
+        }
+        if (channel == Image.CHANNEL_GREEN){
+            for(int i = 0; i < array2D.length; i++){
+                for(int j = 0; j < array2D[i].length; j++){
+                    System.out.printf("%d ",array2D[i][j].getGreen());
+                }
+                System.out.println();
+            }
+        }
+        if (channel == Image.CHANNEL_BLUE){
+            for(int i = 0; i < array2D.length; i++){
+                for(int j = 0; j < array2D[i].length; j++){
+                    System.out.printf("%d ",array2D[i][j].getBlue());
+                }
+                System.out.println();
+            }
+        }
+    }
+    
+    public void merge(){
+        
     }
     
     public static void main(String[] args) {
         Image image = new Image();
         image.readImage("cat.jpeg");
-        Pixel[][] block = image.get2DArrayPixel(0, 0, 8, 8);
-        image.print2DArrayPixel(block);
+        image.merge();
         
     }
 }

@@ -54,6 +54,18 @@ public class Pixel {
     public void setBlue(int blue) {
         this.blue = blue;
     }
+    
+    public void setValueInChannel(int channel, int value){
+        if (channel == Image.CHANNEL_RED){
+            setRed(value);
+        }
+        if (channel == Image.CHANNEL_GREEN){
+            setGreen(value);
+        }
+        if (channel == Image.CHANNEL_BLUE){
+            setBlue(value);
+        }
+    }
 
     @Override
     public String toString() {
