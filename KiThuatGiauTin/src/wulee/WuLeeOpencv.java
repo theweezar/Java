@@ -60,6 +60,10 @@ public class WuLeeOpencv {
         System.out.println("Load cover image successfull!");
     }
     
+    public void saveStegoImage(String path){
+        Imgcodecs.imwrite(path, coverImage);
+    }
+    
     public void printPixel(int row, int col){
         double[] rgb = coverImage.get(row, col);
         System.out.println(String.format("%.1f %.1f %.1f", rgb[0], rgb[1], rgb[2]));
@@ -315,10 +319,11 @@ public class WuLeeOpencv {
 //        System.out.println("Welcome to OpenCV " + Core.VERSION);
 //        Mat m = new Mat(8, 8, CvType.CV_8UC1, new Scalar(0));
         WuLeeOpencv wulee = new WuLeeOpencv();
-        wulee.setCoverImage("cat.jpeg");
+        wulee.setCoverImage("stego.png");
         wulee.setKey("minhduc");
-        wulee.setMessage("ducdeptrai");
-        wulee.hide();
+//        wulee.setMessage("ducdeptrai");
+//        wulee.hide();
+//        wulee.saveStegoImage("stego.png");
         wulee.retrieve();
     }
 }
