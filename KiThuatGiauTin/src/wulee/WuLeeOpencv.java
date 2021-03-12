@@ -128,33 +128,33 @@ public class WuLeeOpencv {
     }
     
     public Mat hideInBlock(Mat block,  char c, int channel){
-        // block ở trên có 3 channel BGR
+        // block ở trên có 3 channel BGR, (8,8,3) BGR
         List<Mat> listChannel = new ArrayList<Mat>();
         // Core.split là phương thức tách chiều sau của ma trận rồi return vào 1 list<Mat> đã khởi tạo ở trên
         Core.split(block, listChannel);
         // channel_block là ma trận 8x8 được lấy từ listChannel ở trên thôi thứ tự 0,1,2 tương đương với BGR
         Mat channel_block = listChannel.get(channel);
         
-//        System.out.printf("\nchannel_block:\n%s\n",channel_block.dump());
+        System.out.printf("\nchannel_block:\n%s\n",channel_block.dump());
         
         // Chuyển kí tự thành dãy nhị phân 8bit
         String binChar = String.format("%8s", Integer.toBinaryString(c)).replaceAll(" ", "0");
-//        System.out.printf("\n%c ===> %s\n", c, binChar);
+        System.out.printf("\n%c ===> %s\n", c, binChar);
         // Duyệt theo từng cột - channel_block.cols()
-        for(int i = 0; i < channel_block.cols(); i++){
+        for(int i = 0; i < 1; i++){
             // Fi là ma trận nhị phân (8,8) của từng cột (8,1)
             Mat fi = fi_to_binary(channel_block.col(i));
             // In ra màn hình giá trị fi int cũ
-//            System.out.printf("fi[%d] int :\n%s\n",i,channel_block.col(i).dump());
+            System.out.printf("fi[%d] int :\n%s\n",i,channel_block.col(i).dump());
             // In ra màn hình giá trị fi binary cũ
-//            System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
+            System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
             // Function Core.bitwise_and giữa fi và key, sau đó return kết quả vào biến matAnd
             Mat matAnd = new Mat();
             Core.bitwise_and(fi, key, matAnd);
             // Function Core.sumElems là phương thức cộng tất cả phần tử trong ma trận lại
             int and_sum = (int)Core.sumElems(matAnd).val[0];
             int key_sum = (int)Core.sumElems(key).val[0];
-//            System.out.printf("fi[%d] ===> and_sum = %d ; key_sum = %d\n", i, and_sum, key_sum);
+            System.out.printf("fi[%d] ===> and_sum = %d ; key_sum = %d\n", i, and_sum, key_sum);
             if (and_sum > 0 && and_sum < key_sum){
                 int bit = binChar.charAt(i) == '1' ? 1:0;
                 if (and_sum % 2 == bit){
@@ -170,15 +170,15 @@ public class WuLeeOpencv {
                     fi = randomBinaryReverse(fi);
                 }
                 // In ra màn hình giá trị fi binary mới
-//                System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
+                System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
                 fi = fi_to_int(fi);
                 // In ra màn hình giá trị fi int mới
-//                System.out.printf("fi[%d] int :\n%s\n",i,fi.dump());
+                System.out.printf("fi[%d] int :\n%s\n",i,fi.dump());
                 // Gán giá trị fi mới vào channel_block. Duyệt theo channel_block.rows()
                 for(int j = 0; j < channel_block.rows(); j++){
                     channel_block.put(j, i, fi.get(j, 0));
                 }
-//                System.out.printf("\nNewchannel_block:\n%s\n",channel_block.dump());
+                System.out.printf("\nNewchannel_block:\n%s\n",channel_block.dump());
             }
         }
         // Sau khi channel_block đã được chỉnh sửa, ta gán ngược lại vào listChannel ở trên đúng với thứ tự channel
@@ -319,12 +319,12 @@ public class WuLeeOpencv {
 //        System.out.println("Welcome to OpenCV " + Core.VERSION);
 //        Mat m = new Mat(8, 8, CvType.CV_8UC1, new Scalar(0));
         WuLeeOpencv wulee = new WuLeeOpencv();
-        wulee.setCoverImage("stego.png");
-        wulee.setKey("minhduc");
-//        wulee.setMessage("ducdeptrai");
-//        wulee.hide();
-//        wulee.saveStegoImage("stego.png");
-        wulee.retrieve();
+        wulee.setCoverImage("cat.jpeg");
+        wulee.setKey("minhduc"); 
+        wulee.setMessage("d");
+        wulee.hide();
+        wulee.saveStegoImage("stego.png");
+//        wulee.retrieve();
     }
 }
 
