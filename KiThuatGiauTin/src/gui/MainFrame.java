@@ -11,9 +11,12 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -36,7 +39,6 @@ public class MainFrame extends javax.swing.JFrame {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
     
-    private String key = "";
     private String path = "";
     private final WuLeeLastedVersion wulee = new WuLeeLastedVersion();
     
@@ -49,14 +51,24 @@ public class MainFrame extends javax.swing.JFrame {
     public void setup(){
         this.process.setEditable(false);
         this.process.setLineWrap(true);
+        displayProcessLine("Program is ready.....");
     }
     
     public void displayProcessLine(String line){
-        this.process.append(line + "\n");
+        Date d = new Date();
+        
+        this.process.append(String.format("[%d:%s:%s] %s\n", d.getHours(), 
+                d.getMinutes() < 10 ? "0"+d.getMinutes():d.getMinutes(), 
+                d.getSeconds() < 10 ? "0"+d.getSeconds():d.getSeconds(), 
+                line));
     }
     
     public void calculate(){
         
+    }
+    
+    public MainFrame getMainFrameComponent(){
+        return this;
     }
     
     /**
@@ -73,7 +85,6 @@ public class MainFrame extends javax.swing.JFrame {
         retrieveBtn = new javax.swing.JButton();
         saveBtn = new javax.swing.JButton();
         hideBtn = new javax.swing.JButton();
-        setKeyBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         process = new javax.swing.JTextArea();
 
@@ -100,6 +111,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         saveBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
         saveBtn.setText("Save");
+        saveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveBtnActionPerformed(evt);
+            }
+        });
 
         hideBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
         hideBtn.setText("Hide");
@@ -109,16 +125,8 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        setKeyBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        setKeyBtn.setText("Set Key");
-        setKeyBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setKeyBtnActionPerformed(evt);
-            }
-        });
-
         process.setColumns(20);
-        process.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        process.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         process.setRows(5);
         jScrollPane2.setViewportView(process);
 
@@ -128,23 +136,18 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2)
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(browseBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(setKeyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(hideBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(retrieveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(browseBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(hideBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(retrieveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,7 +157,6 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(browseBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(setKeyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(hideBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(retrieveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -175,54 +177,58 @@ public class MainFrame extends javax.swing.JFrame {
         int returnVal = chooser.showOpenDialog(null);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             this.path = chooser.getSelectedFile().getAbsolutePath();
-            displayProcessLine(String.format("Import image at %s successfully!", this.path));
-            displayProcessLine("The longer key string get, the less characters hidden");
+            wulee.setCoverImage(this.path);
+            if (wulee.coverIsNull()){
+                displayProcessLine("Something wrong with Opencv module. Please check again.");
+            }
+            else displayProcessLine(String.format("Import image at %s successfully!\nThe longer key string get, the less characters hidden", 
+                    this.path));
         }
     }//GEN-LAST:event_browseBtnActionPerformed
 
-    private void setKeyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setKeyBtnActionPerformed
-        // TODO add your handling code here:
-        String key = "";
-        try{
-            key = JOptionPane.showInputDialog(this, "Key", "Set Key", JOptionPane.INFORMATION_MESSAGE).trim();
-            if (key.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                this.key = key;
-                displayProcessLine(String.format("Set key successfully! The key is: %s", this.key));
-            }
-        }
-        catch(NullPointerException e){
-        }
-        
-    }//GEN-LAST:event_setKeyBtnActionPerformed
-
     private void hideBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hideBtnActionPerformed
         // TODO add your handling code here:
-        if (path.isEmpty()){
+        if (wulee.coverIsNull()){
             JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
-        else if (key.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
         else{
-            
+            HideFrame hideFrame = new HideFrame();
+            hideFrame.setVisible(true);
+            this.setEnabled(false);
+            hideFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e){
+                    if (hideFrame.isExec()){
+                        wulee.setKey(hideFrame.getKeyString());
+                        wulee.setMessage(hideFrame.getMessages());
+                    }
+                    // Tại sao phải ghi MainFrame.this.... ? Vì bên trong function override này thì this sẽ không phải là của MainFrame
+                    // mà là của WindowAdapter
+                    MainFrame.this.setEnabled(true);
+                    MainFrame.this.setAlwaysOnTop(true);
+                    MainFrame.this.setAlwaysOnTop(false);
+                    displayProcessLine("Begin to hide...");
+                    wulee.hide();
+                    displayProcessLine("Hiding messages is success, please save your stego image.");
+                }
+            });
         }
     }//GEN-LAST:event_hideBtnActionPerformed
 
     private void retrieveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveBtnActionPerformed
         // TODO add your handling code here:
-        if (path.isEmpty()){
+        if (wulee.coverIsNull()){
             JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
-        else if (key.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
         else{
-            
+            RetrieveFrame retrieveFrame = new RetrieveFrame();
         }
     }//GEN-LAST:event_retrieveBtnActionPerformed
+
+    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_saveBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -267,6 +273,5 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextArea process;
     private javax.swing.JButton retrieveBtn;
     private javax.swing.JButton saveBtn;
-    private javax.swing.JButton setKeyBtn;
     // End of variables declaration//GEN-END:variables
 }

@@ -59,6 +59,10 @@ public class WuLeeLastedVersion {
         return coverImage != null;
     }
     
+    public boolean coverIsNull(){
+        return coverImage == null;
+    }
+    
     public void saveStegoImage(String path){
         Imgcodecs.imwrite(path, coverImage);
     }
@@ -70,6 +74,10 @@ public class WuLeeLastedVersion {
     public String getRetrieveMessage() {
         return retrieveMessage;
     }
+    
+//    public String calculate(){
+//        int 
+//    }
     
     public Mat fi_to_binary(Mat col){
         Mat fi = new Mat(blockHeight, blockWidth, CvType.CV_8UC1, new Scalar(0));

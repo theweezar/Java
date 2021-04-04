@@ -5,6 +5,8 @@
  */
 package gui;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author hpmdu
@@ -14,9 +16,29 @@ public class HideFrame extends javax.swing.JFrame {
     /**
      * Creates new form HideFrame
      */
+    
+    private String keyString;
+    private String messages;
+    private boolean exec;
+    
     public HideFrame() {
         initComponents();
+        this.exec = false;
     }
+
+    public String getKeyString() {
+        return keyString;
+    }
+
+    public String getMessages() {
+        return messages;
+    }
+
+    public boolean isExec() {
+        return exec;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,7 +52,10 @@ public class HideFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         messageField = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        executeBtn = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        keyField = new javax.swing.JPasswordField();
+        closeBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -42,8 +67,26 @@ public class HideFrame extends javax.swing.JFrame {
         messageField.setRows(5);
         jScrollPane1.setViewportView(messageField);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        jButton1.setText("Execute");
+        executeBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        executeBtn.setText("Execute");
+        executeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                executeBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        jLabel2.setText("Key");
+
+        keyField.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+
+        closeBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        closeBtn.setText("Close");
+        closeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -54,27 +97,61 @@ public class HideFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                        .addComponent(closeBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(executeBtn))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(keyField))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(keyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(executeBtn)
+                    .addComponent(closeBtn))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void executeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeBtnActionPerformed
+        // TODO add your handling code here:
+        String keyString = keyField.getText().trim();
+        String messages = messageField.getText().trim();
+        if (keyString.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else if (messages.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Message is null", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            this.keyString = keyString;
+            this.messages = messages;
+            this.exec = true;
+            this.dispose();
+        }
+    }//GEN-LAST:event_executeBtnActionPerformed
+
+    private void closeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBtnActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_closeBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -112,9 +189,12 @@ public class HideFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton closeBtn;
+    private javax.swing.JButton executeBtn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPasswordField keyField;
     private javax.swing.JTextArea messageField;
     // End of variables declaration//GEN-END:variables
 }
