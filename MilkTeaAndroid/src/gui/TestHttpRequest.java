@@ -19,7 +19,7 @@ import java.net.URL;
 public class TestHttpRequest {
     
     public static void main(String[] args) throws MalformedURLException, IOException {
-        URL url = new URL("http://127.0.0.1:8000/register");
+        URL url = new URL("http://192.168.43.149:8000/register");
         HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
         httpConn.setRequestMethod("GET");
         BufferedReader br = new BufferedReader(new InputStreamReader(httpConn.getInputStream()));
