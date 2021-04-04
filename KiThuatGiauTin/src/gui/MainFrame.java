@@ -17,6 +17,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import wulee.WuLeeLastedVersion;
 
 /**
  *
@@ -28,8 +31,14 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     
+    static{
+        // Load thư viện vào
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+    
     private String key = "";
     private String path = "";
+    private final WuLeeLastedVersion wulee = new WuLeeLastedVersion();
     
     public MainFrame() {
         initComponents();
@@ -40,12 +49,14 @@ public class MainFrame extends javax.swing.JFrame {
     public void setup(){
         this.process.setEditable(false);
         this.process.setLineWrap(true);
-        this.setKeyBtn.setEnabled(false);
-        displayProcessLine("Import image first.");
     }
     
     public void displayProcessLine(String line){
         this.process.append(line + "\n");
+    }
+    
+    public void calculate(){
+        
     }
     
     /**
@@ -81,6 +92,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         retrieveBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
         retrieveBtn.setText("Retrieve");
+        retrieveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                retrieveBtnActionPerformed(evt);
+            }
+        });
 
         saveBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
         saveBtn.setText("Save");
@@ -161,8 +177,6 @@ public class MainFrame extends javax.swing.JFrame {
             this.path = chooser.getSelectedFile().getAbsolutePath();
             displayProcessLine(String.format("Import image at %s successfully!", this.path));
             displayProcessLine("The longer key string get, the less characters hidden");
-            this.setKeyBtn.setEnabled(true);
-            
         }
     }//GEN-LAST:event_browseBtnActionPerformed
 
@@ -186,7 +200,29 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void hideBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hideBtnActionPerformed
         // TODO add your handling code here:
+        if (path.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else if (key.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            
+        }
     }//GEN-LAST:event_hideBtnActionPerformed
+
+    private void retrieveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveBtnActionPerformed
+        // TODO add your handling code here:
+        if (path.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else if (key.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            
+        }
+    }//GEN-LAST:event_retrieveBtnActionPerformed
 
     /**
      * @param args the command line arguments
