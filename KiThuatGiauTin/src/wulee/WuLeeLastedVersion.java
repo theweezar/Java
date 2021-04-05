@@ -7,10 +7,12 @@ package wulee;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
+import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 
 /**
@@ -53,10 +55,14 @@ public class WuLeeLastedVersion {
 //        System.out.println("Key:\n" + key.dump());
     }
     
-    public boolean setCoverImage(String path){
+    public void setKeyToNull(){
+        key = null;
+    }
+    
+    public void setCoverImage(String path){
         // Đọc theo cấu trúc BGR
+//        coverImage = null;
         coverImage = Imgcodecs.imread(path);
-        return coverImage != null;
     }
     
     public boolean coverIsNull(){
@@ -73,6 +79,21 @@ public class WuLeeLastedVersion {
 
     public String getRetrieveMessage() {
         return retrieveMessage;
+    }
+
+    public void setRetrieveMax(int retrieveMax) {
+        this.retrieveMax = retrieveMax;
+    }
+    
+    public void resetWhenHide(){
+        message = "";
+        hiddenCount = 0;
+    }
+    
+    public void resetWhenRetrieve(){
+        retrieveCount = 0;
+        retrieveMax = 0;
+        retrieveMessage = "";
     }
     
 //    public String calculate(){
@@ -290,11 +311,12 @@ public class WuLeeLastedVersion {
     
     public static void main(String[] args) {
         WuLeeLastedVersion wulee = new WuLeeLastedVersion();
-        wulee.setKey("minhduc301099");
-        wulee.setCoverImage("cat.jpeg");
-        wulee.setMessage("duc");
+        wulee.setKey("a");
+        wulee.setCoverImage("tree.jpg");
+        wulee.setMessage("minhducducminh");
         wulee.hide();
         wulee.retrieve();
         System.out.println(wulee.getRetrieveMessage());
+//        System.out.println(Pattern.matches("(.*).png", "ab-c.png"));
     }
 }

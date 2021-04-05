@@ -136,18 +136,21 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
-                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(browseBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(hideBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(retrieveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(browseBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(hideBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(retrieveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,8 +163,8 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(hideBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(retrieveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -174,7 +177,7 @@ public class MainFrame extends javax.swing.JFrame {
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
             "JPG & GIF Images", "jpg", "png", "jpeg", "gif");
         chooser.setFileFilter(filter);
-        int returnVal = chooser.showOpenDialog(null);
+        int returnVal = chooser.showOpenDialog(this);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             this.path = chooser.getSelectedFile().getAbsolutePath();
             wulee.setCoverImage(this.path);
@@ -209,6 +212,8 @@ public class MainFrame extends javax.swing.JFrame {
                     MainFrame.this.setAlwaysOnTop(false);
                     displayProcessLine("Begin to hide...");
                     wulee.hide();
+                    wulee.setKeyToNull();
+                    wulee.resetWhenHide();
                     displayProcessLine("Hiding messages is success, please save your stego image.");
                 }
             });
@@ -221,13 +226,48 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         else{
-            RetrieveFrame retrieveFrame = new RetrieveFrame();
+            // frame nhập key và retrieveMax
+            InputKeyAndLength inpKL = new InputKeyAndLength();
+            inpKL.setVisible(true);
+            inpKL.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e){
+                    if (inpKL.isEveryThingSet()){
+                        // Nhập khóa
+                        wulee.setKey(inpKL.getKeyString());
+                        // Nhập độ dài chuỗi msg
+                        wulee.setRetrieveMax(inpKL.getLength());
+                        // Bắt đầu trích xuất
+                        wulee.retrieve();
+                        RetrieveFrame retrieveFrame = new RetrieveFrame();
+                        retrieveFrame.setRetrieveMsg(wulee.getRetrieveMessage());
+                        retrieveFrame.setVisible(true);
+                        wulee.resetWhenRetrieve();
+                    }
+                }
+            });
+            
         }
     }//GEN-LAST:event_retrieveBtnActionPerformed
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
         // TODO add your handling code here:
-        
+        if (wulee.coverIsNull()){
+            JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            JFileChooser saver = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "JPG & GIF Images", "jpg", "png", "jpeg", "gif");
+            saver.setFileFilter(filter);
+            int returnVal = saver.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION){
+                String fileName = saver.getSelectedFile().getAbsolutePath();
+                if (!fileName.matches("(.*).png")) fileName += ".png";
+                wulee.saveStegoImage(fileName);
+                displayProcessLine(String.format("Save image successfully to %s", fileName));
+            }
+        }
     }//GEN-LAST:event_saveBtnActionPerformed
 
     /**
