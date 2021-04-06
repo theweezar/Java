@@ -19,7 +19,7 @@ import org.opencv.imgcodecs.Imgcodecs;
  *
  * @author hpmdu
  */
-public class WuLeeLastedVersion {
+public class WuLeeLastedVersion_v1 {
     
     static{
         // Load thư viện vào
@@ -62,7 +62,7 @@ public class WuLeeLastedVersion {
     public void setCoverImage(String path){
         // Đọc theo cấu trúc BGR
 //        coverImage = null;
-        coverImage = Imgcodecs.imread(path);
+        coverImage = new Imgcodecs().imread(path);
     }
     
     public boolean coverIsNull(){
@@ -96,9 +96,26 @@ public class WuLeeLastedVersion {
         retrieveMessage = "";
     }
     
-//    public String calculate(){
-//        int 
-//    }
+    public String calculate(){
+        int pixelCount = getTotalPixels();
+        int keyLengthMax = getCoverImageHeight();
+        return String.format("\nTotal number of pixels: %d"
+                + "\nKey length maximum: %s"
+                + "\nImage height: %d"
+                + "\nImage width : %d", pixelCount, keyLengthMax, coverImage.rows(), coverImage.cols());
+    }
+    
+    public int getCoverImageHeight(){
+        return coverImage.rows();
+    }
+    
+    public int getCoverImageWidth(){
+        return coverImage.cols();
+    }
+    
+    public int getTotalPixels(){
+        return coverImage.rows() * coverImage.cols();
+    }
     
     public Mat fi_to_binary(Mat col){
         Mat fi = new Mat(blockHeight, blockWidth, CvType.CV_8UC1, new Scalar(0));
@@ -262,6 +279,7 @@ public class WuLeeLastedVersion {
 //        System.out.printf("\nchannel_block:\n%s\n",channel_block.dump());
         
         String binString = "";
+        // channel_block.cols()
         for(int i = 0; i < channel_block.cols(); i++){
             // Fi là ma trận nhị phân (blockHeight,blockWidth = 8) của từng cột (blockHeight,1)
             Mat fi = fi_to_binary(channel_block.col(i));
@@ -286,6 +304,12 @@ public class WuLeeLastedVersion {
             }
         }
         retrieveMessage += String.format("%c", (char)Integer.parseInt(binString, 2));
+//        try{
+//            retrieveMessage += String.format("%c", (char)Integer.parseInt(binString, 2));
+//        }
+//        catch(NumberFormatException e){
+//            System.out.println(binString);
+//        }
         retrieveCount++;
     }
     
@@ -310,8 +334,8 @@ public class WuLeeLastedVersion {
     }
     
     public static void main(String[] args) {
-        WuLeeLastedVersion wulee = new WuLeeLastedVersion();
-        wulee.setKey("a");
+        WuLeeLastedVersion_v1 wulee = new WuLeeLastedVersion_v1();
+        wulee.setKey("12345678");
         wulee.setCoverImage("tree.jpg");
         wulee.setMessage("minhducducminh");
         wulee.hide();

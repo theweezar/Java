@@ -20,9 +20,15 @@ public class HideFrame extends javax.swing.JFrame {
     private String keyString;
     private String messages;
     private boolean exec;
+    private int imageHeight;
+    private int imageWidth;
     
     public HideFrame() {
         initComponents();
+        this.setResizable(false);
+        messageField.setLineWrap(true);
+        keyField.setText("");
+        warning.setText("");
         this.exec = false;
     }
 
@@ -37,7 +43,20 @@ public class HideFrame extends javax.swing.JFrame {
     public boolean isExec() {
         return exec;
     }
+
+    public void setImageHeight(int imageHeight) {
+        this.imageHeight = imageHeight;
+    }
+
+    public void setImageWidth(int imageWidth) {
+        this.imageWidth = imageWidth;
+    }
     
+    public int getTotalCharHidden(){
+        int blockHeight = keyField.getText().trim().length();
+        int blockWidth = 8;
+        return ((imageHeight * imageWidth) / (blockHeight * blockWidth * 8)) * 3;
+    }
     
 
     /**
@@ -56,6 +75,7 @@ public class HideFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         keyField = new javax.swing.JPasswordField();
         closeBtn = new javax.swing.JButton();
+        warning = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,6 +99,11 @@ public class HideFrame extends javax.swing.JFrame {
         jLabel2.setText("Key");
 
         keyField.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        keyField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                keyFieldFocusLost(evt);
+            }
+        });
 
         closeBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
         closeBtn.setText("Close");
@@ -87,6 +112,10 @@ public class HideFrame extends javax.swing.JFrame {
                 closeBtnActionPerformed(evt);
             }
         });
+
+        warning.setFont(new java.awt.Font("Tahoma", 2, 16)); // NOI18N
+        warning.setForeground(new java.awt.Color(255, 0, 0));
+        warning.setText("onKeyFieldFocus to show how many characters can be hiden ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -101,12 +130,13 @@ public class HideFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(executeBtn))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                    .addComponent(keyField)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(keyField))
+                    .addComponent(warning, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -116,10 +146,12 @@ public class HideFrame extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(keyField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(warning)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(executeBtn)
@@ -137,8 +169,16 @@ public class HideFrame extends javax.swing.JFrame {
         if (keyString.isEmpty()){
             JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        else if (keyString.length() > imageHeight){
+            JOptionPane.showMessageDialog(this, "Key's length is too long", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
         else if (messages.isEmpty()){
             JOptionPane.showMessageDialog(this, "Message is null", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        else if (messages.length() > getTotalCharHidden()){
+            JOptionPane.showMessageDialog(this, 
+                    String.format("Message's length: %d is too long", messages.length())
+                    , "Warning", JOptionPane.WARNING_MESSAGE);
         }
         else{
             this.keyString = keyString;
@@ -152,6 +192,20 @@ public class HideFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_closeBtnActionPerformed
+
+    private void keyFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_keyFieldFocusLost
+        // TODO add your handling code here:
+        int blockHeight = keyField.getText().trim().length();
+        int blockWidth = 8;
+        if (blockHeight > imageHeight) warning.setText("Key's length is too long");
+        else if (blockHeight == 0) warning.setText("Key is null");
+        else{
+            // Tính số lượng kí tự có thể giấu được
+            int totalCharHidden = getTotalCharHidden();
+            warning.setText(String.format("Key's length: %d"
+                    + " | Characters can be hidden in 3 channel: %d", blockHeight, totalCharHidden));
+        }
+    }//GEN-LAST:event_keyFieldFocusLost
 
     /**
      * @param args the command line arguments
@@ -196,5 +250,6 @@ public class HideFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPasswordField keyField;
     private javax.swing.JTextArea messageField;
+    private javax.swing.JLabel warning;
     // End of variables declaration//GEN-END:variables
 }

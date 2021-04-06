@@ -22,13 +22,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import wulee.WuLeeLastedVersion;
+import wulee.WuLeeLastedVersion_v1;
 
 /**
  *
  * @author hpmdu
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame_v1 extends javax.swing.JFrame {
 
     /**
      * Creates new form MainFrame
@@ -40,9 +40,9 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
     private String path = "";
-    private final WuLeeLastedVersion wulee = new WuLeeLastedVersion();
+    private final WuLeeLastedVersion_v1 wulee = new WuLeeLastedVersion_v1();
     
-    public MainFrame() {
+    public MainFrame_v1() {
         initComponents();
         this.setResizable(false);
         setup();
@@ -63,11 +63,7 @@ public class MainFrame extends javax.swing.JFrame {
                 line));
     }
     
-    public void calculate(){
-        
-    }
-    
-    public MainFrame getMainFrameComponent(){
+    public MainFrame_v1 getMainFrameComponent(){
         return this;
     }
     
@@ -184,8 +180,11 @@ public class MainFrame extends javax.swing.JFrame {
             if (wulee.coverIsNull()){
                 displayProcessLine("Something wrong with Opencv module. Please check again.");
             }
-            else displayProcessLine(String.format("Import image at %s successfully!\nThe longer key string get, the less characters hidden", 
+            else {
+                displayProcessLine(String.format("Import image at %s successfully!\nThe longer key string get, the less characters hidden", 
                     this.path));
+                displayProcessLine(wulee.calculate());
+            }
         }
     }//GEN-LAST:event_browseBtnActionPerformed
 
@@ -196,25 +195,32 @@ public class MainFrame extends javax.swing.JFrame {
         }
         else{
             HideFrame hideFrame = new HideFrame();
+            // Gán size ảnh vào hideFrame để so sánh độ dài khóa và tính toán số lượng kí tự có thể dấu được
+            hideFrame.setImageHeight(wulee.getCoverImageHeight());
+            hideFrame.setImageWidth(wulee.getCoverImageWidth());
             hideFrame.setVisible(true);
             this.setEnabled(false);
             hideFrame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e){
+                    // Nếu như hideFrame được ấn nút Execute
                     if (hideFrame.isExec()){
                         wulee.setKey(hideFrame.getKeyString());
                         wulee.setMessage(hideFrame.getMessages());
+                        displayProcessLine("Begin to hide...");
+                        // Bắt đầu giấu tin
+                        wulee.hide();
+                        // Khóa sẽ trở về null
+                        wulee.setKeyToNull();
+                        // Reset các thuộc tính
+                        wulee.resetWhenHide();
+                        displayProcessLine("Hiding messages is success, please save your stego image.");
                     }
                     // Tại sao phải ghi MainFrame.this.... ? Vì bên trong function override này thì this sẽ không phải là của MainFrame
                     // mà là của WindowAdapter
-                    MainFrame.this.setEnabled(true);
-                    MainFrame.this.setAlwaysOnTop(true);
-                    MainFrame.this.setAlwaysOnTop(false);
-                    displayProcessLine("Begin to hide...");
-                    wulee.hide();
-                    wulee.setKeyToNull();
-                    wulee.resetWhenHide();
-                    displayProcessLine("Hiding messages is success, please save your stego image.");
+                    MainFrame_v1.this.setEnabled(true);
+                    MainFrame_v1.this.setAlwaysOnTop(true);
+                    MainFrame_v1.this.setAlwaysOnTop(false);
                 }
             });
         }
@@ -228,11 +234,13 @@ public class MainFrame extends javax.swing.JFrame {
         else{
             // frame nhập key và retrieveMax
             InputKeyAndLength inpKL = new InputKeyAndLength();
+            inpKL.setKeyLengthMax(wulee.getCoverImageHeight());
             inpKL.setVisible(true);
             inpKL.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e){
-                    if (inpKL.isEveryThingSet()){
+                    // Nếu như InputKeyAndLength được ấn nút Execute
+                    if (inpKL.isExec()){
                         // Nhập khóa
                         wulee.setKey(inpKL.getKeyString());
                         // Nhập độ dài chuỗi msg
@@ -240,8 +248,10 @@ public class MainFrame extends javax.swing.JFrame {
                         // Bắt đầu trích xuất
                         wulee.retrieve();
                         RetrieveFrame retrieveFrame = new RetrieveFrame();
+                        // Gán tin nhắn mật vào textarea
                         retrieveFrame.setRetrieveMsg(wulee.getRetrieveMessage());
                         retrieveFrame.setVisible(true);
+                        // Reset các thuộc tính 
                         wulee.resetWhenRetrieve();
                     }
                 }
@@ -287,20 +297,21 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame_v1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame_v1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame_v1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame_v1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                new MainFrame_v1().setVisible(true);
             }
         });
     }

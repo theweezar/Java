@@ -18,6 +18,8 @@ public class RetrieveFrame extends javax.swing.JFrame {
     
     public RetrieveFrame() {
         initComponents();
+        this.setResizable(false);
+        messageField.setLineWrap(true);
         messageField.setEditable(false);
     }
 

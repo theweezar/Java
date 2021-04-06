@@ -17,17 +17,18 @@ public class InputKeyAndLength extends javax.swing.JFrame {
      * Creates new form InputKeyAndLength
      */
     
-    private boolean everyThingSet;
+    private boolean exec;
     private String keyString;
     private int length;
+    private int keyLengthMax;
     
     public InputKeyAndLength() {
         initComponents();
-        everyThingSet = false;
+        exec = false;
     }
 
-    public boolean isEveryThingSet() {
-        return everyThingSet;
+    public boolean isExec() {
+        return exec;
     }
 
     public String getKeyString() {
@@ -36,6 +37,11 @@ public class InputKeyAndLength extends javax.swing.JFrame {
 
     public int getLength() {
         return length;
+    }
+
+
+    public void setKeyLengthMax(int keyLengthMax) {
+        this.keyLengthMax = keyLengthMax;
     }
     
     
@@ -136,6 +142,10 @@ public class InputKeyAndLength extends javax.swing.JFrame {
         if (keyIn.isEmpty()){
             JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        // Nếu khóa qua dài hơn cho phép
+        else if (keyIn.length() > keyLengthMax){
+            JOptionPane.showMessageDialog(this, "Key is too long", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
         // Nếu độ dài trống
         else if (lengthIn.isEmpty()){
             JOptionPane.showMessageDialog(this, "Set length to retrieve messages", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -148,7 +158,7 @@ public class InputKeyAndLength extends javax.swing.JFrame {
                 else{
                     this.keyString = keyIn;
                     this.length = length;
-                    this.everyThingSet = true;
+                    this.exec = true;
                     this.dispose();
                 }
             }
