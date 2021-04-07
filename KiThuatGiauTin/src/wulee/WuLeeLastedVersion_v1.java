@@ -61,11 +61,10 @@ public class WuLeeLastedVersion_v1 {
     
     public void setCoverImage(String path){
         // Đọc theo cấu trúc BGR
-//        coverImage = null;
         coverImage = new Imgcodecs().imread(path);
     }
     
-    public boolean coverIsNull(){
+    public boolean isCoverImageNull(){
         return coverImage == null;
     }
     
@@ -246,17 +245,17 @@ public class WuLeeLastedVersion_v1 {
     }
     
     public void hideInChannel(int channel){
-        int cols = coverImage.cols();
-        int rows = coverImage.rows();
-        // Duyệt chiều cao
-        for(int i = 0; i < rows; i += blockHeight){
-            if (i + blockHeight > rows || hiddenCount == message.length()) return;
-            for(int j = 0; j < cols; j += blockWidth){
-                if (j + blockWidth > cols || hiddenCount == message.length()) break;
+//        int cols = coverImage.cols();
+//        int rows = coverImage.rows();
+        // Duyệt chiều cao ảnh
+        for(int i = 0; i < getCoverImageHeight(); i += blockHeight){
+            if (i + blockHeight > getCoverImageHeight() || hiddenCount == message.length()) return;
+            for(int j = 0; j < getCoverImageWidth(); j += blockWidth){
+                if (j + blockWidth > getCoverImageWidth() || hiddenCount == message.length()) break;
                 // Trích xuất block - 1 block này sẽ dấu được hết 1 ký tự
                 Mat block = coverImage.colRange(j,j + blockWidth).rowRange(i,i + blockHeight);
                 // block mới sau khi được dấu tin
-                block = hideInBlock(block, message.charAt(hiddenCount),channel);
+                block = hideInBlock(block, message.charAt(hiddenCount), channel);
                 // gán block mới vào ảnh
                 assignNewBlockToCoverImage(block, i, j);
             }

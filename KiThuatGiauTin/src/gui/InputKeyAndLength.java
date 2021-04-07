@@ -62,7 +62,7 @@ public class InputKeyAndLength extends javax.swing.JFrame {
         executeBtn = new javax.swing.JButton();
         closeBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         Key.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
         Key.setText("Key");

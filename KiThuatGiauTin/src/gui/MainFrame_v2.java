@@ -42,6 +42,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
         retrieveBtn.setEnabled(false);
         saveBtn.setEnabled(false);
         pathString.setEditable(false);
+        previewBtn.setEnabled(false);
     }
     
     public void displayProcessLine(String line){
@@ -51,6 +52,8 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                 d.getMinutes() < 10 ? "0"+d.getMinutes():d.getMinutes(), 
                 d.getSeconds() < 10 ? "0"+d.getSeconds():d.getSeconds(), 
                 line));
+        // Kéo scroll bar của nofiField xuống dưới cùng
+        this.nofiScroll.getVerticalScrollBar().setValue(this.nofiScroll.getVerticalScrollBar().getMaximum());
     }
     
     public void resetKeyFieldAndSetKeyBtn(){
@@ -78,10 +81,10 @@ public class MainFrame_v2 extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         messageField = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
-        exitBtn = new javax.swing.JButton();
+        previewBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         keyField = new javax.swing.JPasswordField();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        nofiScroll = new javax.swing.JScrollPane();
         nofiField = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         setKeyBtn = new javax.swing.JButton();
@@ -132,11 +135,11 @@ public class MainFrame_v2 extends javax.swing.JFrame {
 
         jLabel2.setText("Messages");
 
-        exitBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        exitBtn.setText("Exit");
-        exitBtn.addActionListener(new java.awt.event.ActionListener() {
+        previewBtn.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        previewBtn.setText("Preview");
+        previewBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitBtnActionPerformed(evt);
+                previewBtnActionPerformed(evt);
             }
         });
 
@@ -147,7 +150,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
         nofiField.setColumns(20);
         nofiField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         nofiField.setRows(5);
-        jScrollPane2.setViewportView(nofiField);
+        nofiScroll.setViewportView(nofiField);
 
         jLabel3.setText("Notifications");
 
@@ -177,7 +180,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(setKeyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2)
+                    .addComponent(nofiScroll)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -190,7 +193,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(previewBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel4)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
@@ -209,7 +212,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                     .addComponent(hideBtn)
                     .addComponent(retrieveBtn)
                     .addComponent(saveBtn)
-                    .addComponent(exitBtn))
+                    .addComponent(previewBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -227,7 +230,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nofiScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -255,7 +258,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             String path = chooser.getSelectedFile().getAbsolutePath();
             wulee.setCoverImage(path);
-            if (wulee.coverIsNull()){
+            if (wulee.isCoverImageNull()){
                 displayProcessLine("Something wrong with Opencv module. Please check again.");
             }
             else {
@@ -269,18 +272,21 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                 hideBtn.setEnabled(true);
                 retrieveBtn.setEnabled(true);
                 saveBtn.setEnabled(true);
+                previewBtn.setEnabled(true);
             }
         }
     }//GEN-LAST:event_browseBtnActionPerformed
 
-    private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
+    private void previewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewBtnActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_exitBtnActionPerformed
+        PreviewImage preview = new PreviewImage();
+        preview.imageShow(pathString.getText().trim());
+        preview.setVisible(true);
+    }//GEN-LAST:event_previewBtnActionPerformed
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
         // TODO add your handling code here:
-        if (wulee.coverIsNull()){
+        if (wulee.isCoverImageNull()){
             JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         else{
@@ -302,7 +308,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
         // TODO add your handling code here:
         String keyString = keyField.getText().trim();
         String messages = messageField.getText().trim();
-        if (wulee.coverIsNull()){
+        if (wulee.isCoverImageNull()){
             JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         else if (keyString.length() == 0 || !isKeySet){
@@ -321,6 +327,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
             }
             else{
                 displayProcessLine("Begin to hide....");
+                
                 wulee.setKey(keyString);
                 wulee.setMessage(messages);
                 wulee.hide();
@@ -338,7 +345,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
     private void retrieveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retrieveBtnActionPerformed
         // TODO add your handling code here:
         String keyString = keyField.getText().trim();
-        if (wulee.coverIsNull()){
+        if (wulee.isCoverImageNull()){
             JOptionPane.showMessageDialog(this, "Image is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         else if (keyString.length() == 0 || !isKeySet){
@@ -353,13 +360,18 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                 int length = Integer.parseInt(lengthString);
                 if (length > totalCharHidden) throw new NumberFormatException();
                 else{
+                    displayProcessLine("Begin to retrieve.");
+                    
                     wulee.setKey(keyString);
                     wulee.setRetrieveMax(length);
-                    displayProcessLine("Begin to retrieve.");
                     wulee.retrieve();
-                    displayProcessLine("Retrieve successfully.");
+                    wulee.setKeyToNull();
                     messageField.setText(wulee.getRetrieveMessage());
+                    wulee.resetWhenRetrieve();
+                    
                     resetKeyFieldAndSetKeyBtn();
+                    
+                    displayProcessLine("Retrieve successfully.");
                 }
             }
             catch(NumberFormatException e){
@@ -433,7 +445,6 @@ public class MainFrame_v2 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseBtn;
-    private javax.swing.JButton exitBtn;
     private javax.swing.JButton hideBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -442,11 +453,12 @@ public class MainFrame_v2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPasswordField keyField;
     private javax.swing.JTextArea messageField;
     private javax.swing.JTextArea nofiField;
+    private javax.swing.JScrollPane nofiScroll;
     private javax.swing.JTextField pathString;
+    private javax.swing.JButton previewBtn;
     private javax.swing.JButton retrieveBtn;
     private javax.swing.JButton saveBtn;
     private javax.swing.JButton setKeyBtn;
