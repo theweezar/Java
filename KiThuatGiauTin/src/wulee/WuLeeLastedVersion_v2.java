@@ -54,7 +54,8 @@ public class WuLeeLastedVersion_v2 {
         }
         blockHeight = key.rows();
         blockWidth = key.cols();
-//        System.out.println("Key:\n" + key.dump());
+        System.out.println(String.format("key: %s\n%s", keyString, key.dump()));
+        System.out.println("key_sum: " + (int)Core.sumElems(key).val[0]);
     }
     
     public void setKeyToNull(){
@@ -159,7 +160,9 @@ public class WuLeeLastedVersion_v2 {
         for(int i = 0; i < fi.rows(); i++){
             for(int j = 0; j < fi.cols(); j++){
                 if ((int)fi.get(i, j)[0] == target && (int)key.get(i, j)[0] == 1){
+//                    if (target == 1) System.out.println(fi.dump());
                     fi.row(i).col(j).setTo(new Scalar(replace));
+//                    if (target == 1) System.out.println(fi.dump());
                     return fi;
                 }
             }
@@ -180,7 +183,7 @@ public class WuLeeLastedVersion_v2 {
         return fi;
     }
     
-    public Mat hideInBlock(Mat block,  char c_bit, int channel){
+    public Mat hideInBlock(Mat block,  char c_bit, int channel, int rowPos, int colPos){
         // char c_bit ở trên là bit thông tin cần được giấu
         // block ở trên có 3 channel BGR, (blockHeight,blockWidth,3) BGR
         List<Mat> listChannel = new ArrayList<Mat>();
@@ -202,28 +205,33 @@ public class WuLeeLastedVersion_v2 {
         if (xor_sum > 0 && xor_sum < key_sum){
             int bit = c_bit == '1' ? 1:0;
             if (xor_sum % 2 == bit){
-
+                
             }
             else if (xor_sum == 1){
-                fi = randomBinaryReplace(fi, 0, 1);
+//                fi = randomBinaryReplace(fi, 0, 1);
+                fi = randomBinaryReplace(fi, 1, 0);
             }
             else if (xor_sum == key_sum - 1){
-                fi = randomBinaryReplace(fi, 1, 0);
+//                fi = randomBinaryReplace(fi, 1, 0);
+                fi = randomBinaryReplace(fi, 0, 1);
             }
             else {
                 fi = randomBinaryReverse(fi);
             }
             // In ra màn hình giá trị fi binary mới
 //                System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
+            Core.bitwise_xor(fi, key, matXor);
+            int new_xor_sum = (int)Core.sumElems(matXor).val[0];
             fi = fi_to_int(fi);
+            
             // In ra màn hình giá trị fi int mới
 //                System.out.printf("fi[%d] int :\n%s\n",i,fi.dump());
             // Gán giá trị fi mới vào channel_block_int.
             channel_block_int = fi;
             hiddenCount+=1;
-//                System.out.printf("\nNewchannel_block:\n%s\n",channel_block_int.dump());
+            System.out.println(String.format("xor_sum: %d | Vị trí đúng: r=%d,c=%d | new_xor_sum: %d | Bit đang giấu: %d", xor_sum, rowPos, colPos, new_xor_sum, bit));
         }
-//        else System.out.println("Out");
+//        else System.out.println(String.format("xor_sum: %d | Vị trí ko đúng: %d", xor_sum, pos));
         
 //        // Sau khi channel_block đã được chỉnh sửa, ta gán ngược lại vào listChannel ở trên đúng với thứ tự channel
         listChannel.set(channel, channel_block_int);
@@ -250,9 +258,10 @@ public class WuLeeLastedVersion_v2 {
             for(int j = 0; j < getCoverImageWidth(); j += 1){
                 if (hiddenCount == bin_message.length()) return;
                 // Trích xuất block - 1 block này sẽ dấu được 1 bit, block này là block int có shape (blockHeight,1)
-                Mat block = coverImage.colRange(j,j + 1).rowRange(i,i + blockHeight);
+//                Mat block = coverImage.colRange(j,j + 1).rowRange(i,i + blockHeight);
+                Mat block = coverImage.col(j).rowRange(i,i + blockHeight);
                 // block mới sau khi được dấu 1 bit
-                block = hideInBlock(block, bin_message.charAt(hiddenCount), channel);
+                block = hideInBlock(block, bin_message.charAt(hiddenCount), channel, i, j);
                 // gán block mới vào ảnh
                 assignNewBlockToCoverImage(block, i, j);
             }
@@ -260,12 +269,13 @@ public class WuLeeLastedVersion_v2 {
     }
     
     public void hide(){
+        System.out.println("\nGiấu tin");
         hideInChannel(CHANNEL_BLUE);
         hideInChannel(CHANNEL_GREEN);
         hideInChannel(CHANNEL_RED);
     }
     
-    public void retrieveInBlock(Mat block, int channel){
+    public void retrieveInBlock(Mat block, int channel, int rowPos, int colPos){
         // char c_bit ở trên là bit thông tin cần được giấu
         // block ở trên có 3 channel BGR, (blockHeight,blockWidth,3) BGR
         List<Mat> listChannel = new ArrayList<Mat>();
@@ -283,6 +293,7 @@ public class WuLeeLastedVersion_v2 {
         int xor_sum = (int)Core.sumElems(matXor).val[0];
         int key_sum = (int)Core.sumElems(key).val[0];
         
+        
         // xor_sum > 0 && xor_sum < key_sum
         if (xor_sum > 0 && xor_sum < key_sum){
             if (xor_sum % 2 == 0){
@@ -292,8 +303,9 @@ public class WuLeeLastedVersion_v2 {
                 bin_retrieve += "1";
             }
             retrieveCount++;
+            System.out.println(String.format("xor_sum: %d | Vị trí đúng: r=%d,c=%d", xor_sum, rowPos, colPos));
         }
-        
+//        else System.out.println(String.format("xor_sum: %d | Vị trí ko đúng: %d", xor_sum, pos));
     }
     
     public void retrieveInChannel(int channel){
@@ -301,8 +313,9 @@ public class WuLeeLastedVersion_v2 {
             if (i + blockHeight > getCoverImageHeight() || retrieveCount == retrieveMax) return;
             for(int j = 0; j < getCoverImageWidth(); j += 1){
                 if (retrieveCount == retrieveMax) return;
-                Mat block = coverImage.colRange(j,j + 1).rowRange(i,i + blockHeight);
-                retrieveInBlock(block, channel);
+//                Mat block = coverImage.colRange(j,j + 1).rowRange(i,i + blockHeight);
+                Mat block = coverImage.col(j).rowRange(i,i + blockHeight);    
+                retrieveInBlock(block, channel, i, j);
             }
         }
     }
@@ -318,6 +331,7 @@ public class WuLeeLastedVersion_v2 {
     
     public void retrieve(){
         // Kiểm lỗi
+        System.out.println("\nTrích xuất");
         retrieveInChannel(CHANNEL_BLUE);
         retrieveInChannel(CHANNEL_GREEN);
         retrieveInChannel(CHANNEL_RED);
@@ -325,20 +339,22 @@ public class WuLeeLastedVersion_v2 {
     }
     
     public void compareTest(){
-        System.out.println(this.key.dump());
-        System.out.println("Raw message : " + this.message);
-        System.out.println("Bin message : " + this.bin_message);
-        System.out.println("Bin retrieve: " + this.bin_retrieve);
-        System.out.println("retrieve msg: " + this.retrieveMessage);
+//        System.out.println("\nMa trận khóa:\n" + this.key.dump() + "\n");
+        System.out.println("\nSo sánh ");
+        System.out.println("Raw message     : " + this.message);
+        System.out.println("Bin message     : " + this.bin_message);
+        System.out.println("Bin retrieve    : " + this.bin_retrieve);
+        System.out.println("retrieve message: " + this.retrieveMessage);
     }
     
     public static void main(String[] args) {
+        String msg = "a";
         WuLeeLastedVersion_v2 wulee = new WuLeeLastedVersion_v2();
-        wulee.setKey("123456789");
+        wulee.setKey("minhduc");
         wulee.setCoverImage("cat.jpeg");
-        wulee.setMessage("ducdongdai");
+        wulee.setMessage(msg);
         wulee.hide();
-        wulee.setRetrieveMax(10);
+        wulee.setRetrieveMax(msg.length());
         wulee.retrieve();
         wulee.compareTest();
 //        System.out.println(wulee.getRetrieveMessage());

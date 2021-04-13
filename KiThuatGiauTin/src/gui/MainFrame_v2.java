@@ -359,7 +359,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                 String.format("Message's length (maximum: %d)", totalCharHidden), 
                 "Message's Length", JOptionPane.DEFAULT_OPTION).trim();
             try{
-                // số int của độ dài chuỗi tin nhắn sẽ được trích xuất
+                // độ dài chuỗi tin nhắn sẽ được trích xuất
                 int length = Integer.parseInt(lengthString);
                 if (length > totalCharHidden) throw new NumberFormatException();
                 else{
@@ -393,6 +393,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
             }
             else if (keyString.length() < 5){
+                // Nếu như key quá ngắn thì sẽ có sai sót trong chương trình này
                 JOptionPane.showMessageDialog(this, "Key's length must be longer than 4", "Warning", JOptionPane.WARNING_MESSAGE);
             }
             else if (keyString.length() > wulee.getCoverImageHeight()){
