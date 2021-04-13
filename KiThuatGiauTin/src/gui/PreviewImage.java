@@ -23,6 +23,7 @@ public class PreviewImage extends javax.swing.JFrame {
      */
     public PreviewImage() {
         initComponents();
+        this.setResizable(false);
 //        this.setSize(1920, 1080);
     }
     
@@ -33,14 +34,14 @@ public class PreviewImage extends javax.swing.JFrame {
             double height = buffImg.getHeight();
             double width = buffImg.getWidth();
             if (width > height){
-                double scaleWidth = 1920/2.5;
+                double scaleWidth = 1920/3;
                 if (width > scaleWidth){
                     height *= (scaleWidth / width);
                     width = scaleWidth;
                 }
             }
             else{
-                double scaleHeight = 1080/2.5;
+                double scaleHeight = 1080/3;
                 if (height > scaleHeight){
                     width *= (scaleHeight / height);
                     height = scaleHeight;

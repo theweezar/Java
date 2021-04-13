@@ -10,6 +10,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import wulee.WuLeeLastedVersion_v1;
+import wulee.WuLeeLastedVersion_v2;
+
 
 /**
  *
@@ -21,18 +23,18 @@ public class MainFrame_v2 extends javax.swing.JFrame {
      * Creates new form MainFrame_v2
      */
     
-    private WuLeeLastedVersion_v1 wulee;
+    private WuLeeLastedVersion_v2 wulee;
     private int totalCharHidden;
     private boolean isKeySet = false;
     
     public MainFrame_v2() {
         initComponents();
         setup();
-        wulee = new WuLeeLastedVersion_v1();
+        wulee = new WuLeeLastedVersion_v2();
     }
     
     public void setup(){
-        this.setResizable(false);
+//        this.setResizable(false);
         nofiField.setEditable(false);
         nofiField.setLineWrap(true);
         messageField.setLineWrap(true);
@@ -297,6 +299,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
             int returnVal = saver.showSaveDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION){
                 String fileName = saver.getSelectedFile().getAbsolutePath();
+                // Nếu fileName ko có đuôi là .png thì sẽ được thêm vào tự động
                 if (!fileName.matches("(.*).png")) fileName += ".png";
                 wulee.saveStegoImage(fileName);
                 displayProcessLine(String.format("Save image successfully to %s", fileName));
@@ -369,16 +372,16 @@ public class MainFrame_v2 extends javax.swing.JFrame {
                     messageField.setText(wulee.getRetrieveMessage());
                     wulee.resetWhenRetrieve();
                     
-                    resetKeyFieldAndSetKeyBtn();
-                    
                     displayProcessLine("Retrieve successfully.");
                 }
             }
             catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(this, 
-                        String.format("Messages's length must be bigger than 0 and smaller than %d", totalCharHidden), 
-                        "Warning", JOptionPane.WARNING_MESSAGE);
+                e.printStackTrace();
+//                JOptionPane.showMessageDialog(this, 
+//                        String.format("Messages's length must be bigger than 0 and smaller than %d", totalCharHidden), 
+//                        "Warning", JOptionPane.WARNING_MESSAGE);
             }
+            resetKeyFieldAndSetKeyBtn();
         }
     }//GEN-LAST:event_retrieveBtnActionPerformed
 
@@ -388,6 +391,9 @@ public class MainFrame_v2 extends javax.swing.JFrame {
             String keyString = keyField.getText().trim();
             if (keyString.length() == 0){
                 JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+            else if (keyString.length() < 5){
+                JOptionPane.showMessageDialog(this, "Key's length must be longer than 4", "Warning", JOptionPane.WARNING_MESSAGE);
             }
             else if (keyString.length() > wulee.getCoverImageHeight()){
                 JOptionPane.showMessageDialog(this, "Key is too long", "Warning", JOptionPane.WARNING_MESSAGE);

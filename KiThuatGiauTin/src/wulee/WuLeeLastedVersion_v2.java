@@ -31,8 +31,10 @@ public class WuLeeLastedVersion_v2 {
     private int blockWidth = 0;
     private int blockHeight = 0;
     private String message = "";
+    private String bin_message = "";
     private int hiddenCount = 0;
     private String retrieveMessage = "";
+    private String bin_retrieve = "";
     private int retrieveCount = 0;
     private int retrieveMax = 20;
     private int CHANNEL_BLUE = 0;
@@ -61,11 +63,10 @@ public class WuLeeLastedVersion_v2 {
     
     public void setCoverImage(String path){
         // Đọc theo cấu trúc BGR
-//        coverImage = null;
-        coverImage = Imgcodecs.imread(path);
+        coverImage = new Imgcodecs().imread(path);
     }
     
-    public boolean coverIsNull(){
+    public boolean isCoverImageNull(){
         return coverImage == null;
     }
     
@@ -75,6 +76,10 @@ public class WuLeeLastedVersion_v2 {
     
     public void setMessage(String message){
         this.message = message;
+        for(int i = 0; i < this.message.length(); i++){
+            this.bin_message += String.format("%8s", Integer.toBinaryString(this.message.charAt(i))).replaceAll(" ", "0");
+        }
+//        System.out.println("Bin message: " + this.bin_message);
     }
 
     public String getRetrieveMessage() {
@@ -82,11 +87,13 @@ public class WuLeeLastedVersion_v2 {
     }
 
     public void setRetrieveMax(int retrieveMax) {
-        this.retrieveMax = retrieveMax;
+        // retrieveMax giờ đây sẽ là số lượng bit tối đa có thể lấy
+        this.retrieveMax = retrieveMax * 8;
     }
     
     public void resetWhenHide(){
         message = "";
+        bin_message = "";
         hiddenCount = 0;
     }
     
@@ -94,11 +101,29 @@ public class WuLeeLastedVersion_v2 {
         retrieveCount = 0;
         retrieveMax = 0;
         retrieveMessage = "";
+        bin_retrieve = "";
     }
     
-//    public String calculate(){
-//        int 
-//    }
+    public String calculate(){
+        int pixelCount = getTotalPixels();
+        int keyLengthMax = getCoverImageHeight();
+        return String.format("\nTotal number of pixels: %d"
+                + "\nKey length maximum: %s"
+                + "\nImage height: %d"
+                + "\nImage width : %d", pixelCount, keyLengthMax, coverImage.rows(), coverImage.cols());
+    }
+    
+    public int getCoverImageHeight(){
+        return coverImage.rows();
+    }
+    
+    public int getCoverImageWidth(){
+        return coverImage.cols();
+    }
+    
+    public int getTotalPixels(){
+        return coverImage.rows() * coverImage.cols();
+    }
     
     public Mat fi_to_binary(Mat col){
         Mat fi = new Mat(blockHeight, blockWidth, CvType.CV_8UC1, new Scalar(0));
@@ -155,91 +180,79 @@ public class WuLeeLastedVersion_v2 {
         return fi;
     }
     
-    public Mat hideInBlock(Mat block,  char c, int channel){
+    public Mat hideInBlock(Mat block,  char c_bit, int channel){
+        // char c_bit ở trên là bit thông tin cần được giấu
         // block ở trên có 3 channel BGR, (blockHeight,blockWidth,3) BGR
         List<Mat> listChannel = new ArrayList<Mat>();
         // Core.split là phương thức tách chiều sau của ma trận rồi return vào 1 list<Mat> đã khởi tạo ở trên
         Core.split(block, listChannel);
-        // channel_block là ma trận int blockHeight x blockWidth = 8 được lấy từ listChannel ở trên thôi thứ tự 0,1,2 tương đương với BGR
-        Mat channel_block = listChannel.get(channel);
+        // channel_block_int là ma trận 2 chiều của 1 channel của block ở trên
+        Mat channel_block_int = listChannel.get(channel);
         
-//        System.out.printf("\nchannel_block:\n%s\n",channel_block.dump());
+        // Fi là ma trận nhị phân
+        Mat fi = fi_to_binary(channel_block_int);
+        // Function Core.bitwise_and giữa fi và key, sau đó return kết quả vào biến matAnd
+        Mat matXor = new Mat();
+        Core.bitwise_xor(fi, key, matXor);
+        // Function Core.sumElems là phương thức cộng tất cả phần tử trong ma trận lại
+        int xor_sum = (int)Core.sumElems(matXor).val[0];
+        int key_sum = (int)Core.sumElems(key).val[0];
         
-        // Chuyển kí tự thành dãy nhị phân 8bit
-        String binChar = String.format("%8s", Integer.toBinaryString(c)).replaceAll(" ", "0");
-//        System.out.printf("\n%c ===> %s\n", c, binChar);
-        // Duyệt theo từng cột - channel_block.cols()
-        for(int i = 0; i < channel_block.cols(); i++){
-            // Fi là ma trận nhị phân (blockHeight,8) của từng cột (blockHeight,1)
-            Mat fi = fi_to_binary(channel_block.col(i));
-            // In ra màn hình giá trị fi int cũ
-//            System.out.printf("fi[%d] int :\n%s\n",i,channel_block.col(i).dump());
-            // In ra màn hình giá trị fi binary cũ
-//            System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
-            // Function Core.bitwise_and giữa fi và key, sau đó return kết quả vào biến matAnd
-            Mat matAnd = new Mat();
-            Core.bitwise_and(fi, key, matAnd);
-            // Function Core.sumElems là phương thức cộng tất cả phần tử trong ma trận lại
-            int and_sum = (int)Core.sumElems(matAnd).val[0];
-            int key_sum = (int)Core.sumElems(key).val[0];
-//            System.out.printf("fi[%d] ===> and_sum = %d ; key_sum = %d\n", i, and_sum, key_sum);
-            if (and_sum > 0 && and_sum < key_sum){
-                int bit = binChar.charAt(i) == '1' ? 1:0;
-                if (and_sum % 2 == bit){
-                    
-                }
-                else if (and_sum == 1){
-                    fi = randomBinaryReplace(fi, 0, 1);
-                }
-                else if (and_sum == key_sum - 1){
-                    fi = randomBinaryReplace(fi, 1, 0);
-                }
-                else {
-                    fi = randomBinaryReverse(fi);
-                }
-                // In ra màn hình giá trị fi binary mới
-//                System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
-                fi = fi_to_int(fi);
-                // In ra màn hình giá trị fi int mới
-//                System.out.printf("fi[%d] int :\n%s\n",i,fi.dump());
-                // Gán giá trị fi mới vào channel_block. Duyệt theo channel_block.rows()
-                for(int j = 0; j < channel_block.rows(); j++){
-                    channel_block.put(j, i, fi.get(j, 0));
-                }
-//                System.out.printf("\nNewchannel_block:\n%s\n",channel_block.dump());
+        // xor_sum > 0 && xor_sum < key_sum
+        if (xor_sum > 0 && xor_sum < key_sum){
+            int bit = c_bit == '1' ? 1:0;
+            if (xor_sum % 2 == bit){
+
             }
+            else if (xor_sum == 1){
+                fi = randomBinaryReplace(fi, 0, 1);
+            }
+            else if (xor_sum == key_sum - 1){
+                fi = randomBinaryReplace(fi, 1, 0);
+            }
+            else {
+                fi = randomBinaryReverse(fi);
+            }
+            // In ra màn hình giá trị fi binary mới
+//                System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
+            fi = fi_to_int(fi);
+            // In ra màn hình giá trị fi int mới
+//                System.out.printf("fi[%d] int :\n%s\n",i,fi.dump());
+            // Gán giá trị fi mới vào channel_block_int.
+            channel_block_int = fi;
+            hiddenCount+=1;
+//                System.out.printf("\nNewchannel_block:\n%s\n",channel_block_int.dump());
         }
-        // Sau khi channel_block đã được chỉnh sửa, ta gán ngược lại vào listChannel ở trên đúng với thứ tự channel
-        listChannel.set(channel, channel_block);
+//        else System.out.println("Out");
+        
+//        // Sau khi channel_block đã được chỉnh sửa, ta gán ngược lại vào listChannel ở trên đúng với thứ tự channel
+        listChannel.set(channel, channel_block_int);
         // Sau đó merge listChannel mới vào Mat block để ra 1 block ảnh mới đã được giấu tin và return nó về
         Core.merge(listChannel, block);
 //        System.out.println(block.dump());
         // Sau khi dấu xong thì hiddenCount sẽ tăng lên 1 vì đã dấu được 1 ký tự
-        hiddenCount++;
         return block;
     }
     
     public void assignNewBlockToCoverImage(Mat block, int row, int col){
         // Đây là phương thức gán block(BGR) vào ảnh(BGR) - row, col là điểm bắt đầu trong ma trận
-        for(int i = 0; i < blockHeight; i++){
-            for(int j = 0; j < blockWidth; j++){
+        for(int i = 0; i < block.rows(); i++){
+            for(int j = 0; j < block.cols(); j++){
                 coverImage.put(row + i, col + j, block.get(i, j));
             }
         }
     }
     
     public void hideInChannel(int channel){
-        int cols = coverImage.cols();
-        int rows = coverImage.rows();
-        // Duyệt chiều cao
-        for(int i = 0; i < rows; i += blockHeight){
-            if (i + blockHeight > rows || hiddenCount == message.length()) return;
-            for(int j = 0; j < cols; j += blockWidth){
-                if (j + blockWidth > cols || hiddenCount == message.length()) break;
-                // Trích xuất block - 1 block này sẽ dấu được hết 1 ký tự
-                Mat block = coverImage.colRange(j,j + blockWidth).rowRange(i,i + blockHeight);
-                // block mới sau khi được dấu tin
-                block = hideInBlock(block, message.charAt(hiddenCount),channel);
+        // Duyệt chiều cao ảnh
+        for(int i = 0; i < getCoverImageHeight(); i += blockHeight){
+            if (i + blockHeight > getCoverImageHeight() || hiddenCount == bin_message.length()) return;
+            for(int j = 0; j < getCoverImageWidth(); j += 1){
+                if (hiddenCount == bin_message.length()) return;
+                // Trích xuất block - 1 block này sẽ dấu được 1 bit, block này là block int có shape (blockHeight,1)
+                Mat block = coverImage.colRange(j,j + 1).rowRange(i,i + blockHeight);
+                // block mới sau khi được dấu 1 bit
+                block = hideInBlock(block, bin_message.charAt(hiddenCount), channel);
                 // gán block mới vào ảnh
                 assignNewBlockToCoverImage(block, i, j);
             }
@@ -253,52 +266,53 @@ public class WuLeeLastedVersion_v2 {
     }
     
     public void retrieveInBlock(Mat block, int channel){
-        // block ở trên có 3 channel BGR
+        // char c_bit ở trên là bit thông tin cần được giấu
+        // block ở trên có 3 channel BGR, (blockHeight,blockWidth,3) BGR
         List<Mat> listChannel = new ArrayList<Mat>();
         // Core.split là phương thức tách chiều sau của ma trận rồi return vào 1 list<Mat> đã khởi tạo ở trên
         Core.split(block, listChannel);
-        // channel_block là ma trận int blockHeight x blockWidth = 8 được lấy từ listChannel ở trên thôi thứ tự 0,1,2 tương đương với BGR
-        Mat channel_block = listChannel.get(channel);
-//        System.out.printf("\nchannel_block:\n%s\n",channel_block.dump());
+        // channel_block_int là ma trận 2 chiều của 1 channel của block ở trên
+        Mat channel_block_int = listChannel.get(channel);
         
-        String binString = "";
-        for(int i = 0; i < channel_block.cols(); i++){
-            // Fi là ma trận nhị phân (blockHeight,blockWidth = 8) của từng cột (blockHeight,1)
-            Mat fi = fi_to_binary(channel_block.col(i));
-            // In ra màn hình giá trị fi int cũ
-//            System.out.printf("fi[%d] int :\n%s\n",i,channel_block.col(i).dump());
-            // In ra màn hình giá trị fi binary cũ
-//            System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
-            // Function Core.bitwise_and giữa fi và key, sau đó return kết quả vào biến matAnd
-            Mat matAnd = new Mat();
-            Core.bitwise_and(fi, key, matAnd);
-            // Function Core.sumElems là phương thức cộng tất cả phần tử trong ma trận lại
-            int and_sum = (int)Core.sumElems(matAnd).val[0];
-            int key_sum = (int)Core.sumElems(key).val[0];
-//            System.out.printf("fi[%d] ===> and_sum = %d ; key_sum = %d\n", i, and_sum, key_sum);
-            if (and_sum > 0 && and_sum < key_sum){
-                if (and_sum % 2 == 0){
-                    binString += "0";
-                }
-                else {
-                    binString += "1";
-                }
+        // Fi là ma trận nhị phân
+        Mat fi = fi_to_binary(channel_block_int);
+        // Function Core.bitwise_and giữa fi và key, sau đó return kết quả vào biến matAnd
+        Mat matXor = new Mat();
+        Core.bitwise_xor(fi, key, matXor);
+        // Function Core.sumElems là phương thức cộng tất cả phần tử trong ma trận lại
+        int xor_sum = (int)Core.sumElems(matXor).val[0];
+        int key_sum = (int)Core.sumElems(key).val[0];
+        
+        // xor_sum > 0 && xor_sum < key_sum
+        if (xor_sum > 0 && xor_sum < key_sum){
+            if (xor_sum % 2 == 0){
+                bin_retrieve += "0";
             }
+            else {
+                bin_retrieve += "1";
+            }
+            retrieveCount++;
         }
-        retrieveMessage += String.format("%c", (char)Integer.parseInt(binString, 2));
-        retrieveCount++;
+        
     }
     
     public void retrieveInChannel(int channel){
-        int cols = coverImage.cols();
-        int rows = coverImage.rows();
-        for(int i = 0; i < rows; i += blockHeight){
-            if (i + blockHeight > rows || retrieveCount == retrieveMax) return;
-            for(int j = 0; j < cols; j += blockWidth){
-                if (j + blockWidth > cols || retrieveCount == retrieveMax) break;
-                Mat block = coverImage.colRange(j,j + blockWidth).rowRange(i,i + blockHeight);
+        for(int i = 0; i < getCoverImageHeight(); i += blockHeight){
+            if (i + blockHeight > getCoverImageHeight() || retrieveCount == retrieveMax) return;
+            for(int j = 0; j < getCoverImageWidth(); j += 1){
+                if (retrieveCount == retrieveMax) return;
+                Mat block = coverImage.colRange(j,j + 1).rowRange(i,i + blockHeight);
                 retrieveInBlock(block, channel);
             }
+        }
+    }
+    
+    public void bin_retrieve_to_string(){
+        String binString = "";
+        for(int i = 0; i < retrieveMax; i += 8){
+            // substring là cắt chuỗi theo khoảng và gửi về chuỗi bị cắt đó
+            binString = bin_retrieve.substring(i, i + 8);
+            retrieveMessage += String.format("%c", (char)Integer.parseInt(binString, 2));
         }
     }
     
@@ -307,16 +321,27 @@ public class WuLeeLastedVersion_v2 {
         retrieveInChannel(CHANNEL_BLUE);
         retrieveInChannel(CHANNEL_GREEN);
         retrieveInChannel(CHANNEL_RED);
+        bin_retrieve_to_string();
+    }
+    
+    public void compareTest(){
+        System.out.println(this.key.dump());
+        System.out.println("Raw message : " + this.message);
+        System.out.println("Bin message : " + this.bin_message);
+        System.out.println("Bin retrieve: " + this.bin_retrieve);
+        System.out.println("retrieve msg: " + this.retrieveMessage);
     }
     
     public static void main(String[] args) {
-        WuLeeLastedVersion_v1 wulee = new WuLeeLastedVersion_v1();
-        wulee.setKey("a");
-        wulee.setCoverImage("tree.jpg");
-        wulee.setMessage("minhducducminh");
+        WuLeeLastedVersion_v2 wulee = new WuLeeLastedVersion_v2();
+        wulee.setKey("123456789");
+        wulee.setCoverImage("cat.jpeg");
+        wulee.setMessage("ducdongdai");
         wulee.hide();
+        wulee.setRetrieveMax(10);
         wulee.retrieve();
-        System.out.println(wulee.getRetrieveMessage());
+        wulee.compareTest();
+//        System.out.println(wulee.getRetrieveMessage());
 //        System.out.println(Pattern.matches("(.*).png", "ab-c.png"));
     }
 }

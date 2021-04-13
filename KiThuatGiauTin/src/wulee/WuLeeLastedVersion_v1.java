@@ -193,21 +193,22 @@ public class WuLeeLastedVersion_v1 {
             // In ra màn hình giá trị fi binary cũ
 //            System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
             // Function Core.bitwise_and giữa fi và key, sau đó return kết quả vào biến matAnd
-            Mat matAnd = new Mat();
-            Core.bitwise_and(fi, key, matAnd);
+            Mat matXor = new Mat();
+            Core.bitwise_xor(fi, key, matXor);
             // Function Core.sumElems là phương thức cộng tất cả phần tử trong ma trận lại
-            int and_sum = (int)Core.sumElems(matAnd).val[0];
+            int xor_sum = (int)Core.sumElems(matXor).val[0];
             int key_sum = (int)Core.sumElems(key).val[0];
 //            System.out.printf("fi[%d] ===> and_sum = %d ; key_sum = %d\n", i, and_sum, key_sum);
-            if (and_sum > 0 && and_sum < key_sum){
+            // Sai chỗ này vì khi ko đúng điều kiện này thì 1 bit sẽ bị thiếu
+            if (xor_sum > 0 && xor_sum < key_sum){
                 int bit = binChar.charAt(i) == '1' ? 1:0;
-                if (and_sum % 2 == bit){
+                if (xor_sum % 2 == bit){
                     
                 }
-                else if (and_sum == 1){
+                else if (xor_sum == 1){
                     fi = randomBinaryReplace(fi, 0, 1);
                 }
-                else if (and_sum == key_sum - 1){
+                else if (xor_sum == key_sum - 1){
                     fi = randomBinaryReplace(fi, 1, 0);
                 }
                 else {
@@ -287,20 +288,22 @@ public class WuLeeLastedVersion_v1 {
             // In ra màn hình giá trị fi binary cũ
 //            System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
             // Function Core.bitwise_and giữa fi và key, sau đó return kết quả vào biến matAnd
-            Mat matAnd = new Mat();
-            Core.bitwise_and(fi, key, matAnd);
+            Mat matXor = new Mat();
+            // ^ là xor
+            Core.bitwise_xor(fi, key, matXor);
             // Function Core.sumElems là phương thức cộng tất cả phần tử trong ma trận lại
-            int and_sum = (int)Core.sumElems(matAnd).val[0];
+            int xor_sum = (int)Core.sumElems(matXor).val[0];
             int key_sum = (int)Core.sumElems(key).val[0];
 //            System.out.printf("fi[%d] ===> and_sum = %d ; key_sum = %d\n", i, and_sum, key_sum);
-            if (and_sum > 0 && and_sum < key_sum){
-                if (and_sum % 2 == 0){
+            if (xor_sum > 0 && xor_sum < key_sum){
+                if (xor_sum % 2 == 0){
                     binString += "0";
                 }
                 else {
                     binString += "1";
                 }
             }
+            else return;
         }
         retrieveMessage += String.format("%c", (char)Integer.parseInt(binString, 2));
 //        try{
