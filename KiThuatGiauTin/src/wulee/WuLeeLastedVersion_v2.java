@@ -102,7 +102,7 @@ public class WuLeeLastedVersion_v2 {
     
     public void resetWhenRetrieve(){
         retrieveCount = 0;
-//        retrieveMax = 0;
+        retrieveMax = -1;
         retrieveMessage = "";
         bin_retrieve = "";
         bin_retrieve_temp = "";
@@ -306,23 +306,35 @@ public class WuLeeLastedVersion_v2 {
             }
             
 //            System.out.println(String.format("xor_sum: %d | Vị trí đúng: r=%d,c=%d", xor_sum, rowPos, colPos));
+            // bin_retrieve_temp là 1 biến dùng để thu thập 8 bit, nếu khi đã đủ 8 bit thì sẽ được đổi thành 1 ký tự
             if (bin_retrieve_temp.length() == 8){
+                // đổi bin_retrieve_temp đã đủ 8 bit thành 1 số ascii
                 int ascii = Integer.parseInt(bin_retrieve_temp, 2);
-                if (ascii >= 32 && ascii <= 126) {
-                    
+                // Nếu số ascii đó nằm trong khoảng kí tự có ý nghĩa
+                // ascii = 10 là new line \n
+                if (ascii >= 32 && ascii <= 126 || ascii == 10) {
+                    // 58 là kí tự ':', nếu như đụng kí tự ':' thì sẽ parse thành 1 số int 
                     if (ascii == 58 && retrieveMax == -1){
-                        retrieveMax = Integer.parseInt(retrieveMessage) + 1;
+                        try{
+                            retrieveMax = Integer.parseInt(retrieveMessage) + 1;
+                        }
+                        catch(NumberFormatException e){
+                            retrieve_done = true;
+                        }
                         retrieveMessage = "";
-                        System.out.println("cat chuoi");
                     }
                     
+                    // Sau khi đã trích xuất được độ dài tin nhán8
                     if (retrieveMax > 0) retrieveCount++;
                     
                     retrieveMessage += String.format("%c", (char)ascii);
                     bin_retrieve += bin_retrieve_temp;
                     bin_retrieve_temp = "";
                 }
-                else retrieve_done = true;
+                else {
+                    retrieve_done = true;
+                    System.out.println("ascii out: " + ascii);
+                }
             }
         }
 //        else System.out.println(String.format("xor_sum: %d | Vị trí ko đúng: %d", xor_sum, pos));
@@ -347,7 +359,7 @@ public class WuLeeLastedVersion_v2 {
         retrieveInChannel(CHANNEL_BLUE);
         retrieveInChannel(CHANNEL_GREEN);
         retrieveInChannel(CHANNEL_RED);
-        retrieveMessage = retrieveMessage.substring(1);
+        if (retrieveMessage.length() != 0) retrieveMessage = retrieveMessage.substring(1);
     }
     
     public void compareTest(){
