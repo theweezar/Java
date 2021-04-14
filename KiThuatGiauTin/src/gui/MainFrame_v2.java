@@ -24,7 +24,7 @@ public class MainFrame_v2 extends javax.swing.JFrame {
      */
     
     private WuLeeLastedVersion_v2 wulee;
-    private int totalCharHidden;
+//    private int totalCharHidden;
     private boolean isKeySet = false;
     
     public MainFrame_v2() {
@@ -325,23 +325,20 @@ public class MainFrame_v2 extends javax.swing.JFrame {
         }
         else{
 //            int totalCharHidden = (int)Math.floor((wulee.getTotalPixels() / (keyString.length() * 8))) * 3;
-            if (messages.length() > totalCharHidden){
-                JOptionPane.showMessageDialog(this, "Message is too long", "Warning", JOptionPane.WARNING_MESSAGE);
-            }
-            else{
-                displayProcessLine("Begin to hide....");
+            
+            // Không thể tính được độ dài tin nhắn có thể giấu được
+            displayProcessLine("Begin to hide....");
                 
-                wulee.setKey(keyString);
-                wulee.setMessage(messages);
-                wulee.hide();
-                wulee.resetWhenHide();
-                wulee.setKeyToNull();
-                
-                resetKeyFieldAndSetKeyBtn();
-                
-                messageField.setText("");
-                displayProcessLine("Done.");
-            }
+            wulee.setKey(keyString);
+            wulee.setMessage(messages);
+            wulee.hide();
+            wulee.resetWhenHide();
+            wulee.setKeyToNull();
+
+            resetKeyFieldAndSetKeyBtn();
+
+            messageField.setText("");
+            displayProcessLine("Done.");
         }
     }//GEN-LAST:event_hideBtnActionPerformed
 
@@ -355,32 +352,19 @@ public class MainFrame_v2 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Key is null", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         else {
-            String lengthString = JOptionPane.showInputDialog(this, 
-                String.format("Message's length (maximum: %d)", totalCharHidden), 
-                "Message's Length", JOptionPane.DEFAULT_OPTION).trim();
-            try{
-                // độ dài chuỗi tin nhắn sẽ được trích xuất
-                int length = Integer.parseInt(lengthString);
-                if (length > totalCharHidden) throw new NumberFormatException();
-                else{
-                    displayProcessLine("Begin to retrieve.");
+//            String lengthString = JOptionPane.showInputDialog(this, 
+//                String.format("Message's length (maximum: %d)", totalCharHidden), 
+//                "Message's Length", JOptionPane.DEFAULT_OPTION).trim();
+            displayProcessLine("Begin to retrieve.");
                     
-                    wulee.setKey(keyString);
-                    wulee.setRetrieveMax(length);
-                    wulee.retrieve();
-                    wulee.setKeyToNull();
-                    messageField.setText(wulee.getRetrieveMessage());
-                    wulee.resetWhenRetrieve();
-                    
-                    displayProcessLine("Retrieve successfully.");
-                }
-            }
-            catch(NumberFormatException e){
-                e.printStackTrace();
-//                JOptionPane.showMessageDialog(this, 
-//                        String.format("Messages's length must be bigger than 0 and smaller than %d", totalCharHidden), 
-//                        "Warning", JOptionPane.WARNING_MESSAGE);
-            }
+            wulee.setKey(keyString);
+//            wulee.setRetrieveMax(length);
+            wulee.retrieve();
+            wulee.setKeyToNull();
+            messageField.setText(wulee.getRetrieveMessage());
+            wulee.resetWhenRetrieve();
+
+            displayProcessLine("Retrieve successfully.");
             resetKeyFieldAndSetKeyBtn();
         }
     }//GEN-LAST:event_retrieveBtnActionPerformed
@@ -402,9 +386,10 @@ public class MainFrame_v2 extends javax.swing.JFrame {
             else{
                 keyField.setEditable(false);
                 setKeyBtn.setText("Change key");
-                totalCharHidden = (int)Math.floor((wulee.getTotalPixels() / (keyString.length() * 8))) * 3;
-                displayProcessLine(String.format("\nKey's length: %d"
-                        + "\nCharacters can be hidden in 3 channel: %d", keyString.length(), totalCharHidden));
+//                totalCharHidden = (int)Math.floor((wulee.getTotalPixels() / (keyString.length() * 8))) * 3;
+//                displayProcessLine(String.format("\nKey's length: %d"
+//                        + "\nCharacters can be hidden in 3 channel: %d", keyString.length(), totalCharHidden));
+                displayProcessLine(String.format("\nKey's length: %d", keyString.length()));
                 isKeySet = true;
             }
         }

@@ -35,8 +35,10 @@ public class WuLeeLastedVersion_v2 {
     private int hiddenCount = 0;
     private String retrieveMessage = "";
     private String bin_retrieve = "";
+    private String bin_retrieve_temp = "";
     private int retrieveCount = 0;
-    private int retrieveMax = 20;
+    private int retrieveMax = -1;
+    private boolean retrieve_done = false;
     private int CHANNEL_BLUE = 0;
     private int CHANNEL_GREEN = 1;
     private int CHANNEL_RED = 2;
@@ -76,7 +78,7 @@ public class WuLeeLastedVersion_v2 {
     }
     
     public void setMessage(String message){
-        this.message = message;
+        this.message = String.format("%d:%s", message.length(), message);
         for(int i = 0; i < this.message.length(); i++){
             this.bin_message += String.format("%8s", Integer.toBinaryString(this.message.charAt(i))).replaceAll(" ", "0");
         }
@@ -87,10 +89,10 @@ public class WuLeeLastedVersion_v2 {
         return retrieveMessage;
     }
 
-    public void setRetrieveMax(int retrieveMax) {
-        // retrieveMax giờ đây sẽ là số lượng bit tối đa có thể lấy
-        this.retrieveMax = retrieveMax * 8;
-    }
+//    public void setRetrieveMax(int retrieveMax) {
+//        // retrieveMax giờ đây sẽ là số lượng bit tối đa có thể lấy
+//        this.retrieveMax = retrieveMax * 8;
+//    }
     
     public void resetWhenHide(){
         message = "";
@@ -100,9 +102,10 @@ public class WuLeeLastedVersion_v2 {
     
     public void resetWhenRetrieve(){
         retrieveCount = 0;
-        retrieveMax = 0;
+//        retrieveMax = 0;
         retrieveMessage = "";
         bin_retrieve = "";
+        bin_retrieve_temp = "";
     }
     
     public String calculate(){
@@ -293,39 +296,48 @@ public class WuLeeLastedVersion_v2 {
         int xor_sum = (int)Core.sumElems(matXor).val[0];
         int key_sum = (int)Core.sumElems(key).val[0];
         
-        
         // xor_sum > 0 && xor_sum < key_sum
         if (xor_sum > 0 && xor_sum < key_sum){
             if (xor_sum % 2 == 0){
-                bin_retrieve += "0";
+                bin_retrieve_temp += "0";
             }
             else {
-                bin_retrieve += "1";
+                bin_retrieve_temp += "1";
             }
-            retrieveCount++;
-            System.out.println(String.format("xor_sum: %d | Vị trí đúng: r=%d,c=%d", xor_sum, rowPos, colPos));
+            
+//            System.out.println(String.format("xor_sum: %d | Vị trí đúng: r=%d,c=%d", xor_sum, rowPos, colPos));
+            if (bin_retrieve_temp.length() == 8){
+                int ascii = Integer.parseInt(bin_retrieve_temp, 2);
+                if (ascii >= 32 && ascii <= 126) {
+                    
+                    if (ascii == 58 && retrieveMax == -1){
+                        retrieveMax = Integer.parseInt(retrieveMessage) + 1;
+                        retrieveMessage = "";
+                        System.out.println("cat chuoi");
+                    }
+                    
+                    if (retrieveMax > 0) retrieveCount++;
+                    
+                    retrieveMessage += String.format("%c", (char)ascii);
+                    bin_retrieve += bin_retrieve_temp;
+                    bin_retrieve_temp = "";
+                }
+                else retrieve_done = true;
+            }
         }
 //        else System.out.println(String.format("xor_sum: %d | Vị trí ko đúng: %d", xor_sum, pos));
     }
     
     public void retrieveInChannel(int channel){
+        if (retrieve_done) return;
         for(int i = 0; i < getCoverImageHeight(); i += blockHeight){
             if (i + blockHeight > getCoverImageHeight() || retrieveCount == retrieveMax) return;
             for(int j = 0; j < getCoverImageWidth(); j += 1){
-                if (retrieveCount == retrieveMax) return;
+                if (retrieve_done || retrieveCount == retrieveMax) return;
 //                Mat block = coverImage.colRange(j,j + 1).rowRange(i,i + blockHeight);
                 Mat block = coverImage.col(j).rowRange(i,i + blockHeight);    
                 retrieveInBlock(block, channel, i, j);
             }
-        }
-    }
-    
-    public void bin_retrieve_to_string(){
-        String binString = "";
-        for(int i = 0; i < retrieveMax; i += 8){
-            // substring là cắt chuỗi theo khoảng và gửi về chuỗi bị cắt đó
-            binString = bin_retrieve.substring(i, i + 8);
-            retrieveMessage += String.format("%c", (char)Integer.parseInt(binString, 2));
         }
     }
     
@@ -335,7 +347,7 @@ public class WuLeeLastedVersion_v2 {
         retrieveInChannel(CHANNEL_BLUE);
         retrieveInChannel(CHANNEL_GREEN);
         retrieveInChannel(CHANNEL_RED);
-        bin_retrieve_to_string();
+        retrieveMessage = retrieveMessage.substring(1);
     }
     
     public void compareTest(){
@@ -348,13 +360,12 @@ public class WuLeeLastedVersion_v2 {
     }
     
     public static void main(String[] args) {
-        String msg = "a";
+        String msg = "hoang phan minh duc duong truc dong phan dai le duc minh";
         WuLeeLastedVersion_v2 wulee = new WuLeeLastedVersion_v2();
         wulee.setKey("minhduc");
         wulee.setCoverImage("cat.jpeg");
         wulee.setMessage(msg);
         wulee.hide();
-        wulee.setRetrieveMax(msg.length());
         wulee.retrieve();
         wulee.compareTest();
 //        System.out.println(wulee.getRetrieveMessage());
