@@ -106,6 +106,7 @@ public class WuLeeLastedVersion_v2 {
         retrieveMessage = "";
         bin_retrieve = "";
         bin_retrieve_temp = "";
+        retrieve_done = false;
     }
     
     public String calculate(){
@@ -203,9 +204,9 @@ public class WuLeeLastedVersion_v2 {
         // Function Core.sumElems là phương thức cộng tất cả phần tử trong ma trận lại
         int xor_sum = (int)Core.sumElems(matXor).val[0];
         int key_sum = (int)Core.sumElems(key).val[0];
-        
         // xor_sum > 0 && xor_sum < key_sum
         if (xor_sum > 0 && xor_sum < key_sum){
+            System.out.printf("fi_bin_before: \n%s\n", fi.dump());
             int bit = c_bit == '1' ? 1:0;
             if (xor_sum % 2 == bit){
                 
@@ -222,7 +223,7 @@ public class WuLeeLastedVersion_v2 {
                 fi = randomBinaryReverse(fi);
             }
             // In ra màn hình giá trị fi binary mới
-//                System.out.printf("fi[%d] bin :\n%s\n",i,fi.dump());
+                System.out.printf("fi_bin_after :\n%s\n",fi.dump());
             Core.bitwise_xor(fi, key, matXor);
             int new_xor_sum = (int)Core.sumElems(matXor).val[0];
             fi = fi_to_int(fi);
@@ -305,7 +306,7 @@ public class WuLeeLastedVersion_v2 {
                 bin_retrieve_temp += "1";
             }
             
-//            System.out.println(String.format("xor_sum: %d | Vị trí đúng: r=%d,c=%d", xor_sum, rowPos, colPos));
+            System.out.println(String.format("xor_sum: %d | Vị trí đúng: r=%d,c=%d", xor_sum, rowPos, colPos));
             // bin_retrieve_temp là 1 biến dùng để thu thập 8 bit, nếu khi đã đủ 8 bit thì sẽ được đổi thành 1 ký tự
             if (bin_retrieve_temp.length() == 8){
                 // đổi bin_retrieve_temp đã đủ 8 bit thành 1 số ascii
@@ -372,7 +373,7 @@ public class WuLeeLastedVersion_v2 {
     }
     
     public static void main(String[] args) {
-        String msg = "hoang phan minh duc duong truc dong phan dai le duc minh";
+        String msg = "a";
         WuLeeLastedVersion_v2 wulee = new WuLeeLastedVersion_v2();
         wulee.setKey("minhduc");
         wulee.setCoverImage("cat.jpeg");
