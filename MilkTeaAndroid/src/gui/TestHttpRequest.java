@@ -11,7 +11,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
+import java.util.ArrayList;
+import org.json.*;
 /**
  *
  * @author hpmdu
@@ -19,16 +20,20 @@ import java.net.URL;
 public class TestHttpRequest {
     
     public static void main(String[] args) throws MalformedURLException, IOException {
-        URL url = new URL("http://192.168.43.149:8000/register");
+        URL url = new URL("http://192.168.1.6/PhongBanController-show");
         HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
         httpConn.setRequestMethod("GET");
         BufferedReader br = new BufferedReader(new InputStreamReader(httpConn.getInputStream()));
                 
         String input;
+        String result = "";
 
         while ((input = br.readLine()) != null){
-           System.out.println(input);
+            result += input;
         }
+        System.out.println(result);
+        JSONObject json = new JSONObject(result);
         br.close();
+        System.out.println(json.getJSONArray("viewData").getJSONObject(0).getString("MAPB"));
     }
 }
