@@ -15,6 +15,9 @@ import org.json.*;
 import entities.*;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -25,15 +28,28 @@ public class HttpRequest {
         
         HttpRequest http = new HttpRequest();
         
-        String phongbanJson = http.requestHttp("http://192.168.1.6/PhongBanController-show");
-        http.parseJSON(phongbanJson, "PhongBan");
-        System.out.println();
-        String nhanvienJson = http.requestHttp("http://192.168.1.6/NhanVienController-show");
-        http.parseJSON(nhanvienJson, "NhanVien");
-        System.out.println();
-        String vppJson = http.requestHttp("http://192.168.1.6/VanPhongPhamController-show");
-        http.parseJSON(vppJson, "VanPhongPham");
+//        String phongbanJson = http.requestHttp("http://192.168.1.6/PhongBanController-show");
+//        List<Object> phongBanList = http.parseJSON(phongbanJson, "PhongBan");
+//        http.printPhongBanEntity(phongBanList);
+//        System.out.println();
+//        String nhanvienJson = http.requestHttp("http://192.168.1.6/NhanVienController-show");
+//        http.parseJSON(nhanvienJson, "NhanVien");
+//        System.out.println();
+//        String vppJson = http.requestHttp("http://192.168.1.6/VanPhongPhamController-show");
+//        http.parseJSON(vppJson, "VanPhongPham");
+        
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("MAPP", "PB01");
+        hashMap.put("TENPB", "PHONG KY THUAT");
+        http.makeRequestBody(hashMap);
     }
+    
+    public void makeRequestBody(HashMap<String, String> hashMap) {
+        for(String key: hashMap.keySet()) {
+            System.out.println(hashMap.get(key));
+        }
+    }
+    
     public String requestHttp(String request) {
         try {
             URL url = new URL(request);
@@ -60,16 +76,18 @@ public class HttpRequest {
         return "";
     }
     
-    public void parseJSON(String json, String objectName) {
+    public List<Object> parseJSON(String json, String objectName) {
         JSONObject jsonObj = new JSONObject(json);
         JSONArray viewData = jsonObj.getJSONArray("viewData");
         System.out.println(json);
+        
+        List<Object> entitiesList = new ArrayList<>();
         
         if (objectName.trim().equals("PhongBan")) {    
             for(int i = 0; i < viewData.length(); i++) {
                 PhongBan phongBan = new PhongBan(viewData.getJSONObject(i).getString("MAPB"), 
                         viewData.getJSONObject(i).getString("TENPB"));
-                System.out.println(phongBan.toString());
+                entitiesList.add(phongBan);
             }
         }
         
@@ -81,7 +99,7 @@ public class HttpRequest {
                         viewData.getJSONObject(i).getString("NGAYSINH"),
                         viewData.getJSONObject(i).getString("MAPB")
                 );
-                System.out.println(nhanVien.toString());
+                entitiesList.add(nhanVien);
             }
         }
         
@@ -96,8 +114,7 @@ public class HttpRequest {
                         viewData.getJSONObject(i).getInt("SOLUONG"),
                         viewData.getJSONObject(i).getString("MANCC")
                 );
-                
-                System.out.println(vanPhongPham.toString());
+                entitiesList.add(vanPhongPham);
             }
         }
         
@@ -111,6 +128,15 @@ public class HttpRequest {
         
         if (objectName.trim().equals("PhieuCungCap")) {
             
+        }
+        
+        return entitiesList;
+    }
+    
+    public void printPhongBanEntity(List<Object> phongBanList) {
+        for(Object obj: phongBanList) {
+            PhongBan pb = (PhongBan)obj;
+            System.out.println(pb.getTenpb());
         }
     }
 }
